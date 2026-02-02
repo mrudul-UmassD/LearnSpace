@@ -1,0 +1,114 @@
+# PyQuest - Docker Compose Configuration
+# Services: web (Next.js), db (PostgreSQL), runner (Python executor)
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: pyquest-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pyquest}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pyquest_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-pyquest}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pyquest-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pyquest}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Python Code Execution Runner (Sandboxed)
+  runner:
+    build:
+      context: ./services/runner
+      dockerfile: Dockerfile
+    container_name: pyquest-runner
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - pyquest-network
+    # Security: Read-only filesystem except /tmp
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    # Security: No network access for executed code
+    # Note: Container itself needs network to receive requests
+    # Code execution is isolated without network via Python subprocess
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Next.js Web Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pyquest-web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${POSTGRES_USER:-pyquest}:${POSTGRES_PASSWORD:-pyquest_dev_password}@db:5432/${POSTGRES_DB:-pyquest}
+      DIRECT_URL: postgresql://${POSTGRES_USER:-pyquest}:${POSTGRES_PASSWORD:-pyquest_dev_password}@db:5432/${POSTGRES_DB:-pyquest}
+      
+      # NextAuth
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-key-min-32-characters-long}
+      
+      # Runner Service
+      RUNNER_SERVICE_URL: http://runner:8080
+      
+      # Node Environment
+      NODE_ENV: ${NODE_ENV:-production}
+    depends_on:
+      db:
+        condition: service_healthy
+      runner:
+        condition: service_healthy
+    networks:
+      - pyquest-network
+    volumes:
+      # Mount content directory for quest files
+      - ./content:/app/content:ro
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  pyquest-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

@@ -31,6 +31,8 @@ export async function POST(request: Request, { params }: RouteParams) {
     }
 
     // Execute code and run tests
+    // Note: This uses local Python execution (DEV ONLY)
+    // See /api/run for the actual execution logic
     const result = await executeUserCode(code, quest.tests);
 
     // Update or create quest attempt

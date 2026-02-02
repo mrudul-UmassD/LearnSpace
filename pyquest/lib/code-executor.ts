@@ -1,4 +1,11 @@
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import fs from 'fs/promises';
+import path from 'path';
+import os from 'os';
 import { QuestTest } from '@/types/quest';
+
+const execAsync = promisify(exec);
 
 export interface TestResult {
   description: string;
@@ -18,27 +25,37 @@ export interface ExecutionResult {
 }
 
 /**
- * Execute user code and run tests
- * This is a mock implementation - replace with real Python execution
+ * ⚠️ DEV ONLY - LOCAL PYTHON EXECUTION ⚠️
+ * 
+ * This implementation uses Node.js child_process to execute Python code locally.
+ * It is NOT suitable for production due to security concerns.
+ * 
+ * TODO: Replace with Docker sandbox or remote API (Judge0, Piston) before production
+ * 
+ * Security Issues:
+ * - No resource limits (CPU, memory)
+ * - Can access file system
+ * - Can make network requests
+ * - Can import any module
+ * - Can execute arbitrary commands
+ * 
+ * For production, use:
+ * 1. Docker container with resource limits
+ * 2. Remote execution API (Judge0: https://ce.judge0.com/)
+ * 3. AWS Lambda with sandboxing
  */
 export async function executeUserCode(code: string, tests: QuestTest[]): Promise<ExecutionResult> {
   const startTime = Date.now();
   
   try {
-    // MOCK IMPLEMENTATION
-    // In production, this should:
-    // 1. Use a Python sandbox (Judge0, Piston, or subprocess with timeout)
-    // 2. Execute the code
-    // 3. Capture stdout/stderr
-    // 4. Run tests against the output
+    console.warn('⚠️  DEV ONLY: Executing Python code locally without sandbox');
     
-    // For now, simulate execution with basic checks
-    const stdout = simulateExecution(code);
-    const stderr = '';
+    // Execute Python code and capture output
+    const { stdout, stderr } = await executePython(code);
     
+    // Run tests against the output
     const testResults: TestResult[] = tests.map(test => {
-      const result = evaluateTest(code, stdout, test);
-      return result;
+      return evaluateTest(code, stdout, stderr, test);
     });
 
     const allPassed = testResults.every(result => result.passed);
@@ -67,35 +84,72 @@ export async function executeUserCode(code: string, tests: QuestTest[]): Promise
   }
 }
 
-function simulateExecution(code: string): string {
-  // Simple simulation - extract print statements
-  const printMatches = code.matchAll(/print\((.*?)\)/g);
-  const outputs: string[] = [];
+/**
+ * Execute Python code using subprocess
+ * DEV ONLY - No sandboxing!
+ */
+async function executePython(code: string): Promise<{ stdout: string; stderr: string }> {
+  const tempDir = os.tmpdir();
+  const tempFile = path.join(tempDir, `pyquest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.py`);
   
-  for (const match of printMatches) {
-    let arg = match[1].trim();
-    // Remove quotes from strings
-    if ((arg.startsWith('"') && arg.endsWith('"')) || (arg.startsWith("'") && arg.endsWith("'"))) {
-      arg = arg.slice(1, -1);
+  try {
+    // Write code to temporary file
+    await fs.writeFile(tempFile, code, 'utf-8');
+    
+    // Execute with timeout
+    const { stdout, stderr } = await execAsync(`python "${tempFile}"`, {
+      timeout: 5000, // 5 second timeout
+      maxBuffer: 1024 * 1024, // 1MB max output
+      windowsHide: true
+    });
+    
+    return { stdout: stdout.trim(), stderr: stderr.trim() };
+  } catch (error: any) {
+    // Handle execution errors
+    if (error.killed) {
+      throw new Error('Execution timeout (5 seconds)');
     }
-    outputs.push(arg);
+    
+    return {
+      stdout: error.stdout?.trim() || '',
+      stderr: error.stderr?.trim() || error.message
+    };
+  } finally {
+    // Clean up temp file
+    try {
+      await fs.unlink(tempFile);
+    } catch {
+      // Ignore cleanup errors
+    }
   }
-  
-  return outputs.join('\n');
 }
 
-function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult {
+/**
+ * Evaluate a single test against the execution results
+ */
+function evaluateTest(code: string, stdout: string, stderr: string, test: QuestTest): TestResult {
+  // If there's a Python error, all tests fail
+  if (stderr && !stdout) {
+    return {
+      description: test.description,
+      passed: false,
+      error: stderr,
+      actual: 'Execution error'
+    };
+  }
+
   switch (test.type) {
     case 'output':
-      const passed = stdout.trim() === test.expected?.toString().trim();
+      const outputPassed = stdout.trim() === test.expected?.toString().trim();
       return {
         description: test.description,
-        passed,
+        passed: outputPassed,
         expected: test.expected,
         actual: stdout.trim()
       };
 
     case 'variable_exists':
+      // Check if variable is defined in the code
       const varExists = new RegExp(`\\b${test.variable}\\s*=`).test(code);
       return {
         description: test.description,
@@ -105,9 +159,10 @@ function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult
       };
 
     case 'variable_type':
-      // Basic type checking based on assignment
-      const varMatch = code.match(new RegExp(`${test.variable}\\s*=\\s*(.+?)(?:\\n|$)`));
-      if (!varMatch) {
+      // We need to inspect the variable - add a check to the code
+      // This is done by checking the code structure (simplified)
+      const varTypeMatch = code.match(new RegExp(`${test.variable}\\s*=\\s*(.+?)(?:\\n|$)`));
+      if (!varTypeMatch) {
         return {
           description: test.description,
           passed: false,
@@ -116,7 +171,7 @@ function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult
         };
       }
       
-      const value = varMatch[1].trim();
+      const value = varTypeMatch[1].trim();
       let actualType = 'unknown';
       
       if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
@@ -149,30 +204,33 @@ function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult
       
       const actualValue = valueMatch[1].trim();
       const expectedStr = test.expected?.toString();
-      const matches = actualValue === expectedStr;
+      const valueMatches = actualValue === expectedStr || actualValue === `"${expectedStr}"` || actualValue === `'${expectedStr}'`;
       
       return {
         description: test.description,
-        passed: matches,
+        passed: valueMatches,
         expected: test.expected,
         actual: actualValue
       };
 
     case 'function_call':
-      // Check if function is defined
-      const funcExists = code.includes(`def ${test.function}(`);
+      // For function calls, we expect the output to match
+      // The code should already have the function call that prints the result
+      const outputLines = stdout.split('\n');
+      const expectedOutput = test.expected?.toString();
+      const functionPassed = outputLines.some(line => line.trim() === expectedOutput?.trim());
+      
       return {
         description: test.description,
-        passed: funcExists,
-        expected: `Function '${test.function}' should be defined`,
-        actual: funcExists ? 'Found' : 'Not found'
+        passed: functionPassed,
+        expected: test.expected,
+        actual: stdout
       };
 
     case 'list_contains':
-    case 'list_length':
-      // Basic list checking
-      const listMatch = code.match(new RegExp(`${test.variable}\\s*=\\s*\\[(.+?)\\]`));
-      if (!listMatch) {
+      // Check if list contains the expected item
+      const listContainsMatch = code.match(new RegExp(`${test.variable}\\s*=\\s*\\[(.+?)\\]`));
+      if (!listContainsMatch) {
         return {
           description: test.description,
           passed: false,
@@ -181,11 +239,37 @@ function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult
         };
       }
       
+      const listContent = listContainsMatch[1];
+      const containsItem = listContent.includes(JSON.stringify(test.expected)) || listContent.includes(`'${test.expected}'`);
+      
       return {
         description: test.description,
-        passed: true, // Simplified for demo
+        passed: containsItem,
+        expected: `List should contain ${test.expected}`,
+        actual: listContent
+      };
+
+    case 'list_length':
+      // Check list length
+      const listLengthMatch = code.match(new RegExp(`${test.variable}\\s*=\\s*\\[(.+?)\\]`));
+      if (!listLengthMatch) {
+        return {
+          description: test.description,
+          passed: false,
+          expected: test.expected,
+          actual: 'List not found'
+        };
+      }
+      
+      // Count items in list (simple comma-based count)
+      const items = listLengthMatch[1].split(',').filter(item => item.trim());
+      const lengthMatches = items.length === test.expected;
+      
+      return {
+        description: test.description,
+        passed: lengthMatches,
         expected: test.expected,
-        actual: 'Checking...'
+        actual: items.length
       };
 
     default:
@@ -196,42 +280,3 @@ function evaluateTest(code: string, stdout: string, test: QuestTest): TestResult
       };
   }
 }
-
-/**
- * TODO: Real implementation using Python subprocess or API
- * 
- * Example with subprocess:
- * 
- * import { exec } from 'child_process';
- * import { promisify } from 'util';
- * import fs from 'fs/promises';
- * import path from 'path';
- * 
- * const execAsync = promisify(exec);
- * 
- * export async function executeUserCode(code: string, tests: QuestTest[]): Promise<ExecutionResult> {
- *   const tempFile = path.join('/tmp', `pyquest_${Date.now()}.py`);
- *   
- *   try {
- *     await fs.writeFile(tempFile, code);
- *     
- *     const { stdout, stderr } = await execAsync(`python3 ${tempFile}`, {
- *       timeout: 5000, // 5 second timeout
- *       maxBuffer: 1024 * 1024 // 1MB max output
- *     });
- *     
- *     // Run tests against output
- *     const testResults = tests.map(test => evaluateTest(code, stdout, test));
- *     
- *     return {
- *       allPassed: testResults.every(r => r.passed),
- *       stdout,
- *       stderr,
- *       testResults,
- *       executionTime: Date.now() - startTime
- *     };
- *   } finally {
- *     await fs.unlink(tempFile).catch(() => {});
- *   }
- * }
- */
