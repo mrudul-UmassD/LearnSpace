@@ -15,13 +15,17 @@ interface QuestWorkspaceProps {
 }
 
 interface ExecutionResult {
+  schemaVersion?: string;
   success?: boolean;
   allPassed: boolean;
   stdout: string;
   stderr: string;
   testResults: Array<{
+    id?: string;
     description: string;
+    expectedBehavior?: string;
     passed: boolean;
+    message?: string;
     expected?: any;
     actual?: any;
     error?: string;
@@ -30,12 +34,25 @@ interface ExecutionResult {
   xpEarned?: number;
   error?: string;
   message?: string;
+  attempt?: {
+    attemptsCount: number;
+    hintTierUnlocked: number;
+    lastResult?: any;
+  };
+  hintPolicy?: {
+    hintUnlockAttempts: number;
+    nextHintUnlockAtAttempt: number | null;
+  };
 }
 
 export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspaceProps) {
   const [code, setCode] = useState(initialCode);
   const [showHint, setShowHint] = useState(false);
   const [currentHintLevel, setCurrentHintLevel] = useState(0);
+  const [hintTierUnlocked, setHintTierUnlocked] = useState(attempt?.hintTierUnlocked ?? 0);
+  const [attemptsCount, setAttemptsCount] = useState(attempt?.attemptsCount ?? 0);
+  const [nextHintUnlockAtAttempt, setNextHintUnlockAtAttempt] = useState<number | null>(null);
+  const [hintUnlockAttempts] = useState(quest.hintUnlockAttempts ?? 2);
   const [testResults, setTestResults] = useState<ExecutionResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -72,6 +89,18 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
     return () => clearTimeout(timer);
   }, [code, initialCode, saveCode]);
 
+  useEffect(() => {
+    if (hintTierUnlocked <= 0) {
+      setShowHint(false);
+      setCurrentHintLevel(0);
+      return;
+    }
+
+    if (currentHintLevel > hintTierUnlocked - 1) {
+      setCurrentHintLevel(Math.max(hintTierUnlocked - 1, 0));
+    }
+  }, [hintTierUnlocked, currentHintLevel]);
+
   const handleRunCode = async () => {
     setIsRunning(true);
     setTestResults(null);
@@ -85,9 +114,38 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
 
       const result: ExecutionResult = await response.json();
       setTestResults(result);
+
+      if (result.attempt) {
+        setAttemptsCount(result.attempt.attemptsCount);
+        setHintTierUnlocked(result.attempt.hintTierUnlocked);
+      }
+
+      if (result.hintPolicy) {
+        setNextHintUnlockAtAttempt(result.hintPolicy.nextHintUnlockAtAttempt);
+      }
       
       if (result.allPassed) {
         setLastSaved(new Date());
+        
+        // Check for new achievements after quest completion
+        if (result.xpEarned && result.xpEarned > 0) {
+          try {
+            const achievementResponse = await fetch('/api/achievements/check', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (achievementResponse.ok) {
+              const achievementData = await achievementResponse.json();
+              if (achievementData.newAchievements && achievementData.newAchievements.length > 0) {
+                // You could show a notification here for new achievements
+                console.log('New achievements unlocked:', achievementData.newAchievements);
+              }
+            }
+          } catch (err) {
+            console.error('Error checking achievements:', err);
+          }
+        }
       }
     } catch (error) {
       console.error('Error running code:', error);
@@ -109,8 +167,12 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
   };
 
   const handleShowHint = () => {
+    if (hintTierUnlocked <= 0) {
+      return;
+    }
+
     setShowHint(true);
-    if (currentHintLevel < quest.hints.length - 1) {
+    if (currentHintLevel < hintTierUnlocked - 1) {
       setCurrentHintLevel(prev => prev + 1);
     }
   };
@@ -151,8 +213,9 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                 <div className="text-sm text-gray-700">
                   <strong>Your Progress:</strong>
                   <div className="mt-1">
-                    Attempts: {attempt.attemptsCount} | 
+                    Attempts: {attemptsCount} | 
                     Status: {attempt.status} |
+                    Hint Tier: {hintTierUnlocked}/{quest.hints.length}
                     {attempt.passed && <span className="text-green-600 ml-1">✓ Passed</span>}
                   </div>
                 </div>
@@ -168,12 +231,26 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
           </CardHeader>
           <CardContent>
             {!showHint ? (
-              <Button variant="outline" onClick={handleShowHint}>
-                Show Hint
-              </Button>
+              <div className="space-y-3">
+                <Button variant="outline" onClick={handleShowHint} disabled={hintTierUnlocked <= 0}>
+                  Show Hint
+                </Button>
+
+                {hintTierUnlocked <= 0 && (
+                  <div className="text-sm text-gray-600">
+                    No hints unlocked yet. Submit {hintUnlockAttempts} attempt(s) to unlock the first hint.
+                  </div>
+                )}
+
+                {hintTierUnlocked > 0 && nextHintUnlockAtAttempt && (
+                  <div className="text-sm text-gray-600">
+                    Next hint unlocks after attempt {nextHintUnlockAtAttempt}.
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="space-y-3">
-                {quest.hints.slice(0, currentHintLevel + 1).map((hint, index) => (
+                {quest.hints.slice(0, hintTierUnlocked).slice(0, currentHintLevel + 1).map((hint, index) => (
                   <div 
                     key={index}
                     className="bg-yellow-50 border border-yellow-200 rounded p-3"
@@ -185,10 +262,16 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                   </div>
                 ))}
                 
-                {currentHintLevel < quest.hints.length - 1 && (
+                {currentHintLevel < hintTierUnlocked - 1 && (
                   <Button variant="outline" onClick={handleShowHint} size="sm">
                     Show Next Hint
                   </Button>
+                )}
+
+                {hintTierUnlocked < quest.hints.length && nextHintUnlockAtAttempt && (
+                  <div className="text-xs text-gray-500">
+                    Next hint unlocks after attempt {nextHintUnlockAtAttempt}.
+                  </div>
                 )}
               </div>
             )}
@@ -236,7 +319,7 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                 <CardTitle className="text-lg">Test Results</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`p-4 rounded ${
+                  <div className={`p-4 rounded ${
                   testResults.allPassed 
                     ? 'bg-green-50 border-2 border-green-500' 
                     : 'bg-red-50 border-2 border-red-400'
@@ -275,6 +358,18 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                               <div className="font-medium text-gray-900">
                                 {test.description}
                               </div>
+
+                              {test.expectedBehavior && (
+                                <div className="mt-1 text-sm text-gray-600">
+                                  Expected behavior: {test.expectedBehavior}
+                                </div>
+                              )}
+
+                              {test.message && (
+                                <div className={`mt-1 text-sm ${test.passed ? 'text-green-700' : 'text-red-700'}`}>
+                                  {test.message}
+                                </div>
+                              )}
                               
                               {!test.passed && (test.expected !== undefined || test.actual !== undefined) && (
                                 <div className="mt-2 text-sm space-y-1">

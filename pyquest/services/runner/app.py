@@ -28,6 +28,7 @@ app = Flask(__name__)
 MAX_EXECUTION_TIME = 2  # seconds
 MAX_OUTPUT_SIZE = 1024 * 1024  # 1MB
 MAX_CODE_SIZE = 100 * 1024  # 100KB
+SCHEMA_VERSION = "2026-02-02"
 
 
 def execute_python_code(code: str) -> Dict[str, str]:
@@ -110,14 +111,26 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
     Returns:
         Dict with test result including 'passed', 'description', 'expected', 'actual'
     """
+    test_id = test.get('id')
+    description = test.get('description', 'Test')
+    expected_behavior = test.get('expectedBehavior', 'Expected behavior not provided')
+
+    def with_base(result: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            'id': test_id,
+            'description': description,
+            'expectedBehavior': expected_behavior,
+            **result
+        }
+
     # If there's a Python error, all tests fail
     if stderr and not stdout:
-        return {
-            'description': test.get('description', 'Test'),
+        return with_base({
             'passed': False,
             'error': stderr,
-            'actual': 'Execution error'
-        }
+            'actual': 'Execution error',
+            'message': 'Code execution failed before tests could run.'
+        })
     
     test_type = test.get('type')
     
@@ -126,12 +139,13 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         expected = str(test.get('expected', '')).strip()
         actual = stdout.strip()
         passed = actual == expected
-        return {
-            'description': test.get('description'),
+        message = 'Output matched expected behavior.' if passed else f"Expected output '{expected}', got '{actual}'."
+        return with_base({
             'passed': passed,
             'expected': expected,
-            'actual': actual
-        }
+            'actual': actual,
+            'message': message
+        })
     
     elif test_type == 'variable_exists':
         # Check if variable is defined in code
@@ -139,12 +153,13 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         import re
         pattern = rf'\b{re.escape(variable)}\s*='
         exists = bool(re.search(pattern, code))
-        return {
-            'description': test.get('description'),
+        message = f"Variable '{variable}' was found." if exists else f"Variable '{variable}' was not found."
+        return with_base({
             'passed': exists,
             'expected': f"Variable '{variable}' should exist",
-            'actual': 'Found' if exists else 'Not found'
-        }
+            'actual': 'Found' if exists else 'Not found',
+            'message': message
+        })
     
     elif test_type == 'variable_type':
         # Infer variable type from code
@@ -154,12 +169,12 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         import re
         match = re.search(rf'{re.escape(variable)}\s*=\s*(.+?)(?:\n|$)', code)
         if not match:
-            return {
-                'description': test.get('description'),
+            return with_base({
                 'passed': False,
                 'expected': expected_type,
-                'actual': 'Variable not found'
-            }
+                'actual': 'Variable not found',
+                'message': f"Variable '{variable}' was not found."
+            })
         
         value = match.group(1).strip()
         
@@ -177,12 +192,14 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         else:
             actual_type = 'unknown'
         
-        return {
-            'description': test.get('description'),
-            'passed': actual_type == expected_type,
+        passed = actual_type == expected_type
+        message = f"Variable '{variable}' has type '{actual_type}'." if passed else f"Expected type '{expected_type}', got '{actual_type}'."
+        return with_base({
+            'passed': passed,
             'expected': expected_type,
-            'actual': actual_type
-        }
+            'actual': actual_type,
+            'message': message
+        })
     
     elif test_type == 'variable_value':
         # Check variable value
@@ -192,12 +209,12 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         import re
         match = re.search(rf'{re.escape(variable)}\s*=\s*(.+?)(?:\n|$)', code)
         if not match:
-            return {
-                'description': test.get('description'),
+            return with_base({
                 'passed': False,
                 'expected': expected,
-                'actual': 'Variable not found'
-            }
+                'actual': 'Variable not found',
+                'message': f"Variable '{variable}' was not found."
+            })
         
         actual = match.group(1).strip()
         expected_str = str(expected)
@@ -209,12 +226,13 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
             actual == f"'{expected_str}'"
         )
         
-        return {
-            'description': test.get('description'),
+        message = f"Variable '{variable}' matches expected value." if matches else f"Expected '{expected}', got '{actual}'."
+        return with_base({
             'passed': matches,
             'expected': expected,
-            'actual': actual
-        }
+            'actual': actual,
+            'message': message
+        })
     
     elif test_type == 'function_call':
         # Check if expected output appears in stdout
@@ -222,12 +240,13 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         output_lines = stdout.split('\n')
         passed = any(line.strip() == expected for line in output_lines)
         
-        return {
-            'description': test.get('description'),
+        message = f"Found expected output '{expected}'." if passed else f"Expected '{expected}' not found in output."
+        return with_base({
             'passed': passed,
             'expected': expected,
-            'actual': stdout
-        }
+            'actual': stdout,
+            'message': message
+        })
     
     elif test_type == 'list_contains':
         # Check if list contains item
@@ -237,12 +256,12 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         import re
         match = re.search(rf'{re.escape(variable)}\s*=\s*\[(.+?)\]', code)
         if not match:
-            return {
-                'description': test.get('description'),
+            return with_base({
                 'passed': False,
                 'expected': expected,
-                'actual': 'List not found'
-            }
+                'actual': 'List not found',
+                'message': f"List '{variable}' was not found."
+            })
         
         list_content = match.group(1)
         contains = (
@@ -251,12 +270,13 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
             f'"{expected}"' in list_content
         )
         
-        return {
-            'description': test.get('description'),
+        message = f"List contains '{expected}'." if contains else f"List does not contain '{expected}'."
+        return with_base({
             'passed': contains,
             'expected': f'List should contain {expected}',
-            'actual': list_content
-        }
+            'actual': list_content,
+            'message': message
+        })
     
     elif test_type == 'list_length':
         # Check list length
@@ -266,30 +286,32 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
         import re
         match = re.search(rf'{re.escape(variable)}\s*=\s*\[(.+?)\]', code)
         if not match:
-            return {
-                'description': test.get('description'),
+            return with_base({
                 'passed': False,
                 'expected': expected_length,
-                'actual': 'List not found'
-            }
+                'actual': 'List not found',
+                'message': f"List '{variable}' was not found."
+            })
         
         list_content = match.group(1)
         items = [item.strip() for item in list_content.split(',') if item.strip()]
         actual_length = len(items)
         
-        return {
-            'description': test.get('description'),
-            'passed': actual_length == expected_length,
+        passed = actual_length == expected_length
+        message = f"List length is {actual_length}." if passed else f"Expected length {expected_length}, got {actual_length}."
+        return with_base({
+            'passed': passed,
             'expected': expected_length,
-            'actual': actual_length
-        }
+            'actual': actual_length,
+            'message': message
+        })
     
     else:
-        return {
-            'description': test.get('description'),
+        return with_base({
             'passed': False,
-            'error': f'Unknown test type: {test_type}'
-        }
+            'error': f'Unknown test type: {test_type}',
+            'message': 'Test type is not supported.'
+        })
 
 
 @app.route('/health', methods=['GET'])
@@ -335,6 +357,7 @@ def run_code():
         
         if not data:
             return jsonify({
+                'schemaVersion': SCHEMA_VERSION,
                 'success': False,
                 'error': 'Invalid JSON'
             }), 400
@@ -345,12 +368,14 @@ def run_code():
         # Validate input
         if not code:
             return jsonify({
+                'schemaVersion': SCHEMA_VERSION,
                 'success': False,
                 'error': 'No code provided'
             }), 400
         
         if len(code) > MAX_CODE_SIZE:
             return jsonify({
+                'schemaVersion': SCHEMA_VERSION,
                 'success': False,
                 'error': f'Code exceeds maximum size ({MAX_CODE_SIZE} bytes)'
             }), 400
@@ -372,6 +397,7 @@ def run_code():
         all_passed = all(result.get('passed', False) for result in test_results)
         
         return jsonify({
+            'schemaVersion': SCHEMA_VERSION,
             'success': True,
             'stdout': stdout,
             'stderr': stderr,
@@ -382,6 +408,7 @@ def run_code():
         
     except Exception as e:
         return jsonify({
+            'schemaVersion': SCHEMA_VERSION,
             'success': False,
             'error': str(e)
         }), 500

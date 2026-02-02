@@ -8,8 +8,10 @@
   "solutionHidden": "print(\"Hello, World!\")",
   "tests": [
     {
+      "id": "hello-world-output",
       "type": "output",
       "description": "Should print 'Hello, World!'",
+      "expectedBehavior": "Output should exactly match 'Hello, World!'",
       "expected": "Hello, World!"
     }
   ],
@@ -28,6 +30,7 @@
     }
   ],
   "xpReward": 50,
+  "hintUnlockAttempts": 2,
   "difficulty": "beginner",
   "order": 1
 }

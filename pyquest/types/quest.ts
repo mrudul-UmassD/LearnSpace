@@ -1,7 +1,9 @@
 // JSON-based quest types
 export interface QuestTest {
+  id: string;
   type: 'output' | 'variable_exists' | 'variable_type' | 'variable_value' | 'function_call' | 'list_contains' | 'list_length';
   description: string;
+  expectedBehavior: string;
   expected?: any;
   variable?: string;
   expectedType?: string;
@@ -24,6 +26,7 @@ export interface QuestData {
   solutionHidden: string;
   tests: QuestTest[];
   hints: QuestHint[];
+  hintUnlockAttempts: number;
   xpReward: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   order: number;

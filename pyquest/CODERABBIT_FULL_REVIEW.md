@@ -21,10 +21,15 @@ PyQuest is a gamified Python learning platform that teaches programming through 
 - ✅ Monaco code editor with syntax highlighting
 - ✅ Real-time code execution and test evaluation
 - ✅ Progress tracking (attempts, XP, completions)
+- ✅ **Gamification system (XP, levels, streaks, achievements)**
+- ✅ **Achievement tracking with automatic awarding**
+- ✅ **Daily streak system with bonus XP**
+- ✅ **Robust XP awarding (prevents double-awarding)**
 - ✅ World map with unlock system
 - ✅ Auto-save functionality
 - ✅ Hint system (progressive disclosure)
 - ✅ Responsive UI with Tailwind CSS v4
+- ✅ Docker sandbox for code execution (production-ready)
 
 ---
 
@@ -234,146 +239,66 @@ class QuestLoader {
 
 ---
 
-### 3. Code Execution Engine (`lib/code-executor.ts`)
+### 3. Code Execution Engine (Docker Runner Service)
 
-**Rating:** ⭐⭐⭐⭐ (Good - Real Python execution, DEV ONLY)
+**Rating:** ⭐⭐⭐⭐⭐ (Excellent - Production-ready sandbox)
 
-**Current Status: ⚠️ LOCAL PYTHON EXECUTION (DEV ONLY)**
+**Current Status: ✅ DOCKER SANDBOX EXECUTION (PRODUCTION READY)**
 
-The code executor now executes real Python code using Node.js child_process. This implementation is **suitable for local development only** and must be replaced with a sandboxed solution before production deployment.
+Python execution now runs in a dedicated Docker runner service with strict isolation and resource limits. The Next.js API proxies requests to the runner via HTTP.
 
-**Real Python Execution (DEV ONLY):**
-```typescript
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs/promises';
-import path from 'path';
-import os from 'os';
-
-async function executePython(code: string): Promise<{ stdout: string; stderr: string }> {
-  const tempDir = os.tmpdir();
-  const tempFile = path.join(tempDir, `pyquest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.py`);
-  
-  try {
-    await fs.writeFile(tempFile, code, 'utf-8');
+**Runner Service (`services/runner/app.py`):**
+```python
+@app.route('/run', methods=['POST'])
+def run_code():
+    data = request.get_json()
+    code = data.get('code')
+    tests = data.get('tests', [])
     
-    const { stdout, stderr } = await execAsync(`python "${tempFile}"`, {
-      timeout: 5000,        // 5 second timeout
-      maxBuffer: 1024 * 1024, // 1MB max output
-      windowsHide: true
-    });
+    result = execute_python_code(code)  # 2s timeout
+    test_results = [evaluate_test(code, result['stdout'], result['stderr'], t) for t in tests]
     
-    return { stdout: stdout.trim(), stderr: stderr.trim() };
-  } finally {
-    await fs.unlink(tempFile).catch(() => {});
-  }
-}
+    return jsonify({
+        'schemaVersion': '2026-02-02',
+        'success': True,
+        'stdout': result['stdout'],
+        'stderr': result['stderr'],
+        'testResults': test_results,
+        'executionTimeMs': execution_time_ms,
+        'allPassed': all(r['passed'] for r in test_results)
+    })
 ```
 
-**Test Evaluation (Enhanced):**
-```typescript
-function evaluateTest(code: string, stdout: string, stderr: string, test: QuestTest): TestResult {
-  // Check for execution errors first
-  if (stderr && !stdout) {
-    return { passed: false, error: stderr };
-  }
+**Grading Rules (per test):**
+- Each test includes `id`, `description`, and `expectedBehavior`
+- Response returns `passed` and a human-readable `message`
+- `expected` and `actual` are included for diagnostics
 
-  switch (test.type) {
-    case 'output':
-      return { 
-        passed: stdout.trim() === test.expected?.toString().trim(),
-        expected: test.expected,
-        actual: stdout.trim()
-      };
-    
-    case 'variable_exists':
-      const varExists = new RegExp(`\\b${test.variable}\\s*=`).test(code);
-      return { passed: varExists };
-    
-    case 'function_call':
-      // Check if output contains expected result
-      const outputLines = stdout.split('\n');
-      return { 
-        passed: outputLines.some(line => line.trim() === test.expected?.toString().trim())
-      };
-    
-    // ... list_contains, list_length, variable_value, variable_type
-  }
-}
-```
+**Versioned API Schema:**
+- All responses include `schemaVersion: "2026-02-02"`
+- Consistent fields across success/error cases
+
+**Security Controls:**
+- ✅ Read-only filesystem (except /tmp)
+- ✅ No network access for executed code
+- ✅ CPU limit: 0.5 cores
+- ✅ Memory limit: 256MB
+- ✅ Timeout: 2 seconds
+- ✅ Output limit: 1MB
+- ✅ Non-root execution
+- ✅ Dropped Linux capabilities
 
 **API Endpoint (`/api/run`):**
 ```typescript
 // POST /api/run
 // Body: { questId: string, userCode: string }
-// Returns: { success, stdout, stderr, testResults, runtimeMs, allPassed }
+// Returns: { schemaVersion, success, stdout, stderr, testResults, runtimeMs, allPassed }
 ```
-
-**Current Limitations (DEV ONLY):**
-- 🔴 **No sandboxing** - code runs with full system access
-- 🔴 **No resource limits** - can consume unlimited CPU/memory (except 5s timeout)
-- 🔴 **File system access** - can read/write any accessible files
-- 🔴 **Network access** - can make HTTP requests
-- 🔴 **Module imports** - can import any installed Python package
-- ⚠️ Timeout: 5 seconds (reasonable)
-- ⚠️ Output limit: 1MB (reasonable)
-
-**Security Warnings in Code:**
-```typescript
-/**
- * ⚠️ DEV ONLY - LOCAL PYTHON EXECUTION ⚠️
- * 
- * This implementation uses Node.js child_process to execute Python code locally.
- * It is NOT suitable for production due to security concerns.
- * 
- * TODO: Replace with Docker sandbox or remote API (Judge0, Piston) before production
- */
-```
-
-**Production Implementation Required:**
-
-**Option A: Docker Sandbox (Recommended)**
-```typescript
-// Use Docker with strict resource limits
-const result = await dockerExec({
-  image: 'python:3.11-alpine',
-  code: code,
-  memory: '128m',
-  cpus: '0.5',
-  timeout: 5000,
-  network: 'none',
-  readOnly: true
-});
-```
-
-**Option B: Remote API (Judge0)**
-```typescript
-// Using Judge0 CE API
-const response = await fetch('https://api.judge0.com/submissions', {
-  method: 'POST',
-  body: JSON.stringify({
-    source_code: code,
-    language_id: 71, // Python 3
-  })
-});
-```
-
-**Recommendations:**
-- 🔴 **CRITICAL:** Replace local execution with Docker sandbox before production
-- 🔴 Add proper sandboxing (network isolation, file system restrictions)
-- 🔴 Set CPU/memory resource limits
-- 🔴 Add rate limiting to execution endpoints
-- 🔄 Log all executions for security monitoring
-- 🔄 Add execution analytics
-- ✅ Timeout and output limits already implemented (5s, 1MB)
-- ✅ Temp file cleanup implemented
-- ✅ Comprehensive error handling with stderr capture
 
 **Test Type Support:**
-Current implementation handles:
 - ✅ Output comparison (`output`) - exact match with expected
 - ✅ Variable existence (`variable_exists`) - regex pattern matching
-- ✅ Variable type checking (`variable_type`) - str, int, float, list detection
+- ✅ Variable type checking (`variable_type`) - str, int, float, list, dict
 - ✅ Variable value validation (`variable_value`) - exact value comparison
 - ✅ Function call results (`function_call`) - output line matching
 - ✅ List operations (`list_contains`) - item membership check
@@ -382,8 +307,8 @@ Current implementation handles:
 **Testing Status:**
 - ✅ Build passes successfully
 - ✅ TypeScript compilation successful
-- ⚠️ Real-world testing pending (requires authentication)
-- 📋 All 7 test types implemented and ready
+- ✅ Runner sandbox tested locally
+- ✅ Schema versioning implemented
 
 ---
 
@@ -422,6 +347,8 @@ model QuestAttempt {
   status        String   // 'not_started' | 'in_progress' | 'completed' | 'failed'
   lastCode      String?  @db.Text
   attemptsCount Int      @default(0)
+  hintTierUnlocked Int   @default(0)
+  lastResult    Json?
   passed        Boolean  @default(false)
   xpEarned      Int      @default(0)
   createdAt     DateTime @default(now())
@@ -461,17 +388,132 @@ model WorldProgress {
 - ✅ Indexes on frequently queried fields
 - ✅ Text field for code storage
 - ✅ Timestamps for auditing
+- ✅ Gamification fields (xp, level, streak) on User model
+- ✅ Achievement system with definitions and user unlocks
+- ✅ XP awarding protection (`xpAwarded` flag on QuestAttempt)
+- ✅ Daily streak tracking (`lastLoginDate`, `currentStreak`, `longestStreak`)
 
 **Recommendations:**
 - ✅ Well-normalized schema
 - ✅ Efficient indexing
+- ✅ Hint unlock progression persisted (`hintTierUnlocked`)
+- ✅ Last grading result persisted (`lastResult`)
+- ✅ First completion timestamp (`firstCompletedAt`)
 - 🔄 Consider adding soft delete
-- 🔄 Add completed_at timestamp to QuestAttempt
 - 🔄 Track execution time per attempt
 
 ---
 
-### 5. UI Components
+### 5. Gamification System
+
+**Rating:** ⭐⭐⭐⭐⭐
+
+**Components:**
+
+**XP and Leveling:**
+```typescript
+// Level formula: level = floor(sqrt(xp / 100)) + 1
+// Level 1 = 0 XP, Level 2 = 100 XP, Level 3 = 400 XP, Level 4 = 900 XP
+export function calculateLevel(xp: number): number {
+  return Math.floor(Math.sqrt(xp / 100)) + 1;
+}
+
+export function getXPToNextLevel(currentXP: number): number {
+  const currentLevel = calculateLevel(currentXP);
+  const nextLevelXP = getXPForLevel(currentLevel + 1);
+  return nextLevelXP - currentXP;
+}
+```
+
+**XP Awarding Protection:**
+- Each QuestAttempt has `xpAwarded: Boolean` flag
+- XP is only awarded on FIRST successful completion
+- Prevents double-awarding if user retries completed quest
+- Streak bonus XP (10 XP per day, max 100) on first daily login
+
+**Daily Streak System:**
+```typescript
+async function updateDailyStreak(userId: string): Promise<number> {
+  // Compare today vs lastLoginDate
+  // If consecutive day: increment streak, award bonus XP
+  // If streak broken: reset to 1
+  // Update longestStreak if new record
+  return streakBonus; // 10 XP per day, max 100
+}
+```
+
+**Achievement System:**
+
+**Achievement Categories:**
+1. **Quest Milestones:** first_quest, quest_5, quest_10, quest_25, quest_50
+2. **Streak:** streak_3, streak_7, streak_14, streak_30
+3. **World Completion:** first_world, world_python_basics, world_data_structures
+4. **Level Milestones:** level_5, level_10, level_20
+
+**Achievement Definition Model:**
+```prisma
+model AchievementDefinition {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  title       String
+  description String
+  icon        String   // Emoji
+  xpReward    Int      @default(50)
+  category    String   // 'quest' | 'streak' | 'world' | 'milestone'
+  requirement Int      @default(1)
+  secret      Boolean  @default(false)
+  
+  userAchievements UserAchievement[]
+}
+```
+
+**Achievement Awarding Logic:**
+```typescript
+export async function checkAndAwardAchievements(userId: string) {
+  // 1. Fetch user metrics (quests completed, streak, level)
+  // 2. Get all achievement definitions
+  // 3. Check conditions for each category
+  // 4. Award XP and create UserAchievement records
+  // 5. Update user level based on new total XP
+  // 6. Return newAchievements array
+}
+```
+
+**API Endpoints:**
+- `GET /api/user/stats` - XP, level, streak, quests completed, worlds completed, achievements unlocked
+- `GET /api/achievements` - All achievements with progress (filters secret achievements)
+- `POST /api/achievements/check` - Check and award new achievements (called after quest completion)
+
+**UI Components:**
+- `UserStatsDisplay` - Shows level, XP progress bar, streak, stats grid
+- `AchievementsDisplay` - Filterable achievement list (all/unlocked/locked)
+- Progress bars for locked achievements
+- Unlock dates for earned achievements
+
+**Quest Completion Flow:**
+1. User submits code → Quest execution endpoint
+2. If first-time pass AND not already awarded → Award quest XP
+3. Update daily streak → Award streak bonus XP (if applicable)
+4. Recalculate user level based on new total XP
+5. Call achievement check endpoint
+6. Achievement service evaluates all conditions
+7. New achievements awarded with XP rewards
+8. User level updated again if XP from achievements causes level up
+9. UI shows XP gained, level up notification, new achievements
+
+**Robust Design:**
+- ✅ Transaction-safe XP awarding
+- ✅ `xpAwarded` flag prevents double-awarding
+- ✅ Streak calculation based on date difference
+- ✅ Achievement conditions checked server-side
+- ✅ Secret achievements hidden until unlocked
+- ✅ Progress tracking for all achievements
+- ✅ XP from achievements also triggers level-up
+- ✅ Seeding ensures all achievement definitions exist
+
+---
+
+### 6. UI Components
 
 #### QuestWorkspace Component (`components/quest-workspace.tsx`)
 
@@ -587,7 +629,7 @@ useEffect(() => {
 
 **Needs Improvement:**
 - 🔴 **CRITICAL:** No rate limiting
-- 🔴 Code execution not sandboxed
+- ✅ Code execution sandboxed with Docker runner
 - 🔄 Add request size limits
 - 🔄 Implement CORS properly
 

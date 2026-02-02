@@ -8,20 +8,26 @@
   "solutionHidden": "fruits = ['apple', 'banana', 'orange']\n\nfruits.append('grape')\n\nprint(fruits[1])\n\nprint(len(fruits))",
   "tests": [
     {
+      "id": "list-type",
       "type": "variable_type",
       "description": "fruits should be a list",
+      "expectedBehavior": "Create a list named 'fruits'",
       "variable": "fruits",
       "expectedType": "list"
     },
     {
+      "id": "list-contains-grape",
       "type": "list_contains",
       "description": "fruits should contain 'grape'",
+      "expectedBehavior": "Add 'grape' to the fruits list",
       "variable": "fruits",
       "expected": "grape"
     },
     {
+      "id": "list-length",
       "type": "list_length",
       "description": "fruits should have 4 items",
+      "expectedBehavior": "Ensure the list has exactly 4 items",
       "variable": "fruits",
       "expected": 4
     }
@@ -41,6 +47,7 @@
     }
   ],
   "xpReward": 125,
+  "hintUnlockAttempts": 3,
   "difficulty": "intermediate",
   "order": 1
 }

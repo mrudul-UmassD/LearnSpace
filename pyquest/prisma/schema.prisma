@@ -20,12 +20,20 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
-  accounts      Account[]
-  sessions      Session[]
-  progress      UserProgress[]
-  achievements  Achievement[]
-  questAttempts QuestAttempt[]
-  worldProgress WorldProgress[]
+  // Game mechanics
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastLoginDate DateTime?
+  
+  accounts           Account[]
+  sessions           Session[]
+  progress           UserProgress[]
+  oldAchievements    Achievement[]
+  questAttempts      QuestAttempt[]
+  worldProgress      WorldProgress[]
+  userAchievements   UserAchievement[]
 }
 
 // NextAuth Account model
@@ -124,17 +132,51 @@ model UserProgress {
   @@index([userId])
 }
 
-// Achievement/Badge system
+// Old Achievement model (deprecated, kept for migration)
 model Achievement {
   id          String   @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(name: "OldAchievements", fields: [userId], references: [id], onDelete: Cascade)
   title       String
   description String
   icon        String
   unlockedAt  DateTime @default(now())
   
   @@index([userId])
+}
+
+// Achievement definition (system-wide)
+model AchievementDefinition {
+  id               String   @id @default(cuid())
+  code             String   @unique // e.g., 'first_quest', 'streak_3', 'world_complete_python_basics'
+  title            String
+  description      String
+  icon             String   // Emoji or icon identifier
+  xpReward         Int      @default(50)
+  category         String   // 'quest', 'streak', 'world', 'milestone'
+  requirement      Int      @default(1) // Threshold value (e.g., 5 for '5 quests completed')
+  secret           Boolean  @default(false) // Hidden until unlocked
+  createdAt        DateTime @default(now())
+  
+  xpAwarded    Boolean  @default(false) // Track if XP has been awarded to prevent double-awarding
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  firstCompletedAt DateTime? // Track when first completed for daily streak
+  @@index([category])
+}
+
+// User's unlocked achievements
+model UserAchievement {
+  id            String                @id @default(cuid())
+  userId        String
+  user          User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   AchievementDefinition @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime              @default(now())
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
 }
 
 // Quest Attempt tracking (for JSON-based quests)
@@ -146,6 +188,8 @@ model QuestAttempt {
   status       String   // 'not_started', 'in_progress', 'completed', 'failed'
   lastCode     String?  @db.Text
   attemptsCount Int     @default(0)
+  hintTierUnlocked Int  @default(0)
+  lastResult   Json?
   passed       Boolean  @default(false)
   xpEarned     Int      @default(0)
   createdAt    DateTime @default(now())

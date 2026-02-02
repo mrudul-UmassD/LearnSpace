@@ -8,35 +8,47 @@
   "solutionHidden": "name = \"Alice\"\nage = 25\nheight = 5.9\n\nprint(name, age, height)",
   "tests": [
     {
+      "id": "vars-name-exists",
       "type": "variable_exists",
       "description": "Variable 'name' should exist",
+      "expectedBehavior": "Define a variable named 'name'",
       "variable": "name"
     },
     {
+      "id": "vars-name-type",
       "type": "variable_type",
       "description": "Variable 'name' should be a string",
+      "expectedBehavior": "The 'name' variable should be a string",
       "variable": "name",
       "expectedType": "str"
     },
     {
+      "id": "vars-age-exists",
       "type": "variable_exists",
       "description": "Variable 'age' should exist",
+      "expectedBehavior": "Define a variable named 'age'",
       "variable": "age"
     },
     {
+      "id": "vars-age-value",
       "type": "variable_value",
       "description": "Variable 'age' should be 25",
+      "expectedBehavior": "Set 'age' to the value 25",
       "variable": "age",
       "expected": 25
     },
     {
+      "id": "vars-height-exists",
       "type": "variable_exists",
       "description": "Variable 'height' should exist",
+      "expectedBehavior": "Define a variable named 'height'",
       "variable": "height"
     },
     {
+      "id": "vars-height-type",
       "type": "variable_type",
       "description": "Variable 'height' should be a float",
+      "expectedBehavior": "The 'height' variable should be a float",
       "variable": "height",
       "expectedType": "float"
     }
@@ -56,6 +68,7 @@
     }
   ],
   "xpReward": 75,
+  "hintUnlockAttempts": 2,
   "difficulty": "beginner",
   "order": 2
 }

@@ -17,24 +17,25 @@ import { getQuestLoader } from '@/lib/quest-loader';
 
 const RUNNER_SERVICE_URL = process.env.RUNNER_SERVICE_URL || 'http://runner:8080';
 const REQUEST_TIMEOUT = 10000; // 10 seconds for runner service response
+const SCHEMA_VERSION = '2026-02-02';
 
 export async function POST(request: Request) {
   try {
     const session = await auth();
     
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Unauthorized' }, { status: 401 });
     }
 
     const { questId, userCode } = await request.json();
 
     // Validate inputs
     if (!questId || typeof questId !== 'string') {
-      return NextResponse.json({ error: 'Invalid questId' }, { status: 400 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Invalid questId' }, { status: 400 });
     }
 
     if (!userCode || typeof userCode !== 'string') {
-      return NextResponse.json({ error: 'Invalid userCode' }, { status: 400 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Invalid userCode' }, { status: 400 });
     }
 
     // Load quest
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
     const quest = questLoader.getQuestById(questId);
 
     if (!quest) {
-      return NextResponse.json({ error: 'Quest not found' }, { status: 404 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Quest not found' }, { status: 404 });
     }
 
     // Call Docker runner service
@@ -71,6 +72,7 @@ export async function POST(request: Request) {
         console.error('Runner service error:', errorData);
         
         return NextResponse.json({
+          schemaVersion: SCHEMA_VERSION,
           success: false,
           questId,
           error: errorData.error || 'Runner service error',
@@ -86,6 +88,7 @@ export async function POST(request: Request) {
 
       // Return structured results with questId added
       return NextResponse.json({
+        schemaVersion: SCHEMA_VERSION,
         success: result.success,
         questId,
         stdout: result.stdout || '',
@@ -102,6 +105,7 @@ export async function POST(request: Request) {
       if (fetchError.name === 'AbortError') {
         console.error('Runner service timeout');
         return NextResponse.json({
+          schemaVersion: SCHEMA_VERSION,
           success: false,
           questId,
           error: 'Execution timeout',
@@ -115,6 +119,7 @@ export async function POST(request: Request) {
 
       console.error('Error calling runner service:', fetchError);
       return NextResponse.json({
+        schemaVersion: SCHEMA_VERSION,
         success: false,
         questId,
         error: 'Failed to connect to runner service',
@@ -129,6 +134,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error in /api/run:', error);
     return NextResponse.json({ 
+      schemaVersion: SCHEMA_VERSION,
       success: false,
       error: 'Code execution failed',
       message: error instanceof Error ? error.message : 'Unknown error',
@@ -145,6 +151,7 @@ export async function POST(request: Request) {
  */
 export async function GET() {
   return NextResponse.json({ 
+    schemaVersion: SCHEMA_VERSION,
     error: 'Method not allowed',
     message: 'Use POST with { questId, userCode }'
   }, { status: 405 });
