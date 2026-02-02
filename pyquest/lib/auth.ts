@@ -72,3 +72,6 @@ export const authConfig: NextAuthConfig = {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+
+// Export authOptions for compatibility with getServerSession
+export const authOptions = authConfig;

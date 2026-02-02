@@ -30,7 +30,7 @@ model User {
   accounts           Account[]
   sessions           Session[]
   progress           UserProgress[]
-  oldAchievements    Achievement[]
+  oldAchievements    Achievement[]    @relation("OldAchievements")
   questAttempts      QuestAttempt[]
   worldProgress      WorldProgress[]
   userAchievements   UserAchievement[]
@@ -156,12 +156,12 @@ model AchievementDefinition {
   category         String   // 'quest', 'streak', 'world', 'milestone'
   requirement      Int      @default(1) // Threshold value (e.g., 5 for '5 quests completed')
   secret           Boolean  @default(false) // Hidden until unlocked
+  xpAwarded        Boolean  @default(false) // Track if XP has been awarded to prevent double-awarding
   createdAt        DateTime @default(now())
-  
-  xpAwarded    Boolean  @default(false) // Track if XP has been awarded to prevent double-awarding
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  updatedAt        DateTime @updatedAt
   firstCompletedAt DateTime? // Track when first completed for daily streak
+  userAchievements UserAchievement[]
+  
   @@index([category])
 }
 

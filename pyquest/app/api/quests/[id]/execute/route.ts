@@ -179,7 +179,7 @@ export async function POST(request: Request, { params }: RouteParams) {
     const hasNewPass = result.allPassed && !wasPreviouslyPassed;
     
     // Check if XP was already awarded to prevent double-awarding
-    const xpAlreadyAwarded = existingAttempt?.xpAwarded ?? false;
+    const xpAlreadyAwarded = (existingAttempt?.xpEarned ?? 0) > 0;
     const shouldAwardXP = hasNewPass && !xpAlreadyAwarded;
 
     let hintTierUnlocked = existingAttempt?.hintTierUnlocked ?? 0;
@@ -254,9 +254,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         hintTierUnlocked,
         lastResult,
         passed: result.allPassed,
-        xpEarned: shouldAwardXP ? quest.xpReward : 0,
-        xpAwarded: shouldAwardXP,
-        firstCompletedAt: result.allPassed ? new Date() : null
+        xpEarned: shouldAwardXP ? quest.xpReward : 0
       },
       update: {
         status: result.allPassed ? 'completed' : 'in_progress',
@@ -266,8 +264,6 @@ export async function POST(request: Request, { params }: RouteParams) {
         lastResult,
         passed: result.allPassed,
         xpEarned: shouldAwardXP ? quest.xpReward : (existingAttempt?.xpEarned ?? 0),
-        xpAwarded: shouldAwardXP ? true : (existingAttempt?.xpAwarded ?? false),
-        firstCompletedAt: hasNewPass ? new Date() : existingAttempt?.firstCompletedAt,
         updatedAt: new Date()
       }
     });
