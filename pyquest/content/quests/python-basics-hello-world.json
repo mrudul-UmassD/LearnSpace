@@ -1,0 +1,33 @@
+{
+  "id": "python-basics-hello-world",
+  "world": "python-basics",
+  "title": "Hello, Python World!",
+  "story": "Welcome to your first Python quest! Every programmer starts their journey by greeting the world. In this quest, you'll learn how to use Python's print() function to display messages.",
+  "instructions": "Use the `print()` function to output the text \"Hello, World!\" exactly as shown (including the comma and exclamation mark).",
+  "starterCode": "# Write your code below\n",
+  "solutionHidden": "print(\"Hello, World!\")",
+  "tests": [
+    {
+      "type": "output",
+      "description": "Should print 'Hello, World!'",
+      "expected": "Hello, World!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use the print() function to display text"
+    },
+    {
+      "level": 2,
+      "text": "Text in Python needs to be wrapped in quotes: \"text\""
+    },
+    {
+      "level": 3,
+      "text": "The exact solution is: print(\"Hello, World!\")"
+    }
+  ],
+  "xpReward": 50,
+  "difficulty": "beginner",
+  "order": 1
+}

@@ -1,8 +1,16 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
 import { NavBar } from '@/components/nav-bar';
+import { WorldMap } from '@/components/world-map';
 
-export default function MapPage() {
+export default async function MapPage() {
+  const session = await auth();
+  
+  if (!session?.user) {
+    redirect('/auth/signin');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <NavBar />
@@ -14,19 +22,7 @@ export default function MapPage() {
           <p className="text-gray-600">Navigate your Python learning journey</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8 min-h-[600px] flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-6xl mb-4">🗺️</div>
-            <h2 className="text-2xl font-bold mb-2">Interactive Quest Map</h2>
-            <p className="text-gray-600 mb-4">
-              The interactive quest map is coming soon! It will show your learning path and progress
-              across different Python topics.
-            </p>
-            <Link href="/quests">
-              <Button variant="primary">View All Quests</Button>
-            </Link>
-          </div>
-        </div>
+        <WorldMap />
       </main>
     </div>
   );

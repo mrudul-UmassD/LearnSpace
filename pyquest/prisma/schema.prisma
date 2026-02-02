@@ -24,6 +24,8 @@ model User {
   sessions      Session[]
   progress      UserProgress[]
   achievements  Achievement[]
+  questAttempts QuestAttempt[]
+  worldProgress WorldProgress[]
 }
 
 // NextAuth Account model
@@ -135,3 +137,38 @@ model Achievement {
   @@index([userId])
 }
 
+// Quest Attempt tracking (for JSON-based quests)
+model QuestAttempt {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId      String   // References quest ID from JSON files
+  status       String   // 'not_started', 'in_progress', 'completed', 'failed'
+  lastCode     String?  @db.Text
+  attemptsCount Int     @default(0)
+  passed       Boolean  @default(false)
+  xpEarned     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@unique([userId, questId])
+  @@index([userId])
+  @@index([questId])
+}
+
+// World Progress tracking
+model WorldProgress {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  worldId         String   // World identifier (e.g., 'python-basics', 'data-structures')
+  questsCompleted Int      @default(0)
+  totalQuests     Int      @default(0)
+  xpEarned        Int      @default(0)
+  isUnlocked      Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([userId, worldId])
+  @@index([userId])
+}

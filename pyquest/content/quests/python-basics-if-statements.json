@@ -1,0 +1,49 @@
+{
+  "id": "python-basics-if-statements",
+  "world": "python-basics",
+  "title": "Making Decisions with If",
+  "story": "Programs need to make decisions based on conditions. The if statement is your first tool for creating intelligent code that responds differently to different situations.",
+  "instructions": "Complete the function `check_temperature(temp)` that:\n- Returns \"Hot\" if temp is greater than 30\n- Returns \"Cold\" if temp is less than 10\n- Returns \"Comfortable\" otherwise",
+  "starterCode": "def check_temperature(temp):\n    # Write your code here\n    pass\n\n# Test your function\nprint(check_temperature(35))\nprint(check_temperature(5))\nprint(check_temperature(20))",
+  "solutionHidden": "def check_temperature(temp):\n    if temp > 30:\n        return \"Hot\"\n    elif temp < 10:\n        return \"Cold\"\n    else:\n        return \"Comfortable\"\n\nprint(check_temperature(35))\nprint(check_temperature(5))\nprint(check_temperature(20))",
+  "tests": [
+    {
+      "type": "function_call",
+      "description": "check_temperature(35) should return 'Hot'",
+      "function": "check_temperature",
+      "args": [35],
+      "expected": "Hot"
+    },
+    {
+      "type": "function_call",
+      "description": "check_temperature(5) should return 'Cold'",
+      "function": "check_temperature",
+      "args": [5],
+      "expected": "Cold"
+    },
+    {
+      "type": "function_call",
+      "description": "check_temperature(20) should return 'Comfortable'",
+      "function": "check_temperature",
+      "args": [20],
+      "expected": "Comfortable"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use if, elif, and else statements"
+    },
+    {
+      "level": 2,
+      "text": "Use > for greater than and < for less than"
+    },
+    {
+      "level": 3,
+      "text": "Remember to return the string values, not print them"
+    }
+  ],
+  "xpReward": 100,
+  "difficulty": "beginner",
+  "order": 3
+}

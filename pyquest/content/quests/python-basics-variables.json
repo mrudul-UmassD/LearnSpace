@@ -1,0 +1,61 @@
+{
+  "id": "python-basics-variables",
+  "world": "python-basics",
+  "title": "Variables: Storing Values",
+  "story": "Variables are like containers that store information. Just as you might label boxes in your home, variables have names that help you remember what's inside. Let's learn how to create and use variables!",
+  "instructions": "Create three variables:\n- A variable named `name` with your name as a string\n- A variable named `age` with the number 25\n- A variable named `height` with the number 5.9\n\nThen print all three variables on one line, separated by spaces.",
+  "starterCode": "# Create your variables here\nname = \nage = \nheight = \n\n# Print them (don't modify this line)\nprint(name, age, height)",
+  "solutionHidden": "name = \"Alice\"\nage = 25\nheight = 5.9\n\nprint(name, age, height)",
+  "tests": [
+    {
+      "type": "variable_exists",
+      "description": "Variable 'name' should exist",
+      "variable": "name"
+    },
+    {
+      "type": "variable_type",
+      "description": "Variable 'name' should be a string",
+      "variable": "name",
+      "expectedType": "str"
+    },
+    {
+      "type": "variable_exists",
+      "description": "Variable 'age' should exist",
+      "variable": "age"
+    },
+    {
+      "type": "variable_value",
+      "description": "Variable 'age' should be 25",
+      "variable": "age",
+      "expected": 25
+    },
+    {
+      "type": "variable_exists",
+      "description": "Variable 'height' should exist",
+      "variable": "height"
+    },
+    {
+      "type": "variable_type",
+      "description": "Variable 'height' should be a float",
+      "variable": "height",
+      "expectedType": "float"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Strings use quotes, numbers don't"
+    },
+    {
+      "level": 2,
+      "text": "Use decimal points for floats: 5.9 not 59"
+    },
+    {
+      "level": 3,
+      "text": "Example: name = \"Alice\""
+    }
+  ],
+  "xpReward": 75,
+  "difficulty": "beginner",
+  "order": 2
+}

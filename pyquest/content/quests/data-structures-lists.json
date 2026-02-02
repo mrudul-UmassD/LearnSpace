@@ -1,0 +1,46 @@
+{
+  "id": "data-structures-lists",
+  "world": "data-structures",
+  "title": "Lists: Your First Collection",
+  "story": "Lists are ordered collections that can hold multiple items. Think of them as a shopping list or a to-do list - they keep things in order and let you access them by position.",
+  "instructions": "Create a list named `fruits` containing 'apple', 'banana', and 'orange'. Then:\n1. Add 'grape' to the end of the list\n2. Print the second item (index 1)\n3. Print the length of the list",
+  "starterCode": "# Create your list here\nfruits = \n\n# Add 'grape' to the list\n\n\n# Print the second item\n\n\n# Print the length\n",
+  "solutionHidden": "fruits = ['apple', 'banana', 'orange']\n\nfruits.append('grape')\n\nprint(fruits[1])\n\nprint(len(fruits))",
+  "tests": [
+    {
+      "type": "variable_type",
+      "description": "fruits should be a list",
+      "variable": "fruits",
+      "expectedType": "list"
+    },
+    {
+      "type": "list_contains",
+      "description": "fruits should contain 'grape'",
+      "variable": "fruits",
+      "expected": "grape"
+    },
+    {
+      "type": "list_length",
+      "description": "fruits should have 4 items",
+      "variable": "fruits",
+      "expected": 4
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Lists use square brackets: [item1, item2, item3]"
+    },
+    {
+      "level": 2,
+      "text": "Use .append() to add items to a list"
+    },
+    {
+      "level": 3,
+      "text": "List indexes start at 0, so the second item is index 1"
+    }
+  ],
+  "xpReward": 125,
+  "difficulty": "intermediate",
+  "order": 1
+}
