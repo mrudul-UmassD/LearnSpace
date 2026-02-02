@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { QuestData } from '@/types/quest';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+
+const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
 interface QuestWorkspaceProps {
   quest: QuestData;
@@ -11,35 +14,98 @@ interface QuestWorkspaceProps {
   attempt: any;
 }
 
+interface ExecutionResult {
+  success?: boolean;
+  allPassed: boolean;
+  stdout: string;
+  stderr: string;
+  testResults: Array<{
+    description: string;
+    passed: boolean;
+    expected?: any;
+    actual?: any;
+    error?: string;
+  }>;
+  executionTime: number;
+  xpEarned?: number;
+  error?: string;
+  message?: string;
+}
+
 export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspaceProps) {
   const [code, setCode] = useState(initialCode);
   const [showHint, setShowHint] = useState(false);
   const [currentHintLevel, setCurrentHintLevel] = useState(0);
-  const [testResults, setTestResults] = useState<any>(null);
+  const [testResults, setTestResults] = useState<ExecutionResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Auto-save functionality
+  const saveCode = useCallback(async (codeToSave: string) => {
+    try {
+      setIsSaving(true);
+      const response = await fetch(`/api/quests/${quest.id}/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: codeToSave })
+      });
+      
+      if (response.ok) {
+        setLastSaved(new Date());
+      }
+    } catch (error) {
+      console.error('Error saving code:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [quest.id]);
+
+  // Auto-save every 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (code !== initialCode) {
+        saveCode(code);
+      }
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, [code, initialCode, saveCode]);
 
   const handleRunCode = async () => {
     setIsRunning(true);
     setTestResults(null);
 
     try {
-      // TODO: Implement code execution API
-      // For now, simulate test results
-      setTimeout(() => {
-        setTestResults({
-          passed: false,
-          message: 'Code execution not yet implemented',
-          tests: quest.tests.map(test => ({
-            description: test.description,
-            passed: false
-          }))
-        });
-        setIsRunning(false);
-      }, 1000);
+      const response = await fetch(`/api/quests/${quest.id}/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      });
+
+      const result: ExecutionResult = await response.json();
+      setTestResults(result);
+      
+      if (result.allPassed) {
+        setLastSaved(new Date());
+      }
     } catch (error) {
       console.error('Error running code:', error);
+      setTestResults({
+        allPassed: false,
+        stdout: '',
+        stderr: 'Network error occurred',
+        testResults: [],
+        executionTime: 0,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    } finally {
       setIsRunning(false);
     }
+  };
+
+  const handleSaveCode = async () => {
+    await saveCode(code);
   };
 
   const handleShowHint = () => {
@@ -51,7 +117,7 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Left Column: Instructions */}
+      {/* Left Column: Instructions & Results */}
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -129,37 +195,131 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
           </CardContent>
         </Card>
 
-        {/* Test Results */}
+        {/* Output & Test Results */}
         {testResults && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Test Results</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={`p-3 rounded ${
-                testResults.passed 
-                  ? 'bg-green-50 border border-green-200' 
-                  : 'bg-red-50 border border-red-200'
-              }`}>
-                <p className={`font-medium ${
-                  testResults.passed ? 'text-green-700' : 'text-red-700'
-                }`}>
-                  {testResults.message}
-                </p>
-                
-                {testResults.tests && (
-                  <div className="mt-3 space-y-2">
-                    {testResults.tests.map((test: any, index: number) => (
-                      <div key={index} className="text-sm flex items-start gap-2">
-                        <span>{test.passed ? '✓' : '✗'}</span>
-                        <span className="text-gray-700">{test.description}</span>
+          <>
+            {/* Execution Output */}
+            {(testResults.stdout || testResults.stderr) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Output</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {testResults.stdout && (
+                    <div className="mb-3">
+                      <div className="text-xs font-semibold text-gray-500 mb-1">STDOUT</div>
+                      <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm whitespace-pre-wrap">
+                        {testResults.stdout}
                       </div>
-                    ))}
+                    </div>
+                  )}
+                  
+                  {testResults.stderr && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 mb-1">STDERR</div>
+                      <div className="bg-gray-900 text-red-400 p-3 rounded font-mono text-sm whitespace-pre-wrap">
+                        {testResults.stderr}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="text-xs text-gray-500 mt-2">
+                    Executed in {testResults.executionTime}ms
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Test Results */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Test Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className={`p-4 rounded ${
+                  testResults.allPassed 
+                    ? 'bg-green-50 border-2 border-green-500' 
+                    : 'bg-red-50 border-2 border-red-400'
+                }`}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-2xl">
+                      {testResults.allPassed ? '🎉' : '❌'}
+                    </span>
+                    <p className={`font-bold text-lg ${
+                      testResults.allPassed ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                      {testResults.allPassed 
+                        ? `All Tests Passed! +${testResults.xpEarned || quest.xpReward} XP` 
+                        : 'Some Tests Failed'}
+                    </p>
+                  </div>
+                  
+                  {testResults.testResults && testResults.testResults.length > 0 && (
+                    <div className="space-y-3 mt-4">
+                      {testResults.testResults.map((test, index) => (
+                        <div 
+                          key={index} 
+                          className={`p-3 rounded border ${
+                            test.passed 
+                              ? 'bg-white border-green-300' 
+                              : 'bg-white border-red-300'
+                          }`}
+                        >
+                          <div className="flex items-start gap-2">
+                            <span className={`text-lg font-bold ${
+                              test.passed ? 'text-green-600' : 'text-red-600'
+                            }`}>
+                              {test.passed ? '✓' : '✗'}
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900">
+                                {test.description}
+                              </div>
+                              
+                              {!test.passed && (test.expected !== undefined || test.actual !== undefined) && (
+                                <div className="mt-2 text-sm space-y-1">
+                                  {test.expected !== undefined && (
+                                    <div>
+                                      <span className="text-gray-600">Expected: </span>
+                                      <span className="font-mono text-gray-900">
+                                        {JSON.stringify(test.expected)}
+                                      </span>
+                                    </div>
+                                  )}
+                                  {test.actual !== undefined && (
+                                    <div>
+                                      <span className="text-gray-600">Actual: </span>
+                                      <span className="font-mono text-gray-900">
+                                        {JSON.stringify(test.actual)}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
+                              {test.error && (
+                                <div className="mt-1 text-sm text-red-600">
+                                  Error: {test.error}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {testResults.error && (
+                    <div className="mt-3 p-3 bg-red-100 border border-red-300 rounded">
+                      <div className="text-sm font-medium text-red-800">
+                        Execution Error: {testResults.error}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </>
         )}
       </div>
 
@@ -167,30 +327,75 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
       <div className="space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Code Editor</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Code Editor</CardTitle>
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                {isSaving && (
+                  <span className="flex items-center gap-1">
+                    <span className="animate-pulse">●</span> Saving...
+                  </span>
+                )}
+                {lastSaved && !isSaving && (
+                  <span>Saved {lastSaved.toLocaleTimeString()}</span>
+                )}
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <textarea
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="w-full h-[500px] font-mono text-sm p-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              spellCheck={false}
-            />
+            <div className="border rounded overflow-hidden">
+              <Editor
+                height="500px"
+                defaultLanguage="python"
+                value={code}
+                onChange={(value) => setCode(value || '')}
+                theme="vs-dark"
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  lineNumbers: 'on',
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true,
+                  tabSize: 4,
+                  wordWrap: 'on',
+                  padding: { top: 10, bottom: 10 }
+                }}
+              />
+            </div>
             
             <div className="flex gap-2 mt-4">
               <Button 
                 variant="primary" 
                 onClick={handleRunCode}
                 disabled={isRunning}
+                className="font-semibold"
               >
-                {isRunning ? 'Running...' : 'Run Tests'}
+                {isRunning ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Running Tests...
+                  </>
+                ) : (
+                  <>▶ Run Tests</>
+                )}
               </Button>
               
               <Button 
                 variant="outline"
-                onClick={() => setCode(quest.starterCode)}
+                onClick={handleSaveCode}
+                disabled={isSaving}
               >
-                Reset Code
+                {isSaving ? 'Saving...' : '💾 Save'}
+              </Button>
+              
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  if (confirm('Reset code to starter template?')) {
+                    setCode(quest.starterCode);
+                  }
+                }}
+              >
+                🔄 Reset
               </Button>
             </div>
           </CardContent>
