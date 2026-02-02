@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User model for authentication and progress tracking
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  progress  UserProgress[]
+  achievements Achievement[]
+}
+
+// Quest model for Python learning content
+model Quest {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  difficulty  String   // 'beginner', 'intermediate', 'advanced'
+  category    String   // 'basics', 'data-structures', 'algorithms', etc.
+  order       Int
+  xpReward    Int      @default(100)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  challenges  Challenge[]
+  progress    UserProgress[]
+  
+  @@index([category, order])
+}
+
+// Challenge model for individual coding exercises
+model Challenge {
+  id          String   @id @default(cuid())
+  questId     String
+  quest       Quest    @relation(fields: [questId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  starterCode String   @db.Text
+  solution    String   @db.Text
+  testCases   String   @db.Text // JSON array of test cases
+  hints       String?  @db.Text // JSON array of hints
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([questId, order])
+}
+
+// User progress tracking
+model UserProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId     String
+  quest       Quest    @relation(fields: [questId], references: [id], onDelete: Cascade)
+  completed   Boolean  @default(false)
+  score       Int      @default(0)
+  attempts    Int      @default(0)
+  lastAttempt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([userId, questId])
+  @@index([userId])
+}
+
+// Achievement/Badge system
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  icon        String
+  unlockedAt  DateTime @default(now())
+  
+  @@index([userId])
+}
+
