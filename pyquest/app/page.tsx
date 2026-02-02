@@ -1,30 +1,12 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { NavBar } from '@/components/nav-bar';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              PyQuest
-            </h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/quests">
-              <Button variant="ghost">Quests</Button>
-            </Link>
-            <Link href="/map">
-              <Button variant="ghost">Map</Button>
-            </Link>
-            <Button variant="primary">Sign In</Button>
-          </div>
-        </nav>
-      </header>
+      <NavBar />
 
       {/* Hero Content */}
       <main className="container mx-auto px-4 py-16">

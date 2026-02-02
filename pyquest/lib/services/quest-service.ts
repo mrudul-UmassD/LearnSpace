@@ -1,8 +1,7 @@
 import { prisma } from '@/lib/db/prisma';
-import type { Quest, UserProgress } from '@/types/quest';
 
 export class QuestService {
-  static async getAllQuests(): Promise<Quest[]> {
+  static async getAllQuests() {
     return prisma.quest.findMany({
       where: { isPublished: true },
       orderBy: [{ category: 'asc' }, { order: 'asc' }],
@@ -16,7 +15,7 @@ export class QuestService {
     });
   }
 
-  static async getUserProgress(userId: string): Promise<UserProgress[]> {
+  static async getUserProgress(userId: string) {
     return prisma.userProgress.findMany({
       where: { userId },
       include: { quest: true },
