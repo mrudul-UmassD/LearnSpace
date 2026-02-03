@@ -158,16 +158,27 @@ export async function POST(request: Request, { params }: RouteParams) {
         ? 504
         : (runnerResult.errorCode === 'RUNNER_HTTP_ERROR' ? 500 : 503);
 
+      // Provide user-friendly error message
+      const userMessage = runnerResult.errorCode === 'RUNNER_NETWORK_ERROR'
+        ? '🐳 Code execution service not available.\n\n' +
+          'The Python runner service is required to execute code.\n\n' +
+          'To start it:\n' +
+          '1. Install Docker Desktop: https://www.docker.com/products/docker-desktop\n' +
+          '2. Run: npm run runner\n' +
+          '3. Wait for "Runner service started" message\n' +
+          '4. Try running your code again'
+        : runnerResult.error || 'Runner service error';
+
       return NextResponse.json(
         {
           schemaVersion: SCHEMA_VERSION,
           requestId,
           success: false,
-          error: runnerResult.error || 'Runner service error',
-          message: runnerResult.error || 'Runner service error',
+          error: userMessage,
+          message: userMessage,
           runtimeMs: runnerResult.executionTimeMs || 0,
           stdout: '',
-          stderr: runnerResult.stderr || 'Execution failed',
+          stderr: userMessage,
           testResults: [],
           allPassed: false,
           errorCode: runnerResult.errorCode,
