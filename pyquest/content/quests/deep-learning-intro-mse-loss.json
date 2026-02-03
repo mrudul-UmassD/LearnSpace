@@ -1,0 +1,72 @@
+{
+  "id": "deep-learning-intro-mse-loss",
+  "world": "deep-learning-intro",
+  "title": "Manual Loss: MSE on MLP Output",
+  "story": "Every neural network needs a loss function to measure how wrong its predictions are! Mean Squared Error (MSE) is the most common loss for regression tasks. It measures the average squared difference between predictions and true values. Lower loss means better predictions!",
+  "instructions": "Reuse the MLP from the previous quest (or create outputs manually). Given out = [[1.], [2.]] and y_true = [[1.], [0.]], compute errors = out - y_true, squared = errors ** 2, and mse = squared.mean(). Print mse.",
+  "starterCode": "# Calculate MSE loss for neural network\nimport numpy as np\n\n# MLP outputs (from previous quest or manual)\nout = np.array([[1.], [2.]])\ny_true = np.array([[1.], [0.]])\n",
+  "solutionHidden": "import numpy as np\n\nout = np.array([[1.], [2.]])\ny_true = np.array([[1.], [0.]])\nerrors = out - y_true\nsquared = errors ** 2\nmse = squared.mean()\nprint(mse)",
+  "tests": [
+    {
+      "id": "out-exists",
+      "type": "variable_exists",
+      "description": "Variable 'out' should exist",
+      "expectedBehavior": "Must have predictions",
+      "variable": "out"
+    },
+    {
+      "id": "y-true-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_true' should exist",
+      "expectedBehavior": "Must have true labels",
+      "variable": "y_true"
+    },
+    {
+      "id": "errors-exists",
+      "type": "variable_exists",
+      "description": "Variable 'errors' should exist",
+      "expectedBehavior": "Must calculate errors",
+      "variable": "errors"
+    },
+    {
+      "id": "squared-exists",
+      "type": "variable_exists",
+      "description": "Variable 'squared' should exist",
+      "expectedBehavior": "Must square the errors",
+      "variable": "squared"
+    },
+    {
+      "id": "mse-exists",
+      "type": "variable_exists",
+      "description": "Variable 'mse' should exist",
+      "expectedBehavior": "Must calculate MSE",
+      "variable": "mse"
+    },
+    {
+      "id": "mse-correct",
+      "type": "variable_value",
+      "description": "mse should be 2.0",
+      "expectedBehavior": "MSE = mean of [[0]^2, [2]^2] = mean of [0, 4] = 2.0",
+      "variable": "mse",
+      "expected": 2.0
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "errors = predictions - actual, then square, then average with .mean()"
+    },
+    {
+      "level": 2,
+      "text": "out - y_true = [[1-1], [2-0]] = [[0], [2]], squared = [[0], [4]], mean = 2.0"
+    },
+    {
+      "level": 3,
+      "text": "errors = out - y_true, squared = errors ** 2, mse = squared.mean()"
+    }
+  ],
+  "xpReward": 135,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 8
+}

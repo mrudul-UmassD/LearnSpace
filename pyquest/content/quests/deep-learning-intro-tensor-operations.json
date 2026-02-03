@@ -1,0 +1,65 @@
+{
+  "id": "deep-learning-intro-tensor-operations",
+  "world": "deep-learning-intro",
+  "title": "Tensor Operations Mini-Lab",
+  "story": "Neural networks are built on tensor operations! Element-wise multiplication, addition, and broadcasting are the foundation. Every layer in a neural network performs these operations millions of times. Let's practice with tiny tensors first!",
+  "instructions": "Import numpy as np. Create tensor `x` as [[1., 2.], [3., 4.]] and `w` as [[2., 0.], [0., 2.]]. Compute `y` as element-wise multiplication (x * w) and `sum_val` as the sum of all elements in y. Print y and sum_val.",
+  "starterCode": "# Practice tensor operations\n",
+  "solutionHidden": "import numpy as np\nx = np.array([[1., 2.], [3., 4.]])\nw = np.array([[2., 0.], [0., 2.]])\ny = x * w\nsum_val = y.sum()\nprint(y)\nprint(sum_val)",
+  "tests": [
+    {
+      "id": "x-exists",
+      "type": "variable_exists",
+      "description": "Variable 'x' should exist",
+      "expectedBehavior": "Must create tensor x",
+      "variable": "x"
+    },
+    {
+      "id": "w-exists",
+      "type": "variable_exists",
+      "description": "Variable 'w' should exist",
+      "expectedBehavior": "Must create tensor w",
+      "variable": "w"
+    },
+    {
+      "id": "y-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y' should exist",
+      "expectedBehavior": "Must compute element-wise product",
+      "variable": "y"
+    },
+    {
+      "id": "sum-exists",
+      "type": "variable_exists",
+      "description": "Variable 'sum_val' should exist",
+      "expectedBehavior": "Must calculate sum",
+      "variable": "sum_val"
+    },
+    {
+      "id": "sum-correct",
+      "type": "variable_value",
+      "description": "sum_val should be 10.0",
+      "expectedBehavior": "Sum of [[2, 0], [0, 8]] = 10",
+      "variable": "sum_val",
+      "expected": 10.0
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use * for element-wise multiplication, .sum() for total sum"
+    },
+    {
+      "level": 2,
+      "text": "Element-wise means multiply corresponding elements: x[i,j] * w[i,j]"
+    },
+    {
+      "level": 3,
+      "text": "y = x * w gives [[1*2, 2*0], [3*0, 4*2]] = [[2, 0], [0, 8]], sum = 10"
+    }
+  ],
+  "xpReward": 110,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 2
+}

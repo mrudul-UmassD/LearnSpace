@@ -1,0 +1,66 @@
+{
+  "id": "deep-learning-intro-backprop-intuition",
+  "world": "deep-learning-intro",
+  "title": "Backprop Intuition: Gradient for One Weight",
+  "story": "How do neural networks learn? Through backpropagation! The gradient tells us how much to adjust each weight to reduce the loss. For a simple neuron y = w*x + b with MSE loss, the gradient is: dMSE/dw = 2 * (y_pred - y_true) * x. Let's compute this manually!",
+  "instructions": "Given scalar values: x = 2.0, y_true = 5.0, w = 1.0, b = 0.0, lr = 0.1. Calculate y_pred = w * x + b. Then compute grad_w = 2 * (y_pred - y_true) * x. Update new_w = w - lr * grad_w. Print grad_w and new_w.",
+  "starterCode": "# Compute gradient for one weight\nx = 2.0\ny_true = 5.0\nw = 1.0\nb = 0.0\nlr = 0.1\n",
+  "solutionHidden": "x = 2.0\ny_true = 5.0\nw = 1.0\nb = 0.0\nlr = 0.1\ny_pred = w * x + b\ngrad_w = 2 * (y_pred - y_true) * x\nnew_w = w - lr * grad_w\nprint(grad_w)\nprint(new_w)",
+  "tests": [
+    {
+      "id": "y-pred-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_pred' should exist",
+      "expectedBehavior": "Must calculate prediction",
+      "variable": "y_pred"
+    },
+    {
+      "id": "grad-w-exists",
+      "type": "variable_exists",
+      "description": "Variable 'grad_w' should exist",
+      "expectedBehavior": "Must calculate gradient",
+      "variable": "grad_w"
+    },
+    {
+      "id": "new-w-exists",
+      "type": "variable_exists",
+      "description": "Variable 'new_w' should exist",
+      "expectedBehavior": "Must update weight",
+      "variable": "new_w"
+    },
+    {
+      "id": "grad-w-correct",
+      "type": "variable_value",
+      "description": "grad_w should be -12.0",
+      "expectedBehavior": "2 * (2.0 - 5.0) * 2.0 = -12.0",
+      "variable": "grad_w",
+      "expected": -12.0
+    },
+    {
+      "id": "new-w-correct",
+      "type": "variable_value",
+      "description": "new_w should be 2.2",
+      "expectedBehavior": "1.0 - 0.1 * (-12.0) = 2.2",
+      "variable": "new_w",
+      "expected": 2.2
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Calculate prediction first: y_pred = w*x + b. Then gradient: 2*(y_pred - y_true)*x"
+    },
+    {
+      "level": 2,
+      "text": "Gradient descent: new_weight = old_weight - learning_rate * gradient"
+    },
+    {
+      "level": 3,
+      "text": "y_pred = 1.0*2.0+0.0 = 2.0, grad_w = 2*(2.0-5.0)*2.0 = -12.0, new_w = 1.0-0.1*(-12.0) = 2.2"
+    }
+  ],
+  "xpReward": 150,
+  "hintUnlockAttempts": 2,
+  "difficulty": "advanced",
+  "order": 9
+}

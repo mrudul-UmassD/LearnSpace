@@ -1,0 +1,57 @@
+{
+  "id": "deep-learning-intro-tensor-warmup",
+  "world": "deep-learning-intro",
+  "title": "Tensor Warm-Up",
+  "story": "Welcome to Deep Learning! Before we build neural networks, we need to understand tensors - the fundamental data structure of deep learning. Tensors are just multi-dimensional arrays: vectors (1D), matrices (2D), and higher-dimensional arrays (3D+). Let's create your first tensors!",
+  "instructions": "Import numpy as np. Create three tensors: `vector` with shape (3,) containing [1., 2., 3.], `matrix` with shape (2, 3) containing [[1., 2., 3.], [4., 5., 6.]], and `tensor3d` with shape (2, 2, 2) containing [[[1., 2.], [3., 4.]], [[5., 6.], [7., 8.]]]. Print all three and their shapes.",
+  "starterCode": "# Create tensors of different dimensions\n",
+  "solutionHidden": "import numpy as np\nvector = np.array([1., 2., 3.])\nmatrix = np.array([[1., 2., 3.], [4., 5., 6.]])\ntensor3d = np.array([[[1., 2.], [3., 4.]], [[5., 6.], [7., 8.]]])\nprint(vector)\nprint(vector.shape)\nprint(matrix)\nprint(matrix.shape)\nprint(tensor3d)\nprint(tensor3d.shape)",
+  "tests": [
+    {
+      "id": "vector-exists",
+      "type": "variable_exists",
+      "description": "Variable 'vector' should exist",
+      "expectedBehavior": "Must create vector tensor",
+      "variable": "vector"
+    },
+    {
+      "id": "matrix-exists",
+      "type": "variable_exists",
+      "description": "Variable 'matrix' should exist",
+      "expectedBehavior": "Must create matrix tensor",
+      "variable": "matrix"
+    },
+    {
+      "id": "tensor3d-exists",
+      "type": "variable_exists",
+      "description": "Variable 'tensor3d' should exist",
+      "expectedBehavior": "Must create 3D tensor",
+      "variable": "tensor3d"
+    },
+    {
+      "id": "np-imported",
+      "type": "variable_exists",
+      "description": "NumPy should be imported as np",
+      "expectedBehavior": "Must import numpy as np",
+      "variable": "np"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.array() to create tensors. Check shapes with .shape attribute"
+    },
+    {
+      "level": 2,
+      "text": "Vector: [a, b, c], Matrix: [[row1], [row2]], 3D: [[[layer1]], [[layer2]]]"
+    },
+    {
+      "level": 3,
+      "text": "vector = np.array([1., 2., 3.]), matrix = np.array([[1., 2., 3.], [4., 5., 6.]]), tensor3d = np.array([[[1., 2.], [3., 4.]], [[5., 6.], [7., 8.]]])"
+    }
+  ],
+  "xpReward": 100,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 1
+}

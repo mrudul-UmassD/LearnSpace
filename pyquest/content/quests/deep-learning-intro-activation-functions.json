@@ -1,0 +1,66 @@
+{
+  "id": "deep-learning-intro-activation-functions",
+  "world": "deep-learning-intro",
+  "title": "Activation Functions Playground",
+  "story": "Neurons need non-linearity to learn complex patterns! Activation functions introduce this non-linearity. ReLU (Rectified Linear Unit) outputs max(0, x) - simple but powerful. Sigmoid squashes values to 0-1, useful for probabilities. Let's implement both!",
+  "instructions": "Import numpy as np. Define `relu(x)` that returns np.maximum(0, x). Define `sigmoid(x)` that returns 1 / (1 + np.exp(-x)). Create `z` = [-1., 0., 1.]. Calculate `relu_z` = relu(z) and `sigmoid_z` = sigmoid(z). Print both results.",
+  "starterCode": "# Implement activation functions\nimport numpy as np\n",
+  "solutionHidden": "import numpy as np\ndef relu(x):\n    return np.maximum(0, x)\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\nz = np.array([-1., 0., 1.])\nrelu_z = relu(z)\nsigmoid_z = sigmoid(z)\nprint(relu_z)\nprint(sigmoid_z)",
+  "tests": [
+    {
+      "id": "relu-function",
+      "type": "function_call",
+      "description": "Function 'relu' should exist and work",
+      "expectedBehavior": "Must define relu function",
+      "function": "relu",
+      "args": [[-2.0, -1.0, 0.0, 1.0, 2.0]]
+    },
+    {
+      "id": "sigmoid-function",
+      "type": "function_call",
+      "description": "Function 'sigmoid' should exist and work",
+      "expectedBehavior": "Must define sigmoid function",
+      "function": "sigmoid",
+      "args": [[0.0]]
+    },
+    {
+      "id": "z-exists",
+      "type": "variable_exists",
+      "description": "Variable 'z' should exist",
+      "expectedBehavior": "Must create test input",
+      "variable": "z"
+    },
+    {
+      "id": "relu-z-exists",
+      "type": "variable_exists",
+      "description": "Variable 'relu_z' should exist",
+      "expectedBehavior": "Must compute ReLU activation",
+      "variable": "relu_z"
+    },
+    {
+      "id": "sigmoid-z-exists",
+      "type": "variable_exists",
+      "description": "Variable 'sigmoid_z' should exist",
+      "expectedBehavior": "Must compute sigmoid activation",
+      "variable": "sigmoid_z"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "ReLU: np.maximum(0, x) keeps positive, zeros negative. Sigmoid: 1/(1+e^(-x))"
+    },
+    {
+      "level": 2,
+      "text": "ReLU(-1) = 0, ReLU(0) = 0, ReLU(1) = 1. Sigmoid(0) = 0.5"
+    },
+    {
+      "level": 3,
+      "text": "def relu(x): return np.maximum(0, x), def sigmoid(x): return 1 / (1 + np.exp(-x))"
+    }
+  ],
+  "xpReward": 130,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 5
+}

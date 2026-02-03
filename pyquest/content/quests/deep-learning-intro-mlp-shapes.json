@@ -1,0 +1,71 @@
+{
+  "id": "deep-learning-intro-mlp-shapes",
+  "world": "deep-learning-intro",
+  "title": "Single Hidden Layer Forward Pass",
+  "story": "Time to build a Multi-Layer Perceptron (MLP)! An MLP has an input layer, one or more hidden layers, and an output layer. Each layer transforms data through matrix multiplication, bias addition, and activation. Let's build a 2→3→1 network and verify the shapes flow correctly!",
+  "instructions": "Import numpy as np and use your relu function. Create X = [[1., 2.], [3., 4.]] (batch_size=2, input_dim=2). Create W1 shape (2,3), b1 shape (3,), W2 shape (3,1), b2 shape (1,). Compute h = relu(X @ W1 + b1), then out = h @ W2 + b2. Print h.shape and out.shape.",
+  "starterCode": "# Build a 2->3->1 MLP\nimport numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\nX = np.array([[1., 2.], [3., 4.]])\n",
+  "solutionHidden": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\nX = np.array([[1., 2.], [3., 4.]])\nW1 = np.random.randn(2, 3)\nb1 = np.zeros(3)\nW2 = np.random.randn(3, 1)\nb2 = np.zeros(1)\nh = relu(X @ W1 + b1)\nout = h @ W2 + b2\nprint(h.shape)\nprint(out.shape)",
+  "tests": [
+    {
+      "id": "W1-exists",
+      "type": "variable_exists",
+      "description": "Variable 'W1' should exist",
+      "expectedBehavior": "Must create first layer weights",
+      "variable": "W1"
+    },
+    {
+      "id": "b1-exists",
+      "type": "variable_exists",
+      "description": "Variable 'b1' should exist",
+      "expectedBehavior": "Must create first layer bias",
+      "variable": "b1"
+    },
+    {
+      "id": "W2-exists",
+      "type": "variable_exists",
+      "description": "Variable 'W2' should exist",
+      "expectedBehavior": "Must create second layer weights",
+      "variable": "W2"
+    },
+    {
+      "id": "b2-exists",
+      "type": "variable_exists",
+      "description": "Variable 'b2' should exist",
+      "expectedBehavior": "Must create second layer bias",
+      "variable": "b2"
+    },
+    {
+      "id": "h-exists",
+      "type": "variable_exists",
+      "description": "Variable 'h' should exist",
+      "expectedBehavior": "Must compute hidden layer",
+      "variable": "h"
+    },
+    {
+      "id": "out-exists",
+      "type": "variable_exists",
+      "description": "Variable 'out' should exist",
+      "expectedBehavior": "Must compute output layer",
+      "variable": "out"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "W1 shape (2,3) transforms 2 inputs to 3 hidden. W2 shape (3,1) transforms 3 hidden to 1 output"
+    },
+    {
+      "level": 2,
+      "text": "Use np.random.randn() or np.ones() to create weight matrices. h = relu(X @ W1 + b1)"
+    },
+    {
+      "level": 3,
+      "text": "W1 = np.ones((2,3)), b1 = np.zeros(3), W2 = np.ones((3,1)), b2 = np.zeros(1), h = relu(X @ W1 + b1), out = h @ W2 + b2"
+    }
+  ],
+  "xpReward": 140,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 6
+}

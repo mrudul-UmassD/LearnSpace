@@ -1,0 +1,71 @@
+{
+  "id": "deep-learning-intro-batch-gradient",
+  "world": "deep-learning-intro",
+  "title": "Tiny Batch Gradient (No Epochs)",
+  "story": "Real neural networks compute gradients over batches of data! Instead of updating after each sample, we average gradients over multiple samples. This is more stable and efficient. Let's compute batch gradients for a simple linear model - just one update step, no training loops!",
+  "instructions": "Import numpy as np. Given X = [0., 1., 2.], y_true = [0., 1., 2.], w = 0.0, b = 0.0, lr = 0.1. Calculate y_pred = w * X + b. Compute errors = y_pred - y_true, grad_w = 2 * (errors * X).mean(), grad_b = 2 * errors.mean(). Update new_w = w - lr * grad_w, new_b = b - lr * grad_b. Print all gradients and new parameters.",
+  "starterCode": "# Compute batch gradients\nimport numpy as np\n\nX = np.array([0., 1., 2.])\ny_true = np.array([0., 1., 2.])\nw = 0.0\nb = 0.0\nlr = 0.1\n",
+  "solutionHidden": "import numpy as np\n\nX = np.array([0., 1., 2.])\ny_true = np.array([0., 1., 2.])\nw = 0.0\nb = 0.0\nlr = 0.1\ny_pred = w * X + b\nerrors = y_pred - y_true\ngrad_w = 2 * (errors * X).mean()\ngrad_b = 2 * errors.mean()\nnew_w = w - lr * grad_w\nnew_b = b - lr * grad_b\nprint(grad_w)\nprint(grad_b)\nprint(new_w)\nprint(new_b)",
+  "tests": [
+    {
+      "id": "y-pred-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_pred' should exist",
+      "expectedBehavior": "Must calculate predictions",
+      "variable": "y_pred"
+    },
+    {
+      "id": "errors-exists",
+      "type": "variable_exists",
+      "description": "Variable 'errors' should exist",
+      "expectedBehavior": "Must calculate errors",
+      "variable": "errors"
+    },
+    {
+      "id": "grad-w-exists",
+      "type": "variable_exists",
+      "description": "Variable 'grad_w' should exist",
+      "expectedBehavior": "Must calculate weight gradient",
+      "variable": "grad_w"
+    },
+    {
+      "id": "grad-b-exists",
+      "type": "variable_exists",
+      "description": "Variable 'grad_b' should exist",
+      "expectedBehavior": "Must calculate bias gradient",
+      "variable": "grad_b"
+    },
+    {
+      "id": "new-w-exists",
+      "type": "variable_exists",
+      "description": "Variable 'new_w' should exist",
+      "expectedBehavior": "Must update weight",
+      "variable": "new_w"
+    },
+    {
+      "id": "new-b-exists",
+      "type": "variable_exists",
+      "description": "Variable 'new_b' should exist",
+      "expectedBehavior": "Must update bias",
+      "variable": "new_b"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Batch gradient: multiply errors by inputs element-wise, then average with .mean()"
+    },
+    {
+      "level": 2,
+      "text": "grad_w needs input X in formula: 2 * (errors * X).mean(). grad_b just needs errors: 2 * errors.mean()"
+    },
+    {
+      "level": 3,
+      "text": "y_pred = [0,0,0], errors = [0,-1,-2], grad_w = 2*mean([0,-1,-4]) = -3.33, grad_b = 2*mean([0,-1,-2]) = -2.0"
+    }
+  ],
+  "xpReward": 155,
+  "hintUnlockAttempts": 2,
+  "difficulty": "advanced",
+  "order": 10
+}

@@ -1,0 +1,64 @@
+{
+  "id": "deep-learning-intro-deterministic-mlp",
+  "world": "deep-learning-intro",
+  "title": "Deterministic Tiny MLP Forward Pass",
+  "story": "Let's compute exact numbers through a tiny neural network! With specific weights and biases, we can trace exactly what happens to each input as it flows through the network. This understanding is crucial for debugging and building intuition about deep learning.",
+  "instructions": "Import numpy as np. Define relu. Create X = [[1., 0.], [0., 1.]], W1 = [[1., -1.], [2., 0.]], b1 = [0., 0.], W2 = [[1.], [1.]], b2 = [0.]. Compute h = relu(X @ W1 + b1), then out = h @ W2 + b2. Print h and out.",
+  "starterCode": "# Compute exact forward pass\nimport numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n",
+  "solutionHidden": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\nX = np.array([[1., 0.], [0., 1.]])\nW1 = np.array([[1., -1.], [2., 0.]])\nb1 = np.array([0., 0.])\nW2 = np.array([[1.], [1.]])\nb2 = np.array([0.])\nh = relu(X @ W1 + b1)\nout = h @ W2 + b2\nprint(h)\nprint(out)",
+  "tests": [
+    {
+      "id": "X-exists",
+      "type": "variable_exists",
+      "description": "Variable 'X' should exist",
+      "expectedBehavior": "Must create input batch",
+      "variable": "X"
+    },
+    {
+      "id": "W1-exists",
+      "type": "variable_exists",
+      "description": "Variable 'W1' should exist",
+      "expectedBehavior": "Must create first layer weights",
+      "variable": "W1"
+    },
+    {
+      "id": "W2-exists",
+      "type": "variable_exists",
+      "description": "Variable 'W2' should exist",
+      "expectedBehavior": "Must create second layer weights",
+      "variable": "W2"
+    },
+    {
+      "id": "h-exists",
+      "type": "variable_exists",
+      "description": "Variable 'h' should exist",
+      "expectedBehavior": "Must compute hidden activations",
+      "variable": "h"
+    },
+    {
+      "id": "out-exists",
+      "type": "variable_exists",
+      "description": "Variable 'out' should exist",
+      "expectedBehavior": "Must compute final output",
+      "variable": "out"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Follow the flow: X @ W1 + b1 gives pre-activations, relu zeros negatives, then h @ W2 + b2"
+    },
+    {
+      "level": 2,
+      "text": "For X[0]=[1,0]: [1,0]@[[1,-1],[2,0]] = [1,-1], relu gives [1,0], then [1,0]@[[1],[1]] = [1]"
+    },
+    {
+      "level": 3,
+      "text": "X @ W1 = [[1,-1],[2,0]], relu([[1,-1],[2,0]]) = [[1,0],[2,0]], [[1,0],[2,0]]@[[1],[1]] = [[1],[2]]"
+    }
+  ],
+  "xpReward": 145,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 7
+}
