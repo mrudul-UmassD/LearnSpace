@@ -53,7 +53,7 @@ def get_python_command() -> str:
     commands = [
         ['py', '-3', '--version'],  # Windows Python Launcher
         ['python', '--version'],     # Common on Windows/macOS
-        ['python3', '--version'],    # Common on Linux
+        ['python3', '--version'],    # Common on Linux/Docker
     ]
     
     for cmd in commands:
@@ -65,8 +65,12 @@ def get_python_command() -> str:
                 text=True
             )
             if result.returncode == 0:
-                # Extract just the command (first element, or first two for 'py -3')
-                _PYTHON_CMD = cmd[0] if len(cmd) == 2 else cmd[:2]
+                # Extract just the executable command (not --version)
+                # For 'py -3', use both parts; for 'python'/'python3', use just the first part
+                if cmd[0] == 'py' and len(cmd) >= 2:
+                    _PYTHON_CMD = cmd[:2]  # ['py', '-3']
+                else:
+                    _PYTHON_CMD = cmd[0]   # 'python' or 'python3'
                 print(f"[runner] Found Python: {_PYTHON_CMD} -> {result.stdout.strip()}")
                 return _PYTHON_CMD
         except (FileNotFoundError, subprocess.TimeoutExpired):
@@ -115,12 +119,16 @@ def execute_python_code(code: str) -> Dict[str, str]:
             cmd = [python_cmd, temp_file]
         
         # Execute Python code with timeout
+        # Copy current environment and add PYTHONUNBUFFERED to disable output buffering
+        env = os.environ.copy()
+        env['PYTHONUNBUFFERED'] = '1'
+        
         process = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
             timeout=MAX_EXECUTION_TIME,
-            env={'PYTHONUNBUFFERED': '1'}  # Disable output buffering
+            env=env
         )
         
         # Limit output size
@@ -375,10 +383,27 @@ def evaluate_test(code: str, stdout: str, stderr: str, test: Dict[str, Any]) -> 
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint for container orchestration"""
+    # Get Python version from detected command
+    python_version = "unknown"
+    try:
+        python_cmd = get_python_command()
+        if isinstance(python_cmd, list):
+            cmd = python_cmd + ['--version']
+        else:
+            cmd = [python_cmd, '--version']
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=2)
+        if result.returncode == 0:
+            # Extract version from output like "Python 3.11.14"
+            python_version = result.stdout.strip() or result.stderr.strip()
+    except Exception:
+        pass
+    
     return jsonify({
         'status': 'healthy',
         'service': 'pyquest-runner',
-        'version': '1.0.0'
+        'version': '1.0.0',
+        'python_version': python_version
     })
 
 
