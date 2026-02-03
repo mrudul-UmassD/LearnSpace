@@ -1,0 +1,58 @@
+{
+  "id": "ml-foundations-linear-regression-concept",
+  "world": "ml-foundations",
+  "title": "The Linear Line",
+  "story": "Linear regression finds the best-fitting line through data points! The line is defined by y = mx + b, where m is the slope (how steep) and b is the intercept (where it crosses y-axis). This simple model is the foundation of machine learning!",
+  "instructions": "Given slope `m = 2` and intercept `b = 1`. Create function `predict(x)` that returns m*x + b. Create array `x_values` with [1, 2, 3, 4]. Calculate `predictions` by applying predict to each x. Print predictions.",
+  "starterCode": "# Implement linear prediction\nimport numpy as np\nm = 2\nb = 1\n",
+  "solutionHidden": "import numpy as np\nm = 2\nb = 1\ndef predict(x):\n    return m * x + b\n\nx_values = np.array([1, 2, 3, 4])\npredictions = np.array([predict(x) for x in x_values])\nprint(predictions)",
+  "tests": [
+    {
+      "id": "predict-exists",
+      "type": "function_call",
+      "description": "Function 'predict' should exist",
+      "expectedBehavior": "Must define predict function",
+      "function": "predict",
+      "args": [5]
+    },
+    {
+      "id": "x-values-exists",
+      "type": "variable_exists",
+      "description": "Variable 'x_values' should exist",
+      "expectedBehavior": "Must create x_values array",
+      "variable": "x_values"
+    },
+    {
+      "id": "predictions-exists",
+      "type": "variable_exists",
+      "description": "Variable 'predictions' should exist",
+      "expectedBehavior": "Must calculate predictions",
+      "variable": "predictions"
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print predictions",
+      "expectedBehavior": "Predictions should be [3, 5, 7, 9]",
+      "expected": "[3 5 7 9]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Define function: def predict(x): return m * x + b. Apply to each value in array"
+    },
+    {
+      "level": 2,
+      "text": "Use list comprehension: [predict(x) for x in x_values], then convert to array"
+    },
+    {
+      "level": 3,
+      "text": "def predict(x): return m * x + b, then predictions = np.array([predict(x) for x in x_values])"
+    }
+  ],
+  "xpReward": 135,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 9
+}

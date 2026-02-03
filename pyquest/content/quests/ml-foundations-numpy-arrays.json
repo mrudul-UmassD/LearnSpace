@@ -1,0 +1,57 @@
+{
+  "id": "ml-foundations-numpy-arrays",
+  "world": "ml-foundations",
+  "title": "Array Awakening",
+  "story": "Welcome to the world of Machine Learning! Before we can train models, we need to master NumPy - Python's powerful numerical computing library. Arrays are the foundation of ML, storing data in efficient, multi-dimensional structures. Let's create your first NumPy arrays!",
+  "instructions": "Import numpy as np. Create a 1D array called `data` with values [1, 2, 3, 4, 5]. Create a 2D array called `matrix` with values [[1, 2], [3, 4]]. Print both arrays and their shapes using the .shape attribute.",
+  "starterCode": "# Import numpy and create arrays\n",
+  "solutionHidden": "import numpy as np\ndata = np.array([1, 2, 3, 4, 5])\nmatrix = np.array([[1, 2], [3, 4]])\nprint(data)\nprint(data.shape)\nprint(matrix)\nprint(matrix.shape)",
+  "tests": [
+    {
+      "id": "data-exists",
+      "type": "variable_exists",
+      "description": "Variable 'data' should exist",
+      "expectedBehavior": "Must create data array",
+      "variable": "data"
+    },
+    {
+      "id": "matrix-exists",
+      "type": "variable_exists",
+      "description": "Variable 'matrix' should exist",
+      "expectedBehavior": "Must create matrix array",
+      "variable": "matrix"
+    },
+    {
+      "id": "np-imported",
+      "type": "variable_exists",
+      "description": "NumPy should be imported as np",
+      "expectedBehavior": "Must import numpy as np",
+      "variable": "np"
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print arrays and shapes",
+      "expectedBehavior": "Output should show both arrays and their shapes",
+      "expected": "[1 2 3 4 5]\n(5,)\n[[1 2]\n [3 4]]\n(2, 2)"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.array([...]) to create arrays. Access shape with array.shape"
+    },
+    {
+      "level": 2,
+      "text": "1D array: np.array([list]). 2D array: np.array([[row1], [row2]])"
+    },
+    {
+      "level": 3,
+      "text": "import numpy as np, data = np.array([1, 2, 3, 4, 5]), matrix = np.array([[1, 2], [3, 4]])"
+    }
+  ],
+  "xpReward": 100,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 1
+}

@@ -1,0 +1,72 @@
+{
+  "id": "ml-foundations-mean-squared-error",
+  "world": "ml-foundations",
+  "title": "The Error Explorer",
+  "story": "How do we measure how wrong our predictions are? Mean Squared Error (MSE) is the most common loss function for regression. It calculates the average of squared differences between predictions and actual values. Lower MSE means better model!",
+  "instructions": "Import numpy as np. Create `y_true` with [10, 20, 30, 40] and `y_pred` with [12, 18, 32, 38]. Calculate `errors` (difference), `squared_errors` (errors squared), and `mse` (mean of squared errors). Print mse.",
+  "starterCode": "# Calculate Mean Squared Error\n",
+  "solutionHidden": "import numpy as np\ny_true = np.array([10, 20, 30, 40])\ny_pred = np.array([12, 18, 32, 38])\nerrors = y_true - y_pred\nsquared_errors = errors ** 2\nmse = squared_errors.mean()\nprint(mse)",
+  "tests": [
+    {
+      "id": "y-true-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_true' should exist",
+      "expectedBehavior": "Must create true values",
+      "variable": "y_true"
+    },
+    {
+      "id": "y-pred-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_pred' should exist",
+      "expectedBehavior": "Must create predictions",
+      "variable": "y_pred"
+    },
+    {
+      "id": "errors-exists",
+      "type": "variable_exists",
+      "description": "Variable 'errors' should exist",
+      "expectedBehavior": "Must calculate errors",
+      "variable": "errors"
+    },
+    {
+      "id": "squared-errors-exists",
+      "type": "variable_exists",
+      "description": "Variable 'squared_errors' should exist",
+      "expectedBehavior": "Must square the errors",
+      "variable": "squared_errors"
+    },
+    {
+      "id": "mse-exists",
+      "type": "variable_exists",
+      "description": "Variable 'mse' should exist",
+      "expectedBehavior": "Must calculate mean squared error",
+      "variable": "mse"
+    },
+    {
+      "id": "mse-value",
+      "type": "variable_value",
+      "description": "mse should be 5.0",
+      "expectedBehavior": "MSE = mean of [4, 4, 4, 4] = 4.0",
+      "variable": "mse",
+      "expected": 4.0
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Subtract arrays to get errors, square with **2, then use .mean() for average"
+    },
+    {
+      "level": 2,
+      "text": "MSE penalizes large errors more heavily due to squaring"
+    },
+    {
+      "level": 3,
+      "text": "errors = y_true - y_pred, squared_errors = errors ** 2, mse = squared_errors.mean()"
+    }
+  ],
+  "xpReward": 140,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 10
+}

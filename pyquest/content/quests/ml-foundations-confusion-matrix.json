@@ -1,0 +1,89 @@
+{
+  "id": "ml-foundations-confusion-matrix",
+  "world": "ml-foundations",
+  "title": "The Confusion Conundrum",
+  "story": "A confusion matrix shows the breakdown of predictions: True Positives (correctly predicted 1s), True Negatives (correctly predicted 0s), False Positives (incorrectly predicted 1s), and False Negatives (incorrectly predicted 0s). It's the foundation for understanding model performance!",
+  "instructions": "Import numpy as np. Given y_true = [1, 1, 0, 0, 1, 0] and y_pred = [1, 0, 0, 1, 1, 0]. Calculate: `true_pos` (both are 1), `true_neg` (both are 0), `false_pos` (pred 1, true 0), `false_neg` (pred 0, true 1). Print all four.",
+  "starterCode": "# Build confusion matrix components\nimport numpy as np\ny_true = np.array([1, 1, 0, 0, 1, 0])\ny_pred = np.array([1, 0, 0, 1, 1, 0])\n",
+  "solutionHidden": "import numpy as np\ny_true = np.array([1, 1, 0, 0, 1, 0])\ny_pred = np.array([1, 0, 0, 1, 1, 0])\ntrue_pos = ((y_true == 1) & (y_pred == 1)).sum()\ntrue_neg = ((y_true == 0) & (y_pred == 0)).sum()\nfalse_pos = ((y_true == 0) & (y_pred == 1)).sum()\nfalse_neg = ((y_true == 1) & (y_pred == 0)).sum()\nprint(true_pos)\nprint(true_neg)\nprint(false_pos)\nprint(false_neg)",
+  "tests": [
+    {
+      "id": "true-pos-exists",
+      "type": "variable_exists",
+      "description": "Variable 'true_pos' should exist",
+      "expectedBehavior": "Must calculate true positives",
+      "variable": "true_pos"
+    },
+    {
+      "id": "true-neg-exists",
+      "type": "variable_exists",
+      "description": "Variable 'true_neg' should exist",
+      "expectedBehavior": "Must calculate true negatives",
+      "variable": "true_neg"
+    },
+    {
+      "id": "false-pos-exists",
+      "type": "variable_exists",
+      "description": "Variable 'false_pos' should exist",
+      "expectedBehavior": "Must calculate false positives",
+      "variable": "false_pos"
+    },
+    {
+      "id": "false-neg-exists",
+      "type": "variable_exists",
+      "description": "Variable 'false_neg' should exist",
+      "expectedBehavior": "Must calculate false negatives",
+      "variable": "false_neg"
+    },
+    {
+      "id": "true-pos-value",
+      "type": "variable_value",
+      "description": "true_pos should be 2",
+      "expectedBehavior": "2 correct positive predictions",
+      "variable": "true_pos",
+      "expected": 2
+    },
+    {
+      "id": "true-neg-value",
+      "type": "variable_value",
+      "description": "true_neg should be 2",
+      "expectedBehavior": "2 correct negative predictions",
+      "variable": "true_neg",
+      "expected": 2
+    },
+    {
+      "id": "false-pos-value",
+      "type": "variable_value",
+      "description": "false_pos should be 1",
+      "expectedBehavior": "1 false positive",
+      "variable": "false_pos",
+      "expected": 1
+    },
+    {
+      "id": "false-neg-value",
+      "type": "variable_value",
+      "description": "false_neg should be 1",
+      "expectedBehavior": "1 false negative",
+      "variable": "false_neg",
+      "expected": 1
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use boolean indexing with & (and). TP: both 1, TN: both 0, FP: pred 1 true 0, FN: pred 0 true 1"
+    },
+    {
+      "level": 2,
+      "text": "Create boolean masks: (y_true == 1) & (y_pred == 1) for true positives, then sum()"
+    },
+    {
+      "level": 3,
+      "text": "true_pos = ((y_true == 1) & (y_pred == 1)).sum(), similar for others with appropriate conditions"
+    }
+  ],
+  "xpReward": 140,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 7
+}

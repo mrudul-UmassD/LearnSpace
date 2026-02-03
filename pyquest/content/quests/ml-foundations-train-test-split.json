@@ -1,0 +1,73 @@
+{
+  "id": "ml-foundations-train-test-split",
+  "world": "ml-foundations",
+  "title": "The Data Divide",
+  "story": "In ML, we never test on data we trained on! The train-test split is fundamental - we train our model on one portion of data and test its performance on unseen data. This tells us if our model generalizes well or just memorized the training data.",
+  "instructions": "Import numpy as np. Create array `data` with [10, 20, 30, 40, 50, 60, 70, 80]. Split it: first 6 elements as `train_data`, last 2 as `test_data`. Calculate `train_size` and `test_size` (lengths). Print all four variables.",
+  "starterCode": "# Implement train-test split\n",
+  "solutionHidden": "import numpy as np\ndata = np.array([10, 20, 30, 40, 50, 60, 70, 80])\ntrain_data = data[:6]\ntest_data = data[6:]\ntrain_size = len(train_data)\ntest_size = len(test_data)\nprint(train_data)\nprint(test_data)\nprint(train_size)\nprint(test_size)",
+  "tests": [
+    {
+      "id": "data-exists",
+      "type": "variable_exists",
+      "description": "Variable 'data' should exist",
+      "expectedBehavior": "Must create full dataset",
+      "variable": "data"
+    },
+    {
+      "id": "train-exists",
+      "type": "variable_exists",
+      "description": "Variable 'train_data' should exist",
+      "expectedBehavior": "Must create training set",
+      "variable": "train_data"
+    },
+    {
+      "id": "test-exists",
+      "type": "variable_exists",
+      "description": "Variable 'test_data' should exist",
+      "expectedBehavior": "Must create test set",
+      "variable": "test_data"
+    },
+    {
+      "id": "train-size-correct",
+      "type": "variable_value",
+      "description": "train_size should be 6",
+      "expectedBehavior": "Training set has 6 samples",
+      "variable": "train_size",
+      "expected": 6
+    },
+    {
+      "id": "test-size-correct",
+      "type": "variable_value",
+      "description": "test_size should be 2",
+      "expectedBehavior": "Test set has 2 samples",
+      "variable": "test_size",
+      "expected": 2
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print train, test sets and sizes",
+      "expectedBehavior": "Output should show split data",
+      "expected": "[10 20 30 40 50 60]\n[70 80]\n6\n2"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use array slicing to split: [:6] for first 6, [6:] for remaining"
+    },
+    {
+      "level": 2,
+      "text": "Common split ratio is 75-25 or 80-20 (train-test)"
+    },
+    {
+      "level": 3,
+      "text": "train_data = data[:6], test_data = data[6:], then use len() for sizes"
+    }
+  ],
+  "xpReward": 125,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 5
+}

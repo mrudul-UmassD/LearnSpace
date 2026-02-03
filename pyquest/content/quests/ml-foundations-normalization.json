@@ -1,0 +1,71 @@
+{
+  "id": "ml-foundations-normalization",
+  "world": "ml-foundations",
+  "title": "The Normalization Nexus",
+  "story": "Features with different scales can hurt ML models! Normalization (scaling to 0-1) and standardization (mean=0, std=1) ensure all features contribute fairly. Min-max normalization formula: (x - min) / (max - min). This is crucial preprocessing!",
+  "instructions": "Import numpy as np. Create `data` with [10, 20, 30, 40, 50]. Calculate `min_val` (minimum), `max_val` (maximum), and `normalized` using min-max formula. Also calculate `mean_val`, `std_val`, and `standardized` = (data - mean) / std. Print normalized and standardized.",
+  "starterCode": "# Normalize and standardize data\n",
+  "solutionHidden": "import numpy as np\ndata = np.array([10, 20, 30, 40, 50])\nmin_val = data.min()\nmax_val = data.max()\nnormalized = (data - min_val) / (max_val - min_val)\nmean_val = data.mean()\nstd_val = data.std()\nstandardized = (data - mean_val) / std_val\nprint(normalized)\nprint(standardized)",
+  "tests": [
+    {
+      "id": "data-exists",
+      "type": "variable_exists",
+      "description": "Variable 'data' should exist",
+      "expectedBehavior": "Must create data array",
+      "variable": "data"
+    },
+    {
+      "id": "normalized-exists",
+      "type": "variable_exists",
+      "description": "Variable 'normalized' should exist",
+      "expectedBehavior": "Must normalize data",
+      "variable": "normalized"
+    },
+    {
+      "id": "standardized-exists",
+      "type": "variable_exists",
+      "description": "Variable 'standardized' should exist",
+      "expectedBehavior": "Must standardize data",
+      "variable": "standardized"
+    },
+    {
+      "id": "min-val-exists",
+      "type": "variable_exists",
+      "description": "Variable 'min_val' should exist",
+      "expectedBehavior": "Must find minimum",
+      "variable": "min_val"
+    },
+    {
+      "id": "max-val-exists",
+      "type": "variable_exists",
+      "description": "Variable 'max_val' should exist",
+      "expectedBehavior": "Must find maximum",
+      "variable": "max_val"
+    },
+    {
+      "id": "mean-val-exists",
+      "type": "variable_exists",
+      "description": "Variable 'mean_val' should exist",
+      "expectedBehavior": "Must calculate mean",
+      "variable": "mean_val"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Min-max: (data - min) / (max - min). Z-score: (data - mean) / std"
+    },
+    {
+      "level": 2,
+      "text": "Use .min(), .max(), .mean(), .std() methods on arrays"
+    },
+    {
+      "level": 3,
+      "text": "normalized = (data - data.min()) / (data.max() - data.min()), standardized = (data - data.mean()) / data.std()"
+    }
+  ],
+  "xpReward": 145,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 12
+}

@@ -1,0 +1,66 @@
+{
+  "id": "ml-foundations-precision-recall",
+  "world": "ml-foundations",
+  "title": "Precision and Recall Realm",
+  "story": "Accuracy isn't everything! Precision answers 'Of the items we predicted as positive, how many were actually positive?' Recall answers 'Of all actual positives, how many did we find?' These metrics are crucial when classes are imbalanced or one type of error is more costly.",
+  "instructions": "Given true_pos = 8, false_pos = 2, false_neg = 3 from a confusion matrix. Calculate `precision` (TP / (TP + FP)) and `recall` (TP / (TP + FN)). Both should be rounded to 2 decimals using round(value, 2). Print both metrics.",
+  "starterCode": "# Calculate precision and recall\ntrue_pos = 8\nfalse_pos = 2\nfalse_neg = 3\n",
+  "solutionHidden": "true_pos = 8\nfalse_pos = 2\nfalse_neg = 3\nprecision = round(true_pos / (true_pos + false_pos), 2)\nrecall = round(true_pos / (true_pos + false_neg), 2)\nprint(precision)\nprint(recall)",
+  "tests": [
+    {
+      "id": "precision-exists",
+      "type": "variable_exists",
+      "description": "Variable 'precision' should exist",
+      "expectedBehavior": "Must calculate precision",
+      "variable": "precision"
+    },
+    {
+      "id": "recall-exists",
+      "type": "variable_exists",
+      "description": "Variable 'recall' should exist",
+      "expectedBehavior": "Must calculate recall",
+      "variable": "recall"
+    },
+    {
+      "id": "precision-value",
+      "type": "variable_value",
+      "description": "precision should be 0.8",
+      "expectedBehavior": "Precision = 8/(8+2) = 0.8",
+      "variable": "precision",
+      "expected": 0.8
+    },
+    {
+      "id": "recall-value",
+      "type": "variable_value",
+      "description": "recall should be 0.73",
+      "expectedBehavior": "Recall = 8/(8+3) = 0.73",
+      "variable": "recall",
+      "expected": 0.73
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print precision and recall",
+      "expectedBehavior": "Output should show both metrics",
+      "expected": "0.8\n0.73"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Precision = TP / (TP + FP), Recall = TP / (TP + FN). Use round(value, 2) for 2 decimals"
+    },
+    {
+      "level": 2,
+      "text": "Precision: Of predicted positives, what fraction were correct? Recall: Of actual positives, what fraction did we catch?"
+    },
+    {
+      "level": 3,
+      "text": "precision = round(8 / (8 + 2), 2), recall = round(8 / (8 + 3), 2)"
+    }
+  ],
+  "xpReward": 145,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 8
+}

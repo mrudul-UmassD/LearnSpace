@@ -1,0 +1,73 @@
+{
+  "id": "ml-foundations-numpy-stats",
+  "world": "ml-foundations",
+  "title": "Statistics Sanctuary",
+  "story": "Understanding your data is the first step in ML! NumPy provides powerful statistical functions to analyze datasets. Mean, median, and standard deviation help you understand data distribution - essential for preprocessing and model evaluation.",
+  "instructions": "Import numpy as np. Create array `dataset` with [2, 4, 4, 4, 5, 5, 7, 9]. Calculate `mean_val` using .mean(), `median_val` using np.median(), and `std_val` (standard deviation) using .std(). Print all three values.",
+  "starterCode": "# Calculate statistics\n",
+  "solutionHidden": "import numpy as np\ndataset = np.array([2, 4, 4, 4, 5, 5, 7, 9])\nmean_val = dataset.mean()\nmedian_val = np.median(dataset)\nstd_val = dataset.std()\nprint(mean_val)\nprint(median_val)\nprint(std_val)",
+  "tests": [
+    {
+      "id": "dataset-exists",
+      "type": "variable_exists",
+      "description": "Variable 'dataset' should exist",
+      "expectedBehavior": "Must create dataset array",
+      "variable": "dataset"
+    },
+    {
+      "id": "mean-exists",
+      "type": "variable_exists",
+      "description": "Variable 'mean_val' should exist",
+      "expectedBehavior": "Must calculate mean",
+      "variable": "mean_val"
+    },
+    {
+      "id": "median-exists",
+      "type": "variable_exists",
+      "description": "Variable 'median_val' should exist",
+      "expectedBehavior": "Must calculate median",
+      "variable": "median_val"
+    },
+    {
+      "id": "std-exists",
+      "type": "variable_exists",
+      "description": "Variable 'std_val' should exist",
+      "expectedBehavior": "Must calculate standard deviation",
+      "variable": "std_val"
+    },
+    {
+      "id": "mean-correct",
+      "type": "variable_value",
+      "description": "mean_val should be 5.0",
+      "expectedBehavior": "Average of dataset is 5.0",
+      "variable": "mean_val",
+      "expected": 5.0
+    },
+    {
+      "id": "median-correct",
+      "type": "variable_value",
+      "description": "median_val should be 4.5",
+      "expectedBehavior": "Median of dataset is 4.5",
+      "variable": "median_val",
+      "expected": 4.5
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use array.mean() for mean, np.median(array) for median, array.std() for standard deviation"
+    },
+    {
+      "level": 2,
+      "text": "Mean is average, median is middle value, std measures spread around mean"
+    },
+    {
+      "level": 3,
+      "text": "mean_val = dataset.mean(), median_val = np.median(dataset), std_val = dataset.std()"
+    }
+  ],
+  "xpReward": 115,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 4
+}

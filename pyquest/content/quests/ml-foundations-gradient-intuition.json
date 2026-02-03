@@ -1,0 +1,50 @@
+{
+  "id": "ml-foundations-gradient-intuition",
+  "world": "ml-foundations",
+  "title": "The Gradient Gateway",
+  "story": "How do models learn? Through gradients! A gradient tells us which direction to adjust our parameters to reduce error. Think of it like finding the steepest path down a hill. For linear regression, the gradient of MSE with respect to slope m is: -2 * mean(x * (y_true - y_pred)).",
+  "instructions": "Import numpy as np. Given x = [1, 2, 3], y_true = [3, 5, 7], y_pred = [2, 4, 8], m = 2. Calculate `residuals` (y_true - y_pred), `gradient` (-2 * mean of x * residuals). Create `new_m` by adding 0.1 * gradient to m. Print gradient and new_m.",
+  "starterCode": "# Calculate gradient for learning\nimport numpy as np\nx = np.array([1, 2, 3])\ny_true = np.array([3, 5, 7])\ny_pred = np.array([2, 4, 8])\nm = 2\n",
+  "solutionHidden": "import numpy as np\nx = np.array([1, 2, 3])\ny_true = np.array([3, 5, 7])\ny_pred = np.array([2, 4, 8])\nm = 2\nresiduals = y_true - y_pred\ngradient = -2 * (x * residuals).mean()\nnew_m = m + 0.1 * gradient\nprint(gradient)\nprint(new_m)",
+  "tests": [
+    {
+      "id": "residuals-exists",
+      "type": "variable_exists",
+      "description": "Variable 'residuals' should exist",
+      "expectedBehavior": "Must calculate residuals",
+      "variable": "residuals"
+    },
+    {
+      "id": "gradient-exists",
+      "type": "variable_exists",
+      "description": "Variable 'gradient' should exist",
+      "expectedBehavior": "Must calculate gradient",
+      "variable": "gradient"
+    },
+    {
+      "id": "new-m-exists",
+      "type": "variable_exists",
+      "description": "Variable 'new_m' should exist",
+      "expectedBehavior": "Must update slope parameter",
+      "variable": "new_m"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Residuals = y_true - y_pred. Gradient = -2 * mean(x * residuals). Update: new_m = m + learning_rate * gradient"
+    },
+    {
+      "level": 2,
+      "text": "Gradient descent updates parameters in direction that reduces error. Learning rate (0.1) controls step size"
+    },
+    {
+      "level": 3,
+      "text": "residuals = y_true - y_pred, gradient = -2 * (x * residuals).mean(), new_m = m + 0.1 * gradient"
+    }
+  ],
+  "xpReward": 150,
+  "hintUnlockAttempts": 2,
+  "difficulty": "advanced",
+  "order": 11
+}

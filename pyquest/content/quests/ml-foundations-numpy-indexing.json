@@ -1,0 +1,64 @@
+{
+  "id": "ml-foundations-numpy-indexing",
+  "world": "ml-foundations",
+  "title": "The Indexing Initiative",
+  "story": "Accessing specific elements in arrays is fundamental to ML! Whether selecting features, filtering data, or creating subsets, mastering NumPy indexing lets you manipulate data with precision. Boolean indexing is especially powerful for filtering!",
+  "instructions": "Import numpy as np. Create array `values` with [5, 10, 15, 20, 25, 30]. Get `first_three` (first 3 elements), `last_two` (last 2 elements), and `greater_than_15` (elements > 15 using boolean indexing). Print all three.",
+  "starterCode": "# Practice NumPy indexing\n",
+  "solutionHidden": "import numpy as np\nvalues = np.array([5, 10, 15, 20, 25, 30])\nfirst_three = values[:3]\nlast_two = values[-2:]\ngreater_than_15 = values[values > 15]\nprint(first_three)\nprint(last_two)\nprint(greater_than_15)",
+  "tests": [
+    {
+      "id": "values-exists",
+      "type": "variable_exists",
+      "description": "Variable 'values' should exist",
+      "expectedBehavior": "Must create values array",
+      "variable": "values"
+    },
+    {
+      "id": "first-three-exists",
+      "type": "variable_exists",
+      "description": "Variable 'first_three' should exist",
+      "expectedBehavior": "Must slice first 3 elements",
+      "variable": "first_three"
+    },
+    {
+      "id": "last-two-exists",
+      "type": "variable_exists",
+      "description": "Variable 'last_two' should exist",
+      "expectedBehavior": "Must slice last 2 elements",
+      "variable": "last_two"
+    },
+    {
+      "id": "greater-exists",
+      "type": "variable_exists",
+      "description": "Variable 'greater_than_15' should exist",
+      "expectedBehavior": "Must use boolean indexing",
+      "variable": "greater_than_15"
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print all three selections",
+      "expectedBehavior": "Output should show sliced and filtered arrays",
+      "expected": "[ 5 10 15]\n[25 30]\n[20 25 30]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use slicing [:3] for first 3, [-2:] for last 2. Boolean indexing: array[array > value]"
+    },
+    {
+      "level": 2,
+      "text": "Boolean indexing creates a mask: values > 15 returns [False, False, False, True, True, True]"
+    },
+    {
+      "level": 3,
+      "text": "first_three = values[:3], last_two = values[-2:], greater_than_15 = values[values > 15]"
+    }
+  ],
+  "xpReward": 120,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 3
+}

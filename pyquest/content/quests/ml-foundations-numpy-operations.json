@@ -1,0 +1,72 @@
+{
+  "id": "ml-foundations-numpy-operations",
+  "world": "ml-foundations",
+  "title": "Operation Optimization",
+  "story": "NumPy's superpower is vectorized operations - performing calculations on entire arrays at once! This is much faster than using Python loops. In ML, we constantly perform mathematical operations on large datasets, so mastering these operations is crucial.",
+  "instructions": "Import numpy as np. Create an array `numbers` with [10, 20, 30, 40]. Calculate `doubled` (multiply by 2), `squared` (raise to power 2), and `total` (sum of all elements using .sum()). Print all results.",
+  "starterCode": "# Perform vectorized operations\n",
+  "solutionHidden": "import numpy as np\nnumbers = np.array([10, 20, 30, 40])\ndoubled = numbers * 2\nsquared = numbers ** 2\ntotal = numbers.sum()\nprint(doubled)\nprint(squared)\nprint(total)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers array",
+      "variable": "numbers"
+    },
+    {
+      "id": "doubled-exists",
+      "type": "variable_exists",
+      "description": "Variable 'doubled' should exist",
+      "expectedBehavior": "Must calculate doubled values",
+      "variable": "doubled"
+    },
+    {
+      "id": "squared-exists",
+      "type": "variable_exists",
+      "description": "Variable 'squared' should exist",
+      "expectedBehavior": "Must calculate squared values",
+      "variable": "squared"
+    },
+    {
+      "id": "total-exists",
+      "type": "variable_exists",
+      "description": "Variable 'total' should exist",
+      "expectedBehavior": "Must calculate sum",
+      "variable": "total"
+    },
+    {
+      "id": "total-correct",
+      "type": "variable_value",
+      "description": "total should be 100",
+      "expectedBehavior": "Sum of 10+20+30+40 = 100",
+      "variable": "total",
+      "expected": 100
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print all results",
+      "expectedBehavior": "Output should show doubled, squared, and total",
+      "expected": "[20 40 60 80]\n[ 100  400  900 1600]\n100"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use * for multiplication, ** for power, and .sum() method for sum"
+    },
+    {
+      "level": 2,
+      "text": "Operations work element-wise: array * 2 doubles each element"
+    },
+    {
+      "level": 3,
+      "text": "doubled = numbers * 2, squared = numbers ** 2, total = numbers.sum()"
+    }
+  ],
+  "xpReward": 110,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 2
+}

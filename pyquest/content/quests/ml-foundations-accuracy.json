@@ -1,0 +1,73 @@
+{
+  "id": "ml-foundations-accuracy",
+  "world": "ml-foundations",
+  "title": "Accuracy Academy",
+  "story": "How do we know if our model is good? Accuracy is the simplest metric - the percentage of correct predictions. It's calculated as (correct predictions / total predictions). While not perfect for all problems, it's essential to understand!",
+  "instructions": "Import numpy as np. Create `y_true` with actual labels [1, 0, 1, 1, 0, 1, 0, 0] and `y_pred` with predictions [1, 0, 1, 0, 0, 1, 0, 1]. Calculate `correct` (count of matching predictions using ==), and `accuracy` (correct / total). Print correct and accuracy.",
+  "starterCode": "# Calculate accuracy metric\n",
+  "solutionHidden": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 1, 0, 0])\ny_pred = np.array([1, 0, 1, 0, 0, 1, 0, 1])\ncorrect = (y_true == y_pred).sum()\naccuracy = correct / len(y_true)\nprint(correct)\nprint(accuracy)",
+  "tests": [
+    {
+      "id": "y-true-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_true' should exist",
+      "expectedBehavior": "Must create true labels",
+      "variable": "y_true"
+    },
+    {
+      "id": "y-pred-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y_pred' should exist",
+      "expectedBehavior": "Must create predictions",
+      "variable": "y_pred"
+    },
+    {
+      "id": "correct-exists",
+      "type": "variable_exists",
+      "description": "Variable 'correct' should exist",
+      "expectedBehavior": "Must count correct predictions",
+      "variable": "correct"
+    },
+    {
+      "id": "accuracy-exists",
+      "type": "variable_exists",
+      "description": "Variable 'accuracy' should exist",
+      "expectedBehavior": "Must calculate accuracy",
+      "variable": "accuracy"
+    },
+    {
+      "id": "correct-value",
+      "type": "variable_value",
+      "description": "correct should be 6",
+      "expectedBehavior": "6 predictions match true labels",
+      "variable": "correct",
+      "expected": 6
+    },
+    {
+      "id": "accuracy-value",
+      "type": "variable_value",
+      "description": "accuracy should be 0.75",
+      "expectedBehavior": "Accuracy is 6/8 = 0.75",
+      "variable": "accuracy",
+      "expected": 0.75
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Compare arrays with ==, then sum() to count True values. Divide by total length"
+    },
+    {
+      "level": 2,
+      "text": "y_true == y_pred creates boolean array. Use .sum() to count matches"
+    },
+    {
+      "level": 3,
+      "text": "correct = (y_true == y_pred).sum(), accuracy = correct / len(y_true)"
+    }
+  ],
+  "xpReward": 130,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 6
+}
