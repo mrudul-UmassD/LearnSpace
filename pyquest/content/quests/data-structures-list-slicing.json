@@ -1,0 +1,88 @@
+{
+  "id": "data-structures-list-slicing",
+  "world": "data-structures",
+  "title": "The Slice Sanctuary",
+  "story": "List slicing is a powerful technique for extracting portions of a list! Using slice notation [start:end], you can grab any range of elements. It's like cutting a piece from a larger whole.",
+  "instructions": "Create a list `numbers` with values [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]. Create `first_three` with the first 3 items, `last_three` with the last 3 items, and `middle` with items at indices 3, 4, 5. Print all three slices.",
+  "starterCode": "# Use list slicing\n",
+  "solutionHidden": "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nfirst_three = numbers[:3]\nlast_three = numbers[-3:]\nmiddle = numbers[3:6]\nprint(first_three)\nprint(last_three)\nprint(middle)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers list",
+      "variable": "numbers"
+    },
+    {
+      "id": "first-three-exists",
+      "type": "variable_exists",
+      "description": "Variable 'first_three' should exist",
+      "expectedBehavior": "Must create first_three slice",
+      "variable": "first_three"
+    },
+    {
+      "id": "last-three-exists",
+      "type": "variable_exists",
+      "description": "Variable 'last_three' should exist",
+      "expectedBehavior": "Must create last_three slice",
+      "variable": "last_three"
+    },
+    {
+      "id": "middle-exists",
+      "type": "variable_exists",
+      "description": "Variable 'middle' should exist",
+      "expectedBehavior": "Must create middle slice",
+      "variable": "middle"
+    },
+    {
+      "id": "first-three-correct",
+      "type": "variable_value",
+      "description": "first_three should be [0, 1, 2]",
+      "expectedBehavior": "Should contain first 3 elements",
+      "variable": "first_three",
+      "expected": [0, 1, 2]
+    },
+    {
+      "id": "last-three-correct",
+      "type": "variable_value",
+      "description": "last_three should be [7, 8, 9]",
+      "expectedBehavior": "Should contain last 3 elements",
+      "variable": "last_three",
+      "expected": [7, 8, 9]
+    },
+    {
+      "id": "middle-correct",
+      "type": "variable_value",
+      "description": "middle should be [3, 4, 5]",
+      "expectedBehavior": "Should contain elements at indices 3-5",
+      "variable": "middle",
+      "expected": [3, 4, 5]
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print all three slices",
+      "expectedBehavior": "Output should show all slices",
+      "expected": "[0, 1, 2]\n[7, 8, 9]\n[3, 4, 5]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Slice syntax: list[start:end]. [:3] means from beginning to index 3 (exclusive)"
+    },
+    {
+      "level": 2,
+      "text": "Negative indices count from end: [-3:] gets last 3 items. [3:6] gets items 3, 4, 5"
+    },
+    {
+      "level": 3,
+      "text": "first_three = numbers[:3], last_three = numbers[-3:], middle = numbers[3:6]"
+    }
+  ],
+  "xpReward": 120,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 3
+}

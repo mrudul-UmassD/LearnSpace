@@ -1,0 +1,51 @@
+{
+  "id": "python-basics-elif",
+  "world": "python-basics",
+  "title": "The Multi-Path Maze",
+  "story": "What if you have more than two options? The elif (else-if) statement lets you create multiple conditions, checking them one by one until you find a match. Perfect for complex decision-making!",
+  "instructions": "Create a variable `score` with value 85. Use if-elif-else: if score >= 90 print \"A grade\", elif score >= 80 print \"B grade\", elif score >= 70 print \"C grade\", else print \"Need improvement\".",
+  "starterCode": "# Use elif for multiple conditions\n",
+  "solutionHidden": "score = 85\nif score >= 90:\n    print(\"A grade\")\nelif score >= 80:\n    print(\"B grade\")\nelif score >= 70:\n    print(\"C grade\")\nelse:\n    print(\"Need improvement\")",
+  "tests": [
+    {
+      "id": "score-exists",
+      "type": "variable_exists",
+      "description": "Variable 'score' should exist",
+      "expectedBehavior": "Must create score variable",
+      "variable": "score"
+    },
+    {
+      "id": "score-value",
+      "type": "variable_value",
+      "description": "score should be 85",
+      "expectedBehavior": "score must equal 85",
+      "variable": "score",
+      "expected": 85
+    },
+    {
+      "id": "output-b-grade",
+      "type": "output",
+      "description": "Should print B grade",
+      "expectedBehavior": "Since 80 <= score < 90, should print B grade",
+      "expected": "B grade"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "elif stands for 'else if'. You can chain multiple elif statements between if and else"
+    },
+    {
+      "level": 2,
+      "text": "Check conditions from highest to lowest. First check >= 90, then >= 80, then >= 70"
+    },
+    {
+      "level": 3,
+      "text": "if score >= 90: (A) elif score >= 80: (B) elif score >= 70: (C) else: (improvement)"
+    }
+  ],
+  "xpReward": 105,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 8
+}

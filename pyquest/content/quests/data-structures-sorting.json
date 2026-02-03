@@ -1,0 +1,81 @@
+{
+  "id": "data-structures-sorting",
+  "world": "data-structures",
+  "title": "The Sorting Sanctuary",
+  "story": "Sorting is a fundamental algorithm! Python provides built-in functions to order your data. The sort() method modifies a list in-place, while sorted() returns a new sorted list without changing the original.",
+  "instructions": "Create a list `numbers` with [5, 2, 8, 1, 9, 3]. Create `sorted_asc` using sorted() for ascending order. Create `sorted_desc` using sorted() with reverse=True. Sort the original list with sort(). Print sorted_asc, sorted_desc, and numbers.",
+  "starterCode": "# Sort lists\n",
+  "solutionHidden": "numbers = [5, 2, 8, 1, 9, 3]\nsorted_asc = sorted(numbers)\nsorted_desc = sorted(numbers, reverse=True)\nnumbers.sort()\nprint(sorted_asc)\nprint(sorted_desc)\nprint(numbers)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers list",
+      "variable": "numbers"
+    },
+    {
+      "id": "sorted-asc-exists",
+      "type": "variable_exists",
+      "description": "Variable 'sorted_asc' should exist",
+      "expectedBehavior": "Must create sorted_asc",
+      "variable": "sorted_asc"
+    },
+    {
+      "id": "sorted-desc-exists",
+      "type": "variable_exists",
+      "description": "Variable 'sorted_desc' should exist",
+      "expectedBehavior": "Must create sorted_desc",
+      "variable": "sorted_desc"
+    },
+    {
+      "id": "sorted-asc-correct",
+      "type": "variable_value",
+      "description": "sorted_asc should be [1, 2, 3, 5, 8, 9]",
+      "expectedBehavior": "Should be sorted ascending",
+      "variable": "sorted_asc",
+      "expected": [1, 2, 3, 5, 8, 9]
+    },
+    {
+      "id": "sorted-desc-correct",
+      "type": "variable_value",
+      "description": "sorted_desc should be [9, 8, 5, 3, 2, 1]",
+      "expectedBehavior": "Should be sorted descending",
+      "variable": "sorted_desc",
+      "expected": [9, 8, 5, 3, 2, 1]
+    },
+    {
+      "id": "numbers-sorted",
+      "type": "variable_value",
+      "description": "numbers should be sorted in-place",
+      "expectedBehavior": "Original list should be modified",
+      "variable": "numbers",
+      "expected": [1, 2, 3, 5, 8, 9]
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print all three sorted lists",
+      "expectedBehavior": "Output should show ascending, descending, and modified original",
+      "expected": "[1, 2, 3, 5, 8, 9]\n[9, 8, 5, 3, 2, 1]\n[1, 2, 3, 5, 8, 9]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "sorted(list) returns new sorted list. list.sort() modifies in-place"
+    },
+    {
+      "level": 2,
+      "text": "Use reverse=True parameter for descending order: sorted(list, reverse=True)"
+    },
+    {
+      "level": 3,
+      "text": "sorted_asc = sorted(numbers), sorted_desc = sorted(numbers, reverse=True), numbers.sort()"
+    }
+  ],
+  "xpReward": 130,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 9
+}

@@ -1,0 +1,67 @@
+{
+  "id": "python-basics-string-methods",
+  "world": "python-basics",
+  "title": "Method Mastery",
+  "story": "Strings come with built-in superpowers called methods! These methods let you transform text in amazing ways. You can change case, find substrings, replace text, and much more. Time to unlock these abilities!",
+  "instructions": "Create a variable `message` with value \"python is amazing\". Create `uppercase` using the upper() method, `capitalized` using the capitalize() method, and `word_count` with the number of words (3). Print all three results.",
+  "starterCode": "# Use string methods\n",
+  "solutionHidden": "message = \"python is amazing\"\nuppercase = message.upper()\ncapitalized = message.capitalize()\nword_count = 3\nprint(uppercase)\nprint(capitalized)\nprint(word_count)",
+  "tests": [
+    {
+      "id": "message-exists",
+      "type": "variable_exists",
+      "description": "Variable 'message' should exist",
+      "expectedBehavior": "Must create message variable",
+      "variable": "message"
+    },
+    {
+      "id": "uppercase-correct",
+      "type": "variable_value",
+      "description": "uppercase should be \"PYTHON IS AMAZING\"",
+      "expectedBehavior": "Use .upper() method on message",
+      "variable": "uppercase",
+      "expected": "PYTHON IS AMAZING"
+    },
+    {
+      "id": "capitalized-correct",
+      "type": "variable_value",
+      "description": "capitalized should be \"Python is amazing\"",
+      "expectedBehavior": "Use .capitalize() method on message",
+      "variable": "capitalized",
+      "expected": "Python is amazing"
+    },
+    {
+      "id": "word-count-correct",
+      "type": "variable_value",
+      "description": "word_count should be 3",
+      "expectedBehavior": "Count the words in the message",
+      "variable": "word_count",
+      "expected": 3
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print all three values",
+      "expectedBehavior": "Output should show uppercase, capitalized, and count",
+      "expected": "PYTHON IS AMAZING\nPython is amazing\n3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "String methods are called with dot notation: string_var.method_name()"
+    },
+    {
+      "level": 2,
+      "text": "The upper() method converts all letters to uppercase, capitalize() makes first letter uppercase"
+    },
+    {
+      "level": 3,
+      "text": "uppercase = message.upper(), capitalized = message.capitalize(), word_count = 3"
+    }
+  ],
+  "xpReward": 90,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 5
+}

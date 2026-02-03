@@ -1,0 +1,51 @@
+{
+  "id": "python-basics-if-else",
+  "world": "python-basics",
+  "title": "The Fork in the Road",
+  "story": "Sometimes you need to handle both paths - what happens when a condition is true AND what happens when it's false. The if-else statement gives you complete control over both scenarios!",
+  "instructions": "Create a variable `age` with value 16. Use an if-else statement: if age is >= 18, print \"You can vote!\". Otherwise, print \"Too young to vote\". Your code should handle both cases.",
+  "starterCode": "# Use if-else for two-way decision\n",
+  "solutionHidden": "age = 16\nif age >= 18:\n    print(\"You can vote!\")\nelse:\n    print(\"Too young to vote\")",
+  "tests": [
+    {
+      "id": "age-exists",
+      "type": "variable_exists",
+      "description": "Variable 'age' should exist",
+      "expectedBehavior": "Must create age variable",
+      "variable": "age"
+    },
+    {
+      "id": "age-value",
+      "type": "variable_value",
+      "description": "age should be 16",
+      "expectedBehavior": "age must equal 16",
+      "variable": "age",
+      "expected": 16
+    },
+    {
+      "id": "output-young",
+      "type": "output",
+      "description": "Should print too young message",
+      "expectedBehavior": "Since age < 18, should print else branch",
+      "expected": "Too young to vote"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "The else clause handles what happens when the if condition is false"
+    },
+    {
+      "level": 2,
+      "text": "Structure: if condition: (action1) else: (action2). Both actions need indentation"
+    },
+    {
+      "level": 3,
+      "text": "if age >= 18: print(\"You can vote!\") else: print(\"Too young to vote\")"
+    }
+  ],
+  "xpReward": 100,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 7
+}

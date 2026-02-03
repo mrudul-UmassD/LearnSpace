@@ -1,0 +1,73 @@
+{
+  "id": "data-structures-filtering",
+  "world": "data-structures",
+  "title": "The Filter Forge",
+  "story": "Filtering lets you select specific items from a collection based on criteria! Combined with list comprehensions or the filter() function, you can extract exactly the data you need. It's like panning for gold in a stream!",
+  "instructions": "Create a list `numbers` from 1 to 20 (using range). Use list comprehension to create `divisible_by_3` with numbers divisible by 3. Create `greater_than_10` with numbers > 10. Print both filtered lists.",
+  "starterCode": "# Filter data from lists\n",
+  "solutionHidden": "numbers = list(range(1, 21))\ndivisible_by_3 = [x for x in numbers if x % 3 == 0]\ngreater_than_10 = [x for x in numbers if x > 10]\nprint(divisible_by_3)\nprint(greater_than_10)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers list",
+      "variable": "numbers"
+    },
+    {
+      "id": "divisible-by-3-exists",
+      "type": "variable_exists",
+      "description": "Variable 'divisible_by_3' should exist",
+      "expectedBehavior": "Must create filtered list",
+      "variable": "divisible_by_3"
+    },
+    {
+      "id": "greater-than-10-exists",
+      "type": "variable_exists",
+      "description": "Variable 'greater_than_10' should exist",
+      "expectedBehavior": "Must create filtered list",
+      "variable": "greater_than_10"
+    },
+    {
+      "id": "divisible-correct",
+      "type": "variable_value",
+      "description": "divisible_by_3 should be [3, 6, 9, 12, 15, 18]",
+      "expectedBehavior": "Should contain multiples of 3",
+      "variable": "divisible_by_3",
+      "expected": [3, 6, 9, 12, 15, 18]
+    },
+    {
+      "id": "greater-correct",
+      "type": "variable_value",
+      "description": "greater_than_10 should be [11-20]",
+      "expectedBehavior": "Should contain numbers greater than 10",
+      "variable": "greater_than_10",
+      "expected": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print both filtered lists",
+      "expectedBehavior": "Output should show both results",
+      "expected": "[3, 6, 9, 12, 15, 18]\n[11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use list comprehension with if condition: [x for x in list if condition]"
+    },
+    {
+      "level": 2,
+      "text": "Check divisibility with modulo: x % 3 == 0. Check greater with: x > 10"
+    },
+    {
+      "level": 3,
+      "text": "divisible_by_3 = [x for x in numbers if x % 3 == 0], greater_than_10 = [x for x in numbers if x > 10]"
+    }
+  ],
+  "xpReward": 140,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 11
+}

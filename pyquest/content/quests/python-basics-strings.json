@@ -1,0 +1,66 @@
+{
+  "id": "python-basics-strings",
+  "world": "python-basics",
+  "title": "String Symphony",
+  "story": "Strings are sequences of characters - letters, numbers, symbols. They're perfect for working with text! You can combine strings, repeat them, and extract parts. Let's explore the power of string manipulation.",
+  "instructions": "Create a variable `first_name` with value \"Ada\" and `last_name` with value \"Lovelace\". Create a `full_name` by combining them with a space between. Create a `greeting` that says \"Hello, \" followed by the full name. Print both full_name and greeting.",
+  "starterCode": "# Work with strings\n",
+  "solutionHidden": "first_name = \"Ada\"\nlast_name = \"Lovelace\"\nfull_name = first_name + \" \" + last_name\ngreeting = \"Hello, \" + full_name\nprint(full_name)\nprint(greeting)",
+  "tests": [
+    {
+      "id": "first-name-exists",
+      "type": "variable_exists",
+      "description": "Variable 'first_name' should exist",
+      "expectedBehavior": "Must create first_name variable",
+      "variable": "first_name"
+    },
+    {
+      "id": "last-name-exists",
+      "type": "variable_exists",
+      "description": "Variable 'last_name' should exist",
+      "expectedBehavior": "Must create last_name variable",
+      "variable": "last_name"
+    },
+    {
+      "id": "full-name-correct",
+      "type": "variable_value",
+      "description": "full_name should be \"Ada Lovelace\"",
+      "expectedBehavior": "full_name must combine first and last name with space",
+      "variable": "full_name",
+      "expected": "Ada Lovelace"
+    },
+    {
+      "id": "greeting-correct",
+      "type": "variable_value",
+      "description": "greeting should be \"Hello, Ada Lovelace\"",
+      "expectedBehavior": "greeting must start with 'Hello, ' followed by full_name",
+      "variable": "greeting",
+      "expected": "Hello, Ada Lovelace"
+    },
+    {
+      "id": "output-full-name",
+      "type": "output",
+      "description": "Should print full_name and greeting",
+      "expectedBehavior": "Output should show both lines",
+      "expected": "Ada Lovelace\nHello, Ada Lovelace"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use the + operator to concatenate (combine) strings together"
+    },
+    {
+      "level": 2,
+      "text": "Don't forget to add a space between first and last name: \" \""
+    },
+    {
+      "level": 3,
+      "text": "full_name = first_name + \" \" + last_name, then greeting = \"Hello, \" + full_name"
+    }
+  ],
+  "xpReward": 85,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 4
+}

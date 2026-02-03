@@ -1,0 +1,51 @@
+{
+  "id": "python-basics-while-loop",
+  "world": "python-basics",
+  "title": "The Conditional Cycle",
+  "story": "While loops are different from for loops - they keep running as long as a condition is true. They're perfect when you don't know exactly how many times to repeat, but you know when to stop!",
+  "instructions": "Create a variable `count` starting at 1. Use a while loop that runs while count <= 5. Inside the loop, print count, then increment it by 1. The loop should print numbers 1 through 5.",
+  "starterCode": "# Use a while loop\n",
+  "solutionHidden": "count = 1\nwhile count <= 5:\n    print(count)\n    count += 1",
+  "tests": [
+    {
+      "id": "count-exists",
+      "type": "variable_exists",
+      "description": "Variable 'count' should exist",
+      "expectedBehavior": "Must create count variable",
+      "variable": "count"
+    },
+    {
+      "id": "count-final",
+      "type": "variable_value",
+      "description": "count should be 6 after loop",
+      "expectedBehavior": "After loop completes, count should be 6",
+      "variable": "count",
+      "expected": 6
+    },
+    {
+      "id": "output-numbers",
+      "type": "output",
+      "description": "Should print 1 through 5",
+      "expectedBehavior": "Output should show numbers 1, 2, 3, 4, 5",
+      "expected": "1\n2\n3\n4\n5"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "While loop syntax: while condition: followed by indented code. Don't forget to update the variable!"
+    },
+    {
+      "level": 2,
+      "text": "Start count at 1. Loop while count <= 5. Inside: print count, then count += 1"
+    },
+    {
+      "level": 3,
+      "text": "count = 1, while count <= 5: print(count) then count += 1 (both indented)"
+    }
+  ],
+  "xpReward": 115,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 10
+}

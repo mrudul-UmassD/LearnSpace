@@ -1,0 +1,59 @@
+{
+  "id": "data-structures-sets",
+  "world": "data-structures",
+  "title": "The Set Sanctuary",
+  "story": "Sets are collections of unique elements - no duplicates allowed! They're perfect for removing duplicates, testing membership, and performing mathematical set operations like union and intersection.",
+  "instructions": "Create a set `numbers` from the list [1, 2, 2, 3, 3, 3, 4, 5, 5]. Add the number 6 to the set using add(). Create a variable `set_size` with the length of the set. Print the set and its size.",
+  "starterCode": "# Work with sets\n",
+  "solutionHidden": "numbers = set([1, 2, 2, 3, 3, 3, 4, 5, 5])\nnumbers.add(6)\nset_size = len(numbers)\nprint(numbers)\nprint(set_size)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers set",
+      "variable": "numbers"
+    },
+    {
+      "id": "numbers-type",
+      "type": "variable_type",
+      "description": "numbers should be a set",
+      "expectedBehavior": "numbers must be set type",
+      "variable": "numbers",
+      "expectedType": "set"
+    },
+    {
+      "id": "set-size-exists",
+      "type": "variable_exists",
+      "description": "Variable 'set_size' should exist",
+      "expectedBehavior": "Must create set_size variable",
+      "variable": "set_size"
+    },
+    {
+      "id": "set-size-value",
+      "type": "variable_value",
+      "description": "set_size should be 6",
+      "expectedBehavior": "Set should have 6 unique elements",
+      "variable": "set_size",
+      "expected": 6
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create set from list: set([list]). Sets automatically remove duplicates"
+    },
+    {
+      "level": 2,
+      "text": "Use set.add(item) to add new element. Use len(set) for size"
+    },
+    {
+      "level": 3,
+      "text": "numbers = set([1, 2, 2, 3, 3, 3, 4, 5, 5]), numbers.add(6), set_size = len(numbers)"
+    }
+  ],
+  "xpReward": 120,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 6
+}

@@ -1,0 +1,67 @@
+{
+  "id": "data-structures-lists-basics",
+  "world": "data-structures",
+  "title": "The List Laboratory",
+  "story": "Lists are one of Python's most powerful data structures! They're ordered collections that can hold multiple items. Think of a list as a container with numbered slots - you can access any item by its position (index).",
+  "instructions": "Create a list called `fruits` containing \"apple\", \"banana\", and \"cherry\". Print the entire list, then print the first item (index 0), and finally print the length of the list using len().",
+  "starterCode": "# Work with lists\n",
+  "solutionHidden": "fruits = [\"apple\", \"banana\", \"cherry\"]\nprint(fruits)\nprint(fruits[0])\nprint(len(fruits))",
+  "tests": [
+    {
+      "id": "fruits-exists",
+      "type": "variable_exists",
+      "description": "Variable 'fruits' should exist",
+      "expectedBehavior": "Must create fruits list",
+      "variable": "fruits"
+    },
+    {
+      "id": "fruits-type",
+      "type": "variable_type",
+      "description": "fruits should be a list",
+      "expectedBehavior": "fruits must be list type",
+      "variable": "fruits",
+      "expectedType": "list"
+    },
+    {
+      "id": "fruits-length",
+      "type": "list_length",
+      "description": "fruits should have 3 items",
+      "expectedBehavior": "List should contain exactly 3 elements",
+      "variable": "fruits",
+      "expected": 3
+    },
+    {
+      "id": "fruits-contains-apple",
+      "type": "list_contains",
+      "description": "fruits should contain 'apple'",
+      "expectedBehavior": "First item should be apple",
+      "variable": "fruits",
+      "expected": "apple"
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print list, first item, and length",
+      "expectedBehavior": "Output should show all required values",
+      "expected": "['apple', 'banana', 'cherry']\napple\n3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create a list with square brackets: my_list = [item1, item2, item3]"
+    },
+    {
+      "level": 2,
+      "text": "Access first item with [0]. Use len(list_name) to get the length"
+    },
+    {
+      "level": 3,
+      "text": "fruits = [\"apple\", \"banana\", \"cherry\"], then print(fruits), print(fruits[0]), print(len(fruits))"
+    }
+  ],
+  "xpReward": 100,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 1
+}

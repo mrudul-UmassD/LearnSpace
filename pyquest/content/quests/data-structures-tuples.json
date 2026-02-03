@@ -1,0 +1,83 @@
+{
+  "id": "data-structures-tuples",
+  "world": "data-structures",
+  "title": "The Tuple Temple",
+  "story": "Tuples are like lists, but immutable - once created, they can't be changed! They're perfect for storing data that shouldn't be modified, like coordinates, database records, or function return values.",
+  "instructions": "Create a tuple `coordinates` with values (10, 20, 30). Create variables `x`, `y`, `z` by unpacking the tuple. Create a variable `tuple_length` with the length. Print x, y, z, and the length.",
+  "starterCode": "# Work with tuples\n",
+  "solutionHidden": "coordinates = (10, 20, 30)\nx, y, z = coordinates\ntuple_length = len(coordinates)\nprint(x)\nprint(y)\nprint(z)\nprint(tuple_length)",
+  "tests": [
+    {
+      "id": "coordinates-exists",
+      "type": "variable_exists",
+      "description": "Variable 'coordinates' should exist",
+      "expectedBehavior": "Must create coordinates tuple",
+      "variable": "coordinates"
+    },
+    {
+      "id": "coordinates-type",
+      "type": "variable_type",
+      "description": "coordinates should be a tuple",
+      "expectedBehavior": "coordinates must be tuple type",
+      "variable": "coordinates",
+      "expectedType": "tuple"
+    },
+    {
+      "id": "x-value",
+      "type": "variable_value",
+      "description": "x should be 10",
+      "expectedBehavior": "x should be first element",
+      "variable": "x",
+      "expected": 10
+    },
+    {
+      "id": "y-value",
+      "type": "variable_value",
+      "description": "y should be 20",
+      "expectedBehavior": "y should be second element",
+      "variable": "y",
+      "expected": 20
+    },
+    {
+      "id": "z-value",
+      "type": "variable_value",
+      "description": "z should be 30",
+      "expectedBehavior": "z should be third element",
+      "variable": "z",
+      "expected": 30
+    },
+    {
+      "id": "length-correct",
+      "type": "variable_value",
+      "description": "tuple_length should be 3",
+      "expectedBehavior": "Tuple should have 3 elements",
+      "variable": "tuple_length",
+      "expected": 3
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print x, y, z, and length",
+      "expectedBehavior": "Output should show all values",
+      "expected": "10\n20\n30\n3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create tuple with parentheses: my_tuple = (item1, item2, item3)"
+    },
+    {
+      "level": 2,
+      "text": "Unpack tuple into variables: a, b, c = my_tuple assigns each value"
+    },
+    {
+      "level": 3,
+      "text": "coordinates = (10, 20, 30), then x, y, z = coordinates, then tuple_length = len(coordinates)"
+    }
+  ],
+  "xpReward": 115,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 7
+}

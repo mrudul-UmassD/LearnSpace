@@ -1,0 +1,88 @@
+{
+  "id": "data-structures-max-min",
+  "world": "data-structures",
+  "title": "The Extremes Explorer",
+  "story": "Finding the largest and smallest values is a common task! Python's max() and min() functions make it easy. You can find extremes in lists, compare multiple values, or even use custom comparison logic.",
+  "instructions": "Create a list `temperatures` with [72, 68, 75, 70, 78, 65, 73]. Find `highest` using max(), `lowest` using min(), and calculate `temp_range` (difference between highest and lowest). Print all three values.",
+  "starterCode": "# Find max and min\n",
+  "solutionHidden": "temperatures = [72, 68, 75, 70, 78, 65, 73]\nhighest = max(temperatures)\nlowest = min(temperatures)\ntemp_range = highest - lowest\nprint(highest)\nprint(lowest)\nprint(temp_range)",
+  "tests": [
+    {
+      "id": "temperatures-exists",
+      "type": "variable_exists",
+      "description": "Variable 'temperatures' should exist",
+      "expectedBehavior": "Must create temperatures list",
+      "variable": "temperatures"
+    },
+    {
+      "id": "highest-exists",
+      "type": "variable_exists",
+      "description": "Variable 'highest' should exist",
+      "expectedBehavior": "Must find highest temperature",
+      "variable": "highest"
+    },
+    {
+      "id": "lowest-exists",
+      "type": "variable_exists",
+      "description": "Variable 'lowest' should exist",
+      "expectedBehavior": "Must find lowest temperature",
+      "variable": "lowest"
+    },
+    {
+      "id": "temp-range-exists",
+      "type": "variable_exists",
+      "description": "Variable 'temp_range' should exist",
+      "expectedBehavior": "Must calculate range",
+      "variable": "temp_range"
+    },
+    {
+      "id": "highest-correct",
+      "type": "variable_value",
+      "description": "highest should be 78",
+      "expectedBehavior": "Maximum temperature is 78",
+      "variable": "highest",
+      "expected": 78
+    },
+    {
+      "id": "lowest-correct",
+      "type": "variable_value",
+      "description": "lowest should be 65",
+      "expectedBehavior": "Minimum temperature is 65",
+      "variable": "lowest",
+      "expected": 65
+    },
+    {
+      "id": "range-correct",
+      "type": "variable_value",
+      "description": "temp_range should be 13",
+      "expectedBehavior": "Range is 78 - 65 = 13",
+      "variable": "temp_range",
+      "expected": 13
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print highest, lowest, and range",
+      "expectedBehavior": "Output should show all three values",
+      "expected": "78\n65\n13"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use max(list) to find largest value, min(list) for smallest"
+    },
+    {
+      "level": 2,
+      "text": "Calculate range by subtracting lowest from highest"
+    },
+    {
+      "level": 3,
+      "text": "highest = max(temperatures), lowest = min(temperatures), temp_range = highest - lowest"
+    }
+  ],
+  "xpReward": 125,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 10
+}

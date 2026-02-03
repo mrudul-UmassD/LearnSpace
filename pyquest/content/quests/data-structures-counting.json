@@ -1,0 +1,66 @@
+{
+  "id": "data-structures-counting",
+  "world": "data-structures",
+  "title": "The Counter's Challenge",
+  "story": "Counting occurrences is essential for data analysis! Whether you're tallying votes, analyzing text, or finding patterns, Python's count() method and Counter class make it easy to track how many times items appear.",
+  "instructions": "Create a list `letters` with ['a', 'b', 'a', 'c', 'b', 'a', 'd', 'a']. Count how many times 'a' appears using count() and store in `count_a`. Create a dictionary `letter_counts` that maps each unique letter to its count. Print count_a and letter_counts.",
+  "starterCode": "# Count occurrences in a list\n",
+  "solutionHidden": "letters = ['a', 'b', 'a', 'c', 'b', 'a', 'd', 'a']\ncount_a = letters.count('a')\nletter_counts = {}\nfor letter in set(letters):\n    letter_counts[letter] = letters.count(letter)\nprint(count_a)\nprint(letter_counts)",
+  "tests": [
+    {
+      "id": "letters-exists",
+      "type": "variable_exists",
+      "description": "Variable 'letters' should exist",
+      "expectedBehavior": "Must create letters list",
+      "variable": "letters"
+    },
+    {
+      "id": "count-a-exists",
+      "type": "variable_exists",
+      "description": "Variable 'count_a' should exist",
+      "expectedBehavior": "Must count 'a' occurrences",
+      "variable": "count_a"
+    },
+    {
+      "id": "letter-counts-exists",
+      "type": "variable_exists",
+      "description": "Variable 'letter_counts' should exist",
+      "expectedBehavior": "Must create counts dictionary",
+      "variable": "letter_counts"
+    },
+    {
+      "id": "count-a-correct",
+      "type": "variable_value",
+      "description": "count_a should be 4",
+      "expectedBehavior": "'a' appears 4 times",
+      "variable": "count_a",
+      "expected": 4
+    },
+    {
+      "id": "letter-counts-type",
+      "type": "variable_type",
+      "description": "letter_counts should be a dict",
+      "expectedBehavior": "Must be dictionary type",
+      "variable": "letter_counts",
+      "expectedType": "dict"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use list.count(item) to count occurrences of an item in a list"
+    },
+    {
+      "level": 2,
+      "text": "Loop through unique letters with set(letters), then count each one"
+    },
+    {
+      "level": 3,
+      "text": "count_a = letters.count('a'), then for letter in set(letters): letter_counts[letter] = letters.count(letter)"
+    }
+  ],
+  "xpReward": 145,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 12
+}

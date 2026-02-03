@@ -1,0 +1,43 @@
+{
+  "id": "python-basics-functions",
+  "world": "python-basics",
+  "title": "The Function Factory",
+  "story": "Functions are reusable blocks of code that perform specific tasks. Instead of writing the same code repeatedly, you define a function once and call it whenever needed. They're the building blocks of organized programs!",
+  "instructions": "Define a function called `greet` that prints \"Hello, World!\". Then call the function twice so it prints the greeting two times.",
+  "starterCode": "# Define and call a function\n",
+  "solutionHidden": "def greet():\n    print(\"Hello, World!\")\n\ngreet()\ngreet()",
+  "tests": [
+    {
+      "id": "function-exists",
+      "type": "function_call",
+      "description": "Function 'greet' should exist",
+      "expectedBehavior": "Must define a function called greet",
+      "function": "greet"
+    },
+    {
+      "id": "output-twice",
+      "type": "output",
+      "description": "Should print Hello twice",
+      "expectedBehavior": "Calling greet() twice should print message twice",
+      "expected": "Hello, World!\nHello, World!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Function syntax: def function_name(): followed by indented code block"
+    },
+    {
+      "level": 2,
+      "text": "Define the function with print inside, then call it by writing greet() twice"
+    },
+    {
+      "level": 3,
+      "text": "def greet(): print(\"Hello, World!\"), then call greet() on two separate lines"
+    }
+  ],
+  "xpReward": 120,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 11
+}

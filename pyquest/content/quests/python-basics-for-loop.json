@@ -1,0 +1,51 @@
+{
+  "id": "python-basics-for-loop",
+  "world": "python-basics",
+  "title": "The Repetition Realm",
+  "story": "Why write the same code multiple times when you can use a loop? The 'for' loop lets you repeat actions efficiently. It's like having a robot that follows your instructions over and over!",
+  "instructions": "Use a for loop with range(5) to print the numbers 0, 1, 2, 3, 4 each on a separate line. Create a variable `total` that sums these numbers (should equal 10). Print total after the loop.",
+  "starterCode": "# Use a for loop to iterate\n",
+  "solutionHidden": "total = 0\nfor i in range(5):\n    print(i)\n    total += i\nprint(total)",
+  "tests": [
+    {
+      "id": "total-exists",
+      "type": "variable_exists",
+      "description": "Variable 'total' should exist",
+      "expectedBehavior": "Must create total variable",
+      "variable": "total"
+    },
+    {
+      "id": "total-value",
+      "type": "variable_value",
+      "description": "total should be 10",
+      "expectedBehavior": "total must be sum of 0+1+2+3+4 = 10",
+      "variable": "total",
+      "expected": 10
+    },
+    {
+      "id": "output-numbers",
+      "type": "output",
+      "description": "Should print numbers and total",
+      "expectedBehavior": "Output should show 0-4 then 10",
+      "expected": "0\n1\n2\n3\n4\n10"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "For loop syntax: for variable in range(n): followed by indented code"
+    },
+    {
+      "level": 2,
+      "text": "Initialize total = 0 before loop. Inside loop, add each number with total += i"
+    },
+    {
+      "level": 3,
+      "text": "total = 0, then for i in range(5): print(i) and total += i, finally print(total)"
+    }
+  ],
+  "xpReward": 110,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 9
+}

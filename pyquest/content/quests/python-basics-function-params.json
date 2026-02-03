@@ -1,0 +1,59 @@
+{
+  "id": "python-basics-function-params",
+  "world": "python-basics",
+  "title": "The Parameter Portal",
+  "story": "Functions become truly powerful when they can accept inputs (parameters) and produce outputs (return values). This lets you create flexible, reusable code that works with different data!",
+  "instructions": "Define a function `add_numbers` that takes two parameters (a and b) and returns their sum. Then create a variable `result` that stores the result of calling add_numbers(5, 3). Print result.",
+  "starterCode": "# Define function with parameters and return\n",
+  "solutionHidden": "def add_numbers(a, b):\n    return a + b\n\nresult = add_numbers(5, 3)\nprint(result)",
+  "tests": [
+    {
+      "id": "function-exists",
+      "type": "function_call",
+      "description": "Function 'add_numbers' should exist",
+      "expectedBehavior": "Must define add_numbers function",
+      "function": "add_numbers",
+      "args": [5, 3]
+    },
+    {
+      "id": "result-exists",
+      "type": "variable_exists",
+      "description": "Variable 'result' should exist",
+      "expectedBehavior": "Must store function result in variable",
+      "variable": "result"
+    },
+    {
+      "id": "result-value",
+      "type": "variable_value",
+      "description": "result should be 8",
+      "expectedBehavior": "add_numbers(5, 3) should return 8",
+      "variable": "result",
+      "expected": 8
+    },
+    {
+      "id": "output-result",
+      "type": "output",
+      "description": "Should print 8",
+      "expectedBehavior": "Output should show the result",
+      "expected": "8"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Function with parameters: def name(param1, param2): return value"
+    },
+    {
+      "level": 2,
+      "text": "Inside the function, use 'return a + b' to send back the sum"
+    },
+    {
+      "level": 3,
+      "text": "def add_numbers(a, b): return a + b, then result = add_numbers(5, 3), then print(result)"
+    }
+  ],
+  "xpReward": 125,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 12
+}

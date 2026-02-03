@@ -1,0 +1,66 @@
+{
+  "id": "data-structures-list-comprehension",
+  "world": "data-structures",
+  "title": "The Comprehension Chamber",
+  "story": "List comprehensions are a Pythonic way to create lists in one elegant line! Instead of writing loops, you can transform and filter data with concise, readable syntax. It's like magic for list creation!",
+  "instructions": "Use list comprehension to create `squares` containing the squares of numbers 1-5 (should be [1, 4, 9, 16, 25]). Create `evens` with even numbers from 0-10 (should be [0, 2, 4, 6, 8, 10]). Print both lists.",
+  "starterCode": "# Use list comprehension\n",
+  "solutionHidden": "squares = [x**2 for x in range(1, 6)]\nevens = [x for x in range(11) if x % 2 == 0]\nprint(squares)\nprint(evens)",
+  "tests": [
+    {
+      "id": "squares-exists",
+      "type": "variable_exists",
+      "description": "Variable 'squares' should exist",
+      "expectedBehavior": "Must create squares list",
+      "variable": "squares"
+    },
+    {
+      "id": "evens-exists",
+      "type": "variable_exists",
+      "description": "Variable 'evens' should exist",
+      "expectedBehavior": "Must create evens list",
+      "variable": "evens"
+    },
+    {
+      "id": "squares-correct",
+      "type": "variable_value",
+      "description": "squares should be [1, 4, 9, 16, 25]",
+      "expectedBehavior": "Should contain squares of 1-5",
+      "variable": "squares",
+      "expected": [1, 4, 9, 16, 25]
+    },
+    {
+      "id": "evens-correct",
+      "type": "variable_value",
+      "description": "evens should be [0, 2, 4, 6, 8, 10]",
+      "expectedBehavior": "Should contain even numbers 0-10",
+      "variable": "evens",
+      "expected": [0, 2, 4, 6, 8, 10]
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print both lists",
+      "expectedBehavior": "Output should show squares and evens",
+      "expected": "[1, 4, 9, 16, 25]\n[0, 2, 4, 6, 8, 10]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "List comprehension syntax: [expression for item in iterable if condition]"
+    },
+    {
+      "level": 2,
+      "text": "For squares: [x**2 for x in range(1, 6)]. For evens: [x for x in range(11) if x % 2 == 0]"
+    },
+    {
+      "level": 3,
+      "text": "squares = [x**2 for x in range(1, 6)], evens = [x for x in range(11) if x % 2 == 0]"
+    }
+  ],
+  "xpReward": 135,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 8
+}

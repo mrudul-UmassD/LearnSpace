@@ -1,0 +1,51 @@
+{
+  "id": "python-basics-if-statement",
+  "world": "python-basics",
+  "title": "The Decision Gate",
+  "story": "Programs need to make decisions! The 'if' statement lets your code choose different paths based on conditions. Think of it like a fork in the road - you only go down one path if a condition is true.",
+  "instructions": "Create a variable `temperature` with value 75. Use an if statement to check if temperature is greater than 70. If true, print \"It's warm outside!\". The message should only appear when the condition is met.",
+  "starterCode": "# Use if statement to make a decision\n",
+  "solutionHidden": "temperature = 75\nif temperature > 70:\n    print(\"It's warm outside!\")",
+  "tests": [
+    {
+      "id": "temp-exists",
+      "type": "variable_exists",
+      "description": "Variable 'temperature' should exist",
+      "expectedBehavior": "Must create temperature variable",
+      "variable": "temperature"
+    },
+    {
+      "id": "temp-value",
+      "type": "variable_value",
+      "description": "temperature should be 75",
+      "expectedBehavior": "temperature must equal 75",
+      "variable": "temperature",
+      "expected": 75
+    },
+    {
+      "id": "output-warm",
+      "type": "output",
+      "description": "Should print warm message",
+      "expectedBehavior": "When temp > 70, print the message",
+      "expected": "It's warm outside!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "The if statement syntax is: if condition: followed by indented code"
+    },
+    {
+      "level": 2,
+      "text": "Use the > operator to check if temperature is greater than 70. Don't forget the colon!"
+    },
+    {
+      "level": 3,
+      "text": "temperature = 75, then: if temperature > 70: (newline, indent) print(\"It's warm outside!\")"
+    }
+  ],
+  "xpReward": 95,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 6
+}

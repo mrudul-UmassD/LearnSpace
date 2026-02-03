@@ -1,0 +1,75 @@
+{
+  "id": "python-basics-numbers",
+  "world": "python-basics",
+  "title": "The Number Nexus",
+  "story": "Numbers are everywhere in programming! Python can work with whole numbers (integers) and decimal numbers (floats). In this quest, you'll master basic arithmetic and learn how to perform calculations.",
+  "instructions": "Create a variable `x` with value 10 and `y` with value 3. Then create variables for: `sum_result` (x + y), `diff_result` (x - y), `prod_result` (x * y), and `div_result` (x / y). Print all four results.",
+  "starterCode": "# Create variables and perform calculations\n",
+  "solutionHidden": "x = 10\ny = 3\nsum_result = x + y\ndiff_result = x - y\nprod_result = x * y\ndiv_result = x / y\nprint(sum_result)\nprint(diff_result)\nprint(prod_result)\nprint(div_result)",
+  "tests": [
+    {
+      "id": "var-x-exists",
+      "type": "variable_exists",
+      "description": "Variable 'x' should exist",
+      "expectedBehavior": "Must create variable x",
+      "variable": "x"
+    },
+    {
+      "id": "var-y-exists",
+      "type": "variable_exists",
+      "description": "Variable 'y' should exist",
+      "expectedBehavior": "Must create variable y",
+      "variable": "y"
+    },
+    {
+      "id": "sum-correct",
+      "type": "variable_value",
+      "description": "sum_result should equal 13",
+      "expectedBehavior": "sum_result must be x + y = 13",
+      "variable": "sum_result",
+      "expected": 13
+    },
+    {
+      "id": "diff-correct",
+      "type": "variable_value",
+      "description": "diff_result should equal 7",
+      "expectedBehavior": "diff_result must be x - y = 7",
+      "variable": "diff_result",
+      "expected": 7
+    },
+    {
+      "id": "prod-correct",
+      "type": "variable_value",
+      "description": "prod_result should equal 30",
+      "expectedBehavior": "prod_result must be x * y = 30",
+      "variable": "prod_result",
+      "expected": 30
+    },
+    {
+      "id": "div-correct",
+      "type": "variable_value",
+      "description": "div_result should equal 3.333...",
+      "expectedBehavior": "div_result must be x / y",
+      "variable": "div_result",
+      "expected": 3.3333333333333335
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use +, -, *, and / operators for addition, subtraction, multiplication, and division"
+    },
+    {
+      "level": 2,
+      "text": "Store each calculation result in the appropriately named variable before printing"
+    },
+    {
+      "level": 3,
+      "text": "Create x=10, y=3, then sum_result = x + y, diff_result = x - y, etc. Print each result."
+    }
+  ],
+  "xpReward": 80,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 3
+}

@@ -1,0 +1,59 @@
+{
+  "id": "data-structures-dictionaries",
+  "world": "data-structures",
+  "title": "The Dictionary Domain",
+  "story": "Dictionaries store data as key-value pairs, like a real dictionary maps words to definitions! They're perfect for organizing related information. Each key is unique and gives you instant access to its value.",
+  "instructions": "Create a dictionary `student` with keys 'name' (value: \"Alice\"), 'age' (value: 20), and 'grade' (value: \"A\"). Print the entire dictionary, then print just the name, and finally print the grade.",
+  "starterCode": "# Work with dictionaries\n",
+  "solutionHidden": "student = {\"name\": \"Alice\", \"age\": 20, \"grade\": \"A\"}\nprint(student)\nprint(student[\"name\"])\nprint(student[\"grade\"])",
+  "tests": [
+    {
+      "id": "student-exists",
+      "type": "variable_exists",
+      "description": "Variable 'student' should exist",
+      "expectedBehavior": "Must create student dictionary",
+      "variable": "student"
+    },
+    {
+      "id": "student-type",
+      "type": "variable_type",
+      "description": "student should be a dict",
+      "expectedBehavior": "student must be dictionary type",
+      "variable": "student",
+      "expectedType": "dict"
+    },
+    {
+      "id": "has-name-key",
+      "type": "variable_value",
+      "description": "student should have name key with Alice",
+      "expectedBehavior": "Dictionary must contain name: Alice",
+      "variable": "student",
+      "expected": {"name": "Alice", "age": 20, "grade": "A"}
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print dict, name, and grade",
+      "expectedBehavior": "Output should show dictionary and accessed values",
+      "expected": "{'name': 'Alice', 'age': 20, 'grade': 'A'}\nAlice\nA"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create dictionary with curly braces: {key1: value1, key2: value2}"
+    },
+    {
+      "level": 2,
+      "text": "Access values using square brackets: dict[\"key_name\"]"
+    },
+    {
+      "level": 3,
+      "text": "student = {\"name\": \"Alice\", \"age\": 20, \"grade\": \"A\"}, then print student, student[\"name\"], student[\"grade\"]"
+    }
+  ],
+  "xpReward": 115,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 4
+}

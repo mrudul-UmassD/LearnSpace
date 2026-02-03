@@ -1,0 +1,67 @@
+{
+  "id": "data-structures-list-methods",
+  "world": "data-structures",
+  "title": "The Method Matrix",
+  "story": "Lists come with powerful methods that let you modify them! You can add items, remove them, sort them, and much more. These methods make lists incredibly flexible for storing and organizing data.",
+  "instructions": "Create an empty list called `numbers`. Use append() to add 10, 20, and 30 to it. Then use insert(1, 15) to insert 15 at index 1. Print the final list (should be [10, 15, 20, 30]).",
+  "starterCode": "# Use list methods\n",
+  "solutionHidden": "numbers = []\nnumbers.append(10)\nnumbers.append(20)\nnumbers.append(30)\nnumbers.insert(1, 15)\nprint(numbers)",
+  "tests": [
+    {
+      "id": "numbers-exists",
+      "type": "variable_exists",
+      "description": "Variable 'numbers' should exist",
+      "expectedBehavior": "Must create numbers list",
+      "variable": "numbers"
+    },
+    {
+      "id": "numbers-length",
+      "type": "list_length",
+      "description": "numbers should have 4 items",
+      "expectedBehavior": "List should contain 4 elements after operations",
+      "variable": "numbers",
+      "expected": 4
+    },
+    {
+      "id": "numbers-contains-10",
+      "type": "list_contains",
+      "description": "numbers should contain 10",
+      "expectedBehavior": "Must include 10",
+      "variable": "numbers",
+      "expected": 10
+    },
+    {
+      "id": "numbers-contains-15",
+      "type": "list_contains",
+      "description": "numbers should contain 15",
+      "expectedBehavior": "Must include 15",
+      "variable": "numbers",
+      "expected": 15
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print [10, 15, 20, 30]",
+      "expectedBehavior": "Final list should be in correct order",
+      "expected": "[10, 15, 20, 30]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Start with empty list: []. Use list.append(item) to add to end"
+    },
+    {
+      "level": 2,
+      "text": "Use list.insert(index, item) to add item at specific position"
+    },
+    {
+      "level": 3,
+      "text": "numbers = [], append 10, 20, 30 in order, then insert(1, 15) to add 15 at index 1"
+    }
+  ],
+  "xpReward": 110,
+  "hintUnlockAttempts": 2,
+  "difficulty": "beginner",
+  "order": 2
+}

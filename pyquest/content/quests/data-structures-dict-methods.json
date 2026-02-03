@@ -1,0 +1,72 @@
+{
+  "id": "data-structures-dict-methods",
+  "world": "data-structures",
+  "title": "The Key-Value Kingdom",
+  "story": "Dictionaries have powerful methods for working with their keys and values! You can get all keys, all values, check if a key exists, and safely access values with defaults. Master these to become a dictionary wizard!",
+  "instructions": "Create a dictionary `scores` with 'math': 95, 'science': 88, 'english': 92. Use keys() to get all keys, values() to get all values, and get() to safely get 'history' (which doesn't exist) with default 0. Print keys list, values list, and history score.",
+  "starterCode": "# Use dictionary methods\n",
+  "solutionHidden": "scores = {\"math\": 95, \"science\": 88, \"english\": 92}\nkeys_list = list(scores.keys())\nvalues_list = list(scores.values())\nhistory_score = scores.get(\"history\", 0)\nprint(keys_list)\nprint(values_list)\nprint(history_score)",
+  "tests": [
+    {
+      "id": "scores-exists",
+      "type": "variable_exists",
+      "description": "Variable 'scores' should exist",
+      "expectedBehavior": "Must create scores dictionary",
+      "variable": "scores"
+    },
+    {
+      "id": "keys-list-exists",
+      "type": "variable_exists",
+      "description": "Variable 'keys_list' should exist",
+      "expectedBehavior": "Must create keys_list",
+      "variable": "keys_list"
+    },
+    {
+      "id": "values-list-exists",
+      "type": "variable_exists",
+      "description": "Variable 'values_list' should exist",
+      "expectedBehavior": "Must create values_list",
+      "variable": "values_list"
+    },
+    {
+      "id": "history-score-exists",
+      "type": "variable_exists",
+      "description": "Variable 'history_score' should exist",
+      "expectedBehavior": "Must use get() method",
+      "variable": "history_score"
+    },
+    {
+      "id": "history-default",
+      "type": "variable_value",
+      "description": "history_score should be 0",
+      "expectedBehavior": "get() should return default value 0",
+      "variable": "history_score",
+      "expected": 0
+    },
+    {
+      "id": "output-check",
+      "type": "output",
+      "description": "Should print keys, values, and history score",
+      "expectedBehavior": "Output should show all three lists/values",
+      "expected": "['math', 'science', 'english']\n[95, 88, 92]\n0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use dict.keys() for keys, dict.values() for values. Convert to list with list()"
+    },
+    {
+      "level": 2,
+      "text": "dict.get(key, default) returns the value if key exists, otherwise returns default"
+    },
+    {
+      "level": 3,
+      "text": "keys_list = list(scores.keys()), values_list = list(scores.values()), history_score = scores.get(\"history\", 0)"
+    }
+  ],
+  "xpReward": 125,
+  "hintUnlockAttempts": 2,
+  "difficulty": "intermediate",
+  "order": 5
+}
