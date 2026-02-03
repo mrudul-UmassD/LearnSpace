@@ -40,6 +40,8 @@ export async function runViaRunner(params: {
 }): Promise<RunnerClientResult> {
   const { options } = params;
 
+  console.log(`[runner-client] Attempting to connect to runner service at: ${RUNNER_SERVICE_URL}`);
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs);
 
@@ -144,7 +146,18 @@ export async function runViaRunner(params: {
     clearTimeout(timeoutId);
 
     const isAbort = err?.name === 'AbortError';
-    const message = redactSecrets(isAbort ? 'Runner service timeout' : safeErrorMessage(err));
+    const isConnectionError = err?.cause?.code === 'ECONNREFUSED' || err?.message?.includes('fetch failed');
+    
+    let message: string;
+    if (isAbort) {
+      message = 'Runner service timeout';
+    } else if (isConnectionError) {
+      message = `Runner service unavailable at ${RUNNER_SERVICE_URL}. Make sure the runner service is running (docker-compose up runner).`;
+      console.error(`[runner-client] Connection failed: ${RUNNER_SERVICE_URL}`, err.message);
+    } else {
+      message = safeErrorMessage(err);
+    }
+    message = redactSecrets(message);
 
     await writeAuditEvent({
       ts: new Date().toISOString(),

@@ -106,13 +106,19 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
     setTestResults(null);
 
     try {
+      console.log('[quest-workspace] Sending code to execute endpoint:', `/api/quests/${quest.id}/execute`);
+      
       const response = await fetch(`/api/quests/${quest.id}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code })
       });
 
+      console.log('[quest-workspace] Response status:', response.status);
+
       const result: ExecutionResult = await response.json();
+      console.log('[quest-workspace] Execution result:', result);
+      
       setTestResults(result);
 
       if (result.attempt) {
@@ -148,14 +154,26 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
         }
       }
     } catch (error) {
-      console.error('Error running code:', error);
+      console.error('[quest-workspace] Error running code:', error);
+      
+      // Provide more helpful error message
+      let errorMessage = 'Network error occurred';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        
+        // Check for specific connection errors
+        if (error.message.includes('fetch failed') || error.message.includes('ECONNREFUSED')) {
+          errorMessage = 'Cannot connect to code execution service. Please start the runner service with: docker-compose up runner';
+        }
+      }
+      
       setTestResults({
         allPassed: false,
         stdout: '',
-        stderr: 'Network error occurred',
+        stderr: errorMessage,
         testResults: [],
         executionTime: 0,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: errorMessage
       });
     } finally {
       setIsRunning(false);
