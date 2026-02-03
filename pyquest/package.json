@@ -12,6 +12,7 @@
     "lint": "eslint",
     "test:auth": "node scripts/auth-smoke.mjs",
     "verify:e2e": "node scripts/verify-e2e.mjs",
+    "verify:python": "node scripts/verify-python.mjs",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:generate:prod": "prisma generate --schema prisma/schema.postgres.prisma",

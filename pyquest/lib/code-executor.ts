@@ -7,6 +7,38 @@ import { QuestTest } from '@/types/quest';
 
 const execAsync = promisify(exec);
 
+/**
+ * Find available Python executable in order of preference.
+ * Caches result to avoid repeated checks.
+ */
+let cachedPythonCommand: string | null = null;
+
+async function getPythonCommand(): Promise<string> {
+  if (cachedPythonCommand) return cachedPythonCommand;
+
+  const commands = [
+    'py -3',      // Windows Python Launcher
+    'python',     // Common on Windows/macOS
+    'python3',    // Common on Linux
+  ];
+
+  for (const cmd of commands) {
+    try {
+      await execAsync(`${cmd} --version`, { timeout: 2000 });
+      cachedPythonCommand = cmd;
+      console.log(`[code-executor] Found Python: ${cmd}`);
+      return cmd;
+    } catch {
+      // Try next command
+    }
+  }
+
+  throw new Error(
+    'No Python executable found. Tried: py -3, python, python3. ' +
+    'Please install Python 3.x from https://www.python.org/downloads/ or use the Docker runner.'
+  );
+}
+
 export interface TestResult {
   description: string;
   passed: boolean;
@@ -48,7 +80,10 @@ export async function executeUserCode(code: string, tests: QuestTest[]): Promise
   const startTime = Date.now();
   
   try {
-    console.warn('⚠️  DEV ONLY: Executing Python code locally without sandbox');
+    if (!process.env.RUNNER_URL) {
+      console.warn('⚠️  DEV ONLY: Executing Python code locally without sandbox');
+      console.warn('⚠️  Set RUNNER_URL to use the Docker runner (recommended)');
+    }
     
     // Execute Python code and capture output
     const { stdout, stderr } = await executePython(code);
@@ -87,17 +122,31 @@ export async function executeUserCode(code: string, tests: QuestTest[]): Promise
 /**
  * Execute Python code using subprocess
  * DEV ONLY - No sandboxing!
+ * 
+ * ⚠️ WARNING: This should only be used in local development.
+ * Production should use the Docker runner service (RUNNER_URL).
  */
 async function executePython(code: string): Promise<{ stdout: string; stderr: string }> {
   const tempDir = os.tmpdir();
   const tempFile = path.join(tempDir, `pyquest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.py`);
   
   try {
+    // Get Python command (cross-platform detection)
+    let pythonCmd: string;
+    try {
+      pythonCmd = await getPythonCommand();
+    } catch (error) {
+      return {
+        stdout: '',
+        stderr: error instanceof Error ? error.message : 'Python not found'
+      };
+    }
+
     // Write code to temporary file
     await fs.writeFile(tempFile, code, 'utf-8');
     
     // Execute with timeout
-    const { stdout, stderr } = await execAsync(`python "${tempFile}"`, {
+    const { stdout, stderr } = await execAsync(`${pythonCmd} "${tempFile}"`, {
       timeout: 5000, // 5 second timeout
       maxBuffer: 1024 * 1024, // 1MB max output
       windowsHide: true
