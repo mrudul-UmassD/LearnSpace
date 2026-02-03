@@ -34,7 +34,7 @@ export async function GET() {
     // Check runner service connectivity
     let runnerStatus = 'unknown';
     let runnerLatencyMs = 0;
-    const runnerUrl = process.env.RUNNER_SERVICE_URL;
+    const runnerUrl = process.env.RUNNER_URL;
 
     if (runnerUrl) {
       try {

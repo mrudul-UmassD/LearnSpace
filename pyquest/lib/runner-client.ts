@@ -1,7 +1,7 @@
 import { redactSecrets, safeErrorMessage, truncateByBytes } from '@/lib/security/strings';
 import { writeAuditEvent } from '@/lib/audit/audit-log';
 
-const RUNNER_SERVICE_URL = process.env.RUNNER_SERVICE_URL || 'http://runner:8080';
+const RUNNER_URL = process.env.RUNNER_URL || process.env.RUNNER_SERVICE_URL || 'http://localhost:8080';
 
 export type RunnerTest = Record<string, unknown>;
 
@@ -40,13 +40,13 @@ export async function runViaRunner(params: {
 }): Promise<RunnerClientResult> {
   const { options } = params;
 
-  console.log(`[runner-client] Attempting to connect to runner service at: ${RUNNER_SERVICE_URL}`);
+  console.log(`[runner-client] Attempting to connect to runner service at: ${RUNNER_URL}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs);
 
   try {
-    const runnerResponse = await fetch(`${RUNNER_SERVICE_URL}/run`, {
+    const runnerResponse = await fetch(`${RUNNER_URL}/run`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -152,8 +152,8 @@ export async function runViaRunner(params: {
     if (isAbort) {
       message = 'Runner service timeout';
     } else if (isConnectionError) {
-      message = `Runner service unavailable at ${RUNNER_SERVICE_URL}. Make sure the runner service is running (docker-compose up runner).`;
-      console.error(`[runner-client] Connection failed: ${RUNNER_SERVICE_URL}`, err.message);
+      message = `Runner service unavailable at ${RUNNER_URL}. Make sure the runner service is running (npm run runner).`;
+      console.error(`[runner-client] Connection failed: ${RUNNER_URL}`, err.message);
     } else {
       message = safeErrorMessage(err);
     }

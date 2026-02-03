@@ -7,7 +7,7 @@ export async function GET() {
   try {
     // Check if we can access environment variables
     const hasDatabase = !!process.env.DATABASE_URL;
-    const hasRunnerUrl = !!process.env.RUNNER_SERVICE_URL;
+    const hasRunnerUrl = !!process.env.RUNNER_URL;
     
     return NextResponse.json({
       status: 'healthy',

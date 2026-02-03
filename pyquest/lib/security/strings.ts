@@ -19,6 +19,7 @@ export function redactSecrets(input: string): string {
     'DIRECT_URL',
     'NEXTAUTH_SECRET',
     'AUTH_SECRET',
+    'RUNNER_URL',
     'RUNNER_SERVICE_URL',
     'OPENAI_API_KEY',
     'SENTRY_AUTH_TOKEN',

@@ -127,6 +127,8 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 ### Running the Application
 
 - **Development Mode**: `npm run dev`
+- **Full Docker (web + db + runner)**: `npm run dev:full`
+- **Runner Service Only**: `npm run runner`
 - **Build for Production**: `npm run build`
 - **Start Production Server**: `npm start`
 - **Lint Code**: `npm run lint`
@@ -144,6 +146,10 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start development server |
+| `npm run dev:full` | Start full docker-compose stack |
+| `npm run runner` | Start runner service (Docker) |
+| `npm run runner:build` | Build runner service image |
+| `npm run runner:logs` | Tail runner service logs |
 | `npm run build` | Build for production |
 | `npm start` | Start production server |
 | `npm run lint` | Run ESLint |
@@ -378,7 +384,7 @@ AUDIT_LOG_TO_FILE=true
 2. Import repository in [Vercel](https://vercel.com)
 3. Configure environment variables
 4. Deploy runner service separately (AWS ECS, DigitalOcean, etc.)
-5. Update `RUNNER_SERVICE_URL` in Vercel env
+5. Update `RUNNER_URL` in Vercel env
 
 #### AWS EC2 / DigitalOcean Droplet
 
@@ -490,7 +496,7 @@ deploy:
 | `DATABASE_URL` | PostgreSQL connection string | - | ✅ |
 | `NEXTAUTH_SECRET` | Session encryption key (32+ chars) | - | ✅ |
 | `NEXTAUTH_URL` | Public URL of application | `http://localhost:3000` | ✅ |
-| `RUNNER_SERVICE_URL` | Python runner service URL | `http://runner:8080` | ✅ |
+| `RUNNER_URL` | Python runner service URL | `http://runner:8080` | ✅ |
 | `NODE_ENV` | Node environment | `production` | ❌ |
 | `PORT` | Web service port | `3000` | ❌ |
 | `POSTGRES_USER` | Database user | `pyquest` | ❌ |

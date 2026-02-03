@@ -35,6 +35,8 @@ export async function POST(request: Request) {
   const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent') || undefined;
 
+  console.log(`[api] /api/run request received`, { requestId });
+
   try {
     const session = await auth();
     
@@ -125,7 +127,7 @@ export async function POST(request: Request) {
       ? (result.errorCode === 'RUNNER_TIMEOUT' ? 504 : 503)
       : 200;
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         schemaVersion: SCHEMA_VERSION,
         requestId,
@@ -145,6 +147,9 @@ export async function POST(request: Request) {
       },
       { status, headers: rateLimitHeaders(rl) }
     );
+
+    console.log(`[api] /api/run response sent`, { requestId, status });
+    return response;
 
   } catch (error) {
     const message = redactSecrets(safeErrorMessage(error));

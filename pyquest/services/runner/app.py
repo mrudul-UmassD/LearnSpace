@@ -30,6 +30,53 @@ MAX_OUTPUT_SIZE = 1024 * 1024  # 1MB
 MAX_CODE_SIZE = 100 * 1024  # 100KB
 SCHEMA_VERSION = "2026-02-02"
 
+# Cached Python command to avoid repeated lookups
+_PYTHON_CMD = None
+
+
+def get_python_command() -> str:
+    """
+    Find available Python executable in order of preference.
+    
+    Returns:
+        str: Python command that works on this system
+        
+    Raises:
+        RuntimeError: If no Python executable is found
+    """
+    global _PYTHON_CMD
+    
+    if _PYTHON_CMD is not None:
+        return _PYTHON_CMD
+    
+    # Try commands in order: py -3 (Windows launcher), python, python3
+    commands = [
+        ['py', '-3', '--version'],  # Windows Python Launcher
+        ['python', '--version'],     # Common on Windows/macOS
+        ['python3', '--version'],    # Common on Linux
+    ]
+    
+    for cmd in commands:
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                timeout=2,
+                text=True
+            )
+            if result.returncode == 0:
+                # Extract just the command (first element, or first two for 'py -3')
+                _PYTHON_CMD = cmd[0] if len(cmd) == 2 else cmd[:2]
+                print(f"[runner] Found Python: {_PYTHON_CMD} -> {result.stdout.strip()}")
+                return _PYTHON_CMD
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            continue
+    
+    raise RuntimeError(
+        "No Python executable found. Tried: py -3, python, python3. "
+        "Please ensure Python 3.x is installed and in PATH."
+    )
+
 
 def execute_python_code(code: str) -> Dict[str, str]:
     """
@@ -52,13 +99,24 @@ def execute_python_code(code: str) -> Dict[str, str]:
         f.write(code)
     
     try:
-        # Determine Python command (python3 on Linux, python on Windows)
-        python_cmd = 'python3' if os.name != 'nt' else 'python'
+        # Get Python command (cached lookup with fallback)
+        try:
+            python_cmd = get_python_command()
+        except RuntimeError as e:
+            return {
+                'stdout': '',
+                'stderr': f'Python executable not found: {str(e)}'
+            }
+        
+        # Build command (handle both single string and list)
+        if isinstance(python_cmd, list):
+            cmd = python_cmd + [temp_file]
+        else:
+            cmd = [python_cmd, temp_file]
         
         # Execute Python code with timeout
-        # Note: subprocess.run timeout works cross-platform (Windows/Linux)
         process = subprocess.run(
-            [python_cmd, temp_file],
+            cmd,
             capture_output=True,
             text=True,
             timeout=MAX_EXECUTION_TIME,

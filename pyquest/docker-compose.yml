@@ -84,7 +84,7 @@ services:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-key-min-32-characters-long}
       
       # Runner Service
-      RUNNER_SERVICE_URL: http://runner:8080
+      RUNNER_URL: http://runner:8080
       
       # Node Environment
       NODE_ENV: ${NODE_ENV:-production}

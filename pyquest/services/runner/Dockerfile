@@ -1,7 +1,7 @@
 # PyQuest Runner Service - Secure Docker Image
-# Uses minimal Python Alpine image with strict security controls
+# Uses minimal Python slim image with strict security controls
 
-FROM python:3.11-alpine
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
