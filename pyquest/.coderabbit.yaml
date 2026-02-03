@@ -1,0 +1,130 @@
+# CodeRabbit Configuration
+# Comprehensive AI-powered code review for LearnSpace
+
+# Language support
+language: en-US
+
+# Review settings
+reviews:
+  # Auto-approve for:
+  # - Documentation updates
+  # - Minor formatting changes
+  # - Dependency updates (non-major)
+  auto_review:
+    enabled: true
+    base_branches:
+      - main
+      - develop
+  
+  # Request changes for:
+  # - Security vulnerabilities
+  # - Breaking changes
+  # - Missing tests for critical paths
+  request_changes:
+    enabled: true
+    labels:
+      - "needs-work"
+      - "security"
+
+  # Focus areas for review
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  
+  # Specific checks
+  early_access: true
+  
+# Path-specific rules
+path_instructions:
+  - path: "**/*.ts"
+    instructions: |
+      - Check for proper TypeScript types (avoid 'any')
+      - Ensure async/await patterns are correct
+      - Verify error handling with try-catch
+      - Check for potential null/undefined issues
+  
+  - path: "**/*.tsx"
+    instructions: |
+      - Verify React hooks are used correctly
+      - Check for proper component memoization when needed
+      - Ensure accessibility (a11y) attributes
+      - Review state management patterns
+  
+  - path: "app/api/**/*.ts"
+    instructions: |
+      - Verify authentication checks are present
+      - Check input validation and sanitization
+      - Ensure proper error responses (4xx, 5xx)
+      - Review rate limiting implementation
+      - Check for SQL injection prevention
+      - Verify secrets are not logged or exposed
+  
+  - path: "lib/security/**/*.ts"
+    instructions: |
+      - Thorough security review required
+      - Check for timing attack vulnerabilities
+      - Verify cryptographic functions are used correctly
+      - Review access control logic
+      - Check for OWASP Top 10 vulnerabilities
+  
+  - path: "services/runner/**/*.py"
+    instructions: |
+      - Verify sandbox security (no eval, exec without restrictions)
+      - Check resource limits (CPU, memory, timeout)
+      - Review subprocess security
+      - Ensure no arbitrary file system access
+      - Verify network isolation
+  
+  - path: "**/*.sql"
+    instructions: |
+      - Check for SQL injection vulnerabilities
+      - Verify parameterized queries
+      - Review index usage for performance
+  
+  - path: "prisma/schema.prisma"
+    instructions: |
+      - Check for proper foreign key relationships
+      - Verify index definitions
+      - Review cascade delete behavior
+      - Check for data loss risks
+  
+  - path: "Dockerfile"
+    instructions: |
+      - Check for security best practices
+      - Verify non-root user execution
+      - Review minimal image usage
+      - Check for secrets in layers
+      - Verify multi-stage build optimization
+  
+  - path: "docker-compose*.yml"
+    instructions: |
+      - Check resource limits
+      - Verify network isolation
+      - Review volume mount security (read-only where appropriate)
+      - Check health checks are defined
+      - Review restart policies
+
+# Knowledge base (project context)
+knowledge_base:
+  - "This is a Python learning platform with code execution capabilities"
+  - "Security is critical - user code runs in Docker sandbox"
+  - "Next.js 15 App Router with TypeScript"
+  - "PostgreSQL database with Prisma ORM"
+  - "NextAuth v5 for authentication"
+  - "Rate limiting and output truncation implemented for DoS protection"
+  - "Secrets must never appear in logs or responses"
+  - "All API routes require authentication except /api/health and /api/metrics"
+  - "Runner service executes Python code with 2s timeout and 1MB output limit"
+
+# Chat settings
+chat:
+  auto_reply: true
+
+# Repository settings  
+tone_instructions: |
+  - Be concise and actionable
+  - Prioritize security issues
+  - Suggest specific code improvements
+  - Explain reasoning for suggestions
+  - Be encouraging for good patterns

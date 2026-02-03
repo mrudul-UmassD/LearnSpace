@@ -200,23 +200,305 @@ ESLint and Prettier are configured to work together. Configuration files:
 
 Tailwind is configured in `tailwind.config.ts`. Custom utilities are available in `lib/utils/`.
 
-## 🚀 Deployment
+## 🚀 Production Deployment
 
-### Vercel (Recommended)
+PyQuest includes comprehensive Docker deployment infrastructure for production environments.
 
-1. Push your code to GitHub
-2. Import your repository in [Vercel](https://vercel.com)
-3. Add environment variables in the Vercel dashboard
-4. Deploy!
+### Prerequisites
 
-### Other Platforms
+- **Docker** 20.10+ and **Docker Compose** 2.0+
+- **Git** for repository management
+- **PostgreSQL** (managed via Docker or external service)
 
-PyQuest can be deployed to any platform that supports Next.js:
+### Quick Deploy with Docker Compose
 
-- **Railway**: [Deploy to Railway](https://railway.app)
-- **Render**: [Deploy to Render](https://render.com)
-- **AWS**: Use AWS Amplify or EC2
-- **Docker**: Use the included Dockerfile (if added)
+#### 1. Configure Environment
+
+Create production environment file:
+
+```bash
+cp .env.production .env.production
+```
+
+Edit `.env.production` and update critical values:
+
+```env
+# Generate secure secret: openssl rand -base64 32
+NEXTAUTH_SECRET="your-secure-random-secret-min-32-chars"
+NEXTAUTH_URL="https://your-domain.com"
+
+# Database credentials
+POSTGRES_PASSWORD="secure-random-password"
+DATABASE_URL="postgresql://pyquest:secure-random-password@db:5432/pyquest"
+```
+
+#### 2. Deploy Services
+
+**Linux/Mac:**
+```bash
+chmod +x scripts/deploy.sh
+./scripts/deploy.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\deploy.ps1
+```
+
+Or manually:
+```bash
+docker-compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml exec web npx prisma migrate deploy
+```
+
+#### 3. Verify Deployment
+
+- **Web UI**: http://localhost:3000
+- **Health Check**: http://localhost:3000/api/health
+- **Metrics**: http://localhost:3000/api/metrics
+- **Runner Health**: http://localhost:8080/health
+
+### Production Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Nginx/Traefik                 │
+│              (Reverse Proxy + SSL)              │
+└────────────┬────────────────────────────────────┘
+             │
+             ├──────> Web (Next.js)  :3000
+             │        - API Routes
+             │        - SSR Pages
+             │        - Static Assets
+             │
+             ├──────> Runner (Python) :8080
+             │        - Code Execution
+             │        - Sandboxed Environment
+             │
+             └──────> PostgreSQL :5432
+                      - User Data
+                      - Quest Progress
+                      - Sessions
+```
+
+### Database Migrations
+
+Run migrations before deploying new versions:
+
+**Linux/Mac:**
+```bash
+chmod +x scripts/migrate.sh
+DATABASE_URL="your-connection-string" ./scripts/migrate.sh
+```
+
+**Windows:**
+```powershell
+$env:DATABASE_URL="your-connection-string"
+.\scripts\migrate.ps1
+```
+
+### Monitoring & Health Checks
+
+#### Health Endpoints
+
+- **`GET /api/health`**: Basic health check
+  ```json
+  {
+    "status": "healthy",
+    "service": "pyquest-web",
+    "timestamp": "2026-02-03T10:30:00.000Z"
+  }
+  ```
+
+- **`GET /api/metrics`**: Detailed metrics
+  ```json
+  {
+    "status": "ok",
+    "uptime": 3600,
+    "dependencies": {
+      "database": { "status": "healthy", "latency_ms": 5 },
+      "runner": { "status": "healthy", "latency_ms": 12 }
+    },
+    "metrics": {
+      "users_total": 150,
+      "quest_attempts_total": 1250
+    }
+  }
+  ```
+
+#### Docker Management
+
+```bash
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# View specific service logs
+docker-compose -f docker-compose.prod.yml logs -f web
+docker-compose -f docker-compose.prod.yml logs -f runner
+
+# Restart services
+docker-compose -f docker-compose.prod.yml restart
+
+# Stop services
+docker-compose -f docker-compose.prod.yml down
+
+# Update and redeploy
+git pull
+docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+### Security Configuration
+
+Production deployment includes:
+
+- **Rate Limiting**: 20 requests/min per user+IP (configurable)
+- **Output Truncation**: 64KB stdout/stderr limits
+- **Secret Redaction**: Automatic env variable redaction
+- **Audit Logging**: Structured JSON logs for security events
+- **Network Isolation**: Runner has no external network access
+- **Read-only Filesystem**: Containers run with read-only root FS
+- **Resource Limits**: CPU (1 core) and Memory (512MB) constraints
+
+Configure via environment variables:
+```env
+RUN_RATE_LIMIT_MAX=20
+RUN_RATE_LIMIT_WINDOW_MS=60000
+RUN_CODE_MAX_CHARS=30000
+RUN_STDOUT_MAX_BYTES=65536
+AUDIT_LOG_TO_FILE=true
+```
+
+### Cloud Deployment Options
+
+#### Vercel (Web Only)
+
+1. Push code to GitHub
+2. Import repository in [Vercel](https://vercel.com)
+3. Configure environment variables
+4. Deploy runner service separately (AWS ECS, DigitalOcean, etc.)
+5. Update `RUNNER_SERVICE_URL` in Vercel env
+
+#### AWS EC2 / DigitalOcean Droplet
+
+1. Provision Ubuntu 22.04 server
+2. Install Docker and Docker Compose
+3. Clone repository
+4. Configure `.env.production`
+5. Run `./scripts/deploy.sh`
+6. Configure Nginx reverse proxy with SSL (Let's Encrypt)
+
+#### Kubernetes (Advanced)
+
+Convert docker-compose to Kubernetes manifests:
+```bash
+kompose convert -f docker-compose.prod.yml
+```
+
+#### Railway / Render
+
+Deploy services individually:
+- Web: Next.js deployment
+- Database: Managed PostgreSQL
+- Runner: Docker container deployment
+
+Update connection strings accordingly.
+
+### Backup & Disaster Recovery
+
+#### Database Backup
+
+```bash
+# Automated daily backup
+docker exec pyquest-db-prod pg_dump -U pyquest pyquest > backup-$(date +%Y%m%d).sql
+
+# Restore from backup
+docker exec -i pyquest-db-prod psql -U pyquest pyquest < backup.sql
+```
+
+#### Volume Backup
+
+```bash
+# Backup PostgreSQL data volume
+docker run --rm -v pyquest_postgres_data_prod:/data -v $(pwd):/backup \
+  alpine tar czf /backup/postgres-data-backup.tar.gz /data
+```
+
+### Performance Tuning
+
+#### Database Connection Pooling
+
+Configure Prisma connection pool:
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  connection_limit = 10
+  pool_timeout = 10
+}
+```
+
+#### Horizontal Scaling
+
+Scale runner and web services:
+```bash
+docker-compose -f docker-compose.prod.yml up -d --scale runner=3 --scale web=2
+```
+
+Add load balancer (Nginx/HAProxy) for distribution.
+
+### Troubleshooting
+
+#### Service Not Starting
+
+```bash
+# Check logs
+docker-compose -f docker-compose.prod.yml logs
+
+# Check container status
+docker ps -a
+
+# Restart specific service
+docker-compose -f docker-compose.prod.yml restart web
+```
+
+#### Database Connection Issues
+
+```bash
+# Test database connectivity
+docker-compose -f docker-compose.prod.yml exec web npx prisma db pull
+
+# Check PostgreSQL logs
+docker-compose -f docker-compose.prod.yml logs db
+```
+
+#### Out of Memory
+
+Increase Docker resource limits in `docker-compose.prod.yml`:
+```yaml
+deploy:
+  resources:
+    limits:
+      memory: 2G
+```
+
+### Environment Variables Reference
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | - | ✅ |
+| `NEXTAUTH_SECRET` | Session encryption key (32+ chars) | - | ✅ |
+| `NEXTAUTH_URL` | Public URL of application | `http://localhost:3000` | ✅ |
+| `RUNNER_SERVICE_URL` | Python runner service URL | `http://runner:8080` | ✅ |
+| `NODE_ENV` | Node environment | `production` | ❌ |
+| `PORT` | Web service port | `3000` | ❌ |
+| `POSTGRES_USER` | Database user | `pyquest` | ❌ |
+| `POSTGRES_PASSWORD` | Database password | - | ✅ |
+| `POSTGRES_DB` | Database name | `pyquest` | ❌ |
+| `RUN_RATE_LIMIT_MAX` | Rate limit per window | `20` | ❌ |
+| `RUN_CODE_MAX_CHARS` | Max code size | `30000` | ❌ |
+| `AUDIT_LOG_TO_FILE` | Enable file logging | `false` | ❌ |
 
 ## 🤝 Contributing
 
