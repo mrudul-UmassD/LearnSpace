@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:prod": "prisma generate --schema prisma/schema.postgres.prisma && next build",
     "start": "next start",
     "lint": "eslint",
+    "test:auth": "node scripts/auth-smoke.mjs",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
+    "prisma:generate:prod": "prisma generate --schema prisma/schema.postgres.prisma",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "prisma:seed": "tsx prisma/seed.ts"
@@ -19,10 +22,12 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@monaco-editor/react": "^4.7.0",
+    "@prisma/adapter-better-sqlite3": "^7.3.0",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@prisma/extension-accelerate": "^3.0.1",
     "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.6.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.30.0",
     "next": "16.1.6",
