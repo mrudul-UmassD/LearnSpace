@@ -3,10 +3,21 @@ import { auth } from '@/lib/auth';
 import { getQuestLoader } from '@/lib/quest-loader';
 import { prisma } from '@/lib/db/prisma';
 import { calculateLevel } from '@/types/gamification';
+import { getClientIp } from '@/lib/security/ip';
+import { rateLimit, rateLimitHeaders } from '@/lib/security/rate-limit';
+import { runViaRunner } from '@/lib/runner-client';
+import { writeAuditEvent } from '@/lib/audit/audit-log';
+import { redactSecrets, safeErrorMessage } from '@/lib/security/strings';
+import crypto from 'crypto';
 
-const RUNNER_SERVICE_URL = process.env.RUNNER_SERVICE_URL || 'http://runner:8080';
 const REQUEST_TIMEOUT = 10000;
 const SCHEMA_VERSION = '2026-02-02';
+
+const MAX_CODE_CHARS = Number(process.env.RUN_CODE_MAX_CHARS || 30_000);
+const MAX_STDOUT_BYTES = Number(process.env.RUN_STDOUT_MAX_BYTES || 64 * 1024);
+const MAX_STDERR_BYTES = Number(process.env.RUN_STDERR_MAX_BYTES || 64 * 1024);
+const RATE_LIMIT_WINDOW_MS = Number(process.env.EXECUTE_RATE_LIMIT_WINDOW_MS || process.env.RUN_RATE_LIMIT_WINDOW_MS || 60_000);
+const RATE_LIMIT_MAX = Number(process.env.EXECUTE_RATE_LIMIT_MAX || process.env.RUN_RATE_LIMIT_MAX || 20);
 
 /**
  * Update user's daily streak
@@ -63,104 +74,120 @@ interface RouteParams {
 }
 
 export async function POST(request: Request, { params }: RouteParams) {
+  const requestId = crypto.randomUUID();
+  const ip = getClientIp(request);
+  const userAgent = request.headers.get('user-agent') || undefined;
+
   try {
     const session = await auth();
     const { id } = await params;
     
     if (!session?.user?.id) {
-      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, requestId, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!id || id.length > 128 || !/^[a-z0-9-]+$/.test(id)) {
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, requestId, error: 'Invalid quest id' }, { status: 400 });
+    }
+
+    const rl = rateLimit({
+      key: `execute:${session.user.id}:${ip}`,
+      limit: RATE_LIMIT_MAX,
+      windowMs: RATE_LIMIT_WINDOW_MS,
+    });
+
+    if (!rl.allowed) {
+      await writeAuditEvent({
+        ts: new Date().toISOString(),
+        level: 'warn',
+        event: 'api.rate_limited',
+        requestId,
+        route: '/api/quests/[id]/execute',
+        userId: session.user.id,
+        ip,
+        userAgent,
+        questId: id,
+        errorCode: 'RATE_LIMIT',
+        meta: { limit: rl.limit, windowMs: RATE_LIMIT_WINDOW_MS },
+      });
+
+      return NextResponse.json(
+        { schemaVersion: SCHEMA_VERSION, requestId, error: 'Rate limit exceeded' },
+        { status: 429, headers: rateLimitHeaders(rl) }
+      );
     }
 
     const { code } = await request.json();
 
     if (!code || typeof code !== 'string') {
-      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Invalid code' }, { status: 400 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, requestId, error: 'Invalid code' }, { status: 400 });
+    }
+
+    if (code.length > MAX_CODE_CHARS) {
+      return NextResponse.json(
+        { schemaVersion: SCHEMA_VERSION, requestId, error: `Code too large (max ${MAX_CODE_CHARS} chars)` },
+        { status: 413, headers: rateLimitHeaders(rl) }
+      );
     }
 
     const questLoader = getQuestLoader();
     const quest = questLoader.getQuestById(id);
 
     if (!quest) {
-      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, error: 'Quest not found' }, { status: 404 });
+      return NextResponse.json({ schemaVersion: SCHEMA_VERSION, requestId, error: 'Quest not found' }, { status: 404 });
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+    const runnerResult = await runViaRunner({
+      code,
+      tests: quest.tests as any,
+      options: {
+        requestId,
+        route: '/api/quests/[id]/execute',
+        userId: session.user.id,
+        ip,
+        userAgent,
+        questId: id,
+        timeoutMs: REQUEST_TIMEOUT,
+        maxStdoutBytes: MAX_STDOUT_BYTES,
+        maxStderrBytes: MAX_STDERR_BYTES,
+      },
+    });
 
-    let result: {
-      success?: boolean;
-      allPassed: boolean;
-      stdout: string;
-      stderr: string;
-      testResults: Array<Record<string, any>>;
-      executionTimeMs?: number;
-      error?: string;
+    if (runnerResult.transportError) {
+      const status = runnerResult.errorCode === 'RUNNER_TIMEOUT'
+        ? 504
+        : (runnerResult.errorCode === 'RUNNER_HTTP_ERROR' ? 500 : 503);
+
+      return NextResponse.json(
+        {
+          schemaVersion: SCHEMA_VERSION,
+          requestId,
+          success: false,
+          error: runnerResult.error || 'Runner service error',
+          message: runnerResult.error || 'Runner service error',
+          runtimeMs: runnerResult.executionTimeMs || 0,
+          stdout: '',
+          stderr: runnerResult.stderr || 'Execution failed',
+          testResults: [],
+          allPassed: false,
+          errorCode: runnerResult.errorCode,
+          runnerStatus: runnerResult.runnerStatus,
+        },
+        { status, headers: rateLimitHeaders(rl) }
+      );
+    }
+
+    const result = {
+      success: runnerResult.success,
+      allPassed: runnerResult.allPassed || false,
+      stdout: runnerResult.stdout || '',
+      stderr: runnerResult.stderr || '',
+      testResults: runnerResult.testResults || [],
+      executionTimeMs: runnerResult.executionTimeMs || 0,
+      error: runnerResult.error,
+      truncatedStdout: runnerResult.truncatedStdout,
+      truncatedStderr: runnerResult.truncatedStderr,
     };
-
-    try {
-      const runnerResponse = await fetch(`${RUNNER_SERVICE_URL}/run`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, tests: quest.tests }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!runnerResponse.ok) {
-        const errorData = await runnerResponse.json().catch(() => ({ error: 'Runner error' }));
-        return NextResponse.json({
-          schemaVersion: SCHEMA_VERSION,
-          success: false,
-          error: errorData.error || 'Runner service error',
-          message: errorData.error || 'Runner service error',
-          runtimeMs: 0,
-          stdout: '',
-          stderr: errorData.error || 'Execution failed',
-          testResults: [],
-          allPassed: false
-        }, { status: 500 });
-      }
-
-      const runnerResult = await runnerResponse.json();
-      result = {
-        success: runnerResult.success,
-        allPassed: runnerResult.allPassed || false,
-        stdout: runnerResult.stdout || '',
-        stderr: runnerResult.stderr || '',
-        testResults: runnerResult.testResults || [],
-        executionTimeMs: runnerResult.executionTimeMs || 0,
-        error: runnerResult.error
-      };
-    } catch (fetchError: any) {
-      clearTimeout(timeoutId);
-
-      if (fetchError.name === 'AbortError') {
-        return NextResponse.json({
-          schemaVersion: SCHEMA_VERSION,
-          success: false,
-          error: 'Execution timeout',
-          message: 'Runner service did not respond in time',
-          runtimeMs: REQUEST_TIMEOUT,
-          stdout: '',
-          stderr: 'Runner service did not respond in time',
-          testResults: [],
-          allPassed: false
-        }, { status: 504 });
-      }
-
-      return NextResponse.json({
-        schemaVersion: SCHEMA_VERSION,
-        success: false,
-        error: 'Failed to connect to runner service',
-        message: fetchError.message || 'Service unavailable',
-        runtimeMs: 0,
-        stdout: '',
-        stderr: fetchError.message || 'Service unavailable',
-        testResults: [],
-        allPassed: false
-      }, { status: 503 });
-    }
 
     const existingAttempt = await prisma.questAttempt.findUnique({
       where: {
@@ -200,7 +227,10 @@ export async function POST(request: Request, { params }: RouteParams) {
       stderr: result.stderr,
       testResults: result.testResults,
       runtimeMs: result.executionTimeMs || 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      requestId,
+      truncatedStdout: result.truncatedStdout,
+      truncatedStderr: result.truncatedStderr
     };
 
     // Award XP and update streak if this is a new completion
@@ -301,41 +331,63 @@ export async function POST(request: Request, { params }: RouteParams) {
       });
     }
 
-    return NextResponse.json({
-      schemaVersion: SCHEMA_VERSION,
-      success: true,
-      allPassed: result.allPassed,
-      stdout: result.stdout,
-      stderr: result.stderr,
-      testResults: result.testResults,
-      executionTime: result.executionTimeMs || 0,
-      xpEarned: shouldAwardXP ? quest.xpReward : 0,
-      streakBonus: shouldAwardXP ? streakBonus : 0,
-      totalXPAwarded: shouldAwardXP ? totalXPAwarded : 0,
-      leveledUp: shouldAwardXP ? leveledUp : false,
-      newLevel: (shouldAwardXP && leveledUp) ? newLevel : undefined,
-      attempt: {
-        attemptsCount: attempt.attemptsCount,
-        hintTierUnlocked: attempt.hintTierUnlocked,
-        lastResult: attempt.lastResult
+    return NextResponse.json(
+      {
+        schemaVersion: SCHEMA_VERSION,
+        requestId,
+        success: true,
+        allPassed: result.allPassed,
+        stdout: result.stdout,
+        stderr: result.stderr,
+        testResults: result.testResults,
+        executionTime: result.executionTimeMs || 0,
+        truncatedStdout: result.truncatedStdout,
+        truncatedStderr: result.truncatedStderr,
+        xpEarned: shouldAwardXP ? quest.xpReward : 0,
+        streakBonus: shouldAwardXP ? streakBonus : 0,
+        totalXPAwarded: shouldAwardXP ? totalXPAwarded : 0,
+        leveledUp: shouldAwardXP ? leveledUp : false,
+        newLevel: (shouldAwardXP && leveledUp) ? newLevel : undefined,
+        attempt: {
+          attemptsCount: attempt.attemptsCount,
+          hintTierUnlocked: attempt.hintTierUnlocked,
+          lastResult: attempt.lastResult,
+        },
+        hintPolicy: {
+          hintUnlockAttempts,
+          nextHintUnlockAtAttempt,
+        },
       },
-      hintPolicy: {
-        hintUnlockAttempts,
-        nextHintUnlockAtAttempt
-      }
-    });
+      { headers: rateLimitHeaders(rl) }
+    );
   } catch (error) {
-    console.error('Error executing code:', error);
-    return NextResponse.json({ 
-      schemaVersion: SCHEMA_VERSION,
-      success: false,
-      allPassed: false,
-      stdout: '',
-      stderr: error instanceof Error ? error.message : 'Unknown error',
-      testResults: [],
-      executionTime: 0,
-      error: 'Code execution failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    const message = redactSecrets(safeErrorMessage(error));
+    console.error('Error executing code:', message);
+    await writeAuditEvent({
+      ts: new Date().toISOString(),
+      level: 'error',
+      event: 'api.unhandled_error',
+      requestId,
+      route: '/api/quests/[id]/execute',
+      ip,
+      userAgent,
+      errorCode: 'UNHANDLED',
+      message,
+    });
+    return NextResponse.json(
+      {
+        schemaVersion: SCHEMA_VERSION,
+        requestId,
+        success: false,
+        allPassed: false,
+        stdout: '',
+        stderr: 'Internal error',
+        testResults: [],
+        executionTime: 0,
+        error: 'Code execution failed',
+        message: 'Internal error',
+      },
+      { status: 500 }
+    );
   }
 }
