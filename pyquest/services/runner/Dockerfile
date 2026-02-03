@@ -17,7 +17,7 @@ COPY app.py .
 RUN mkdir -p /tmp && chmod 1777 /tmp
 
 # Create non-root user for running the service
-RUN adduser -D -u 1000 runner
+RUN useradd -m -u 1000 runner
 
 # Security: Make filesystem read-only except /tmp
 # This is enforced at container runtime via docker-compose
