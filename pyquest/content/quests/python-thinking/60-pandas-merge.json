@@ -1,0 +1,33 @@
+{
+  "id": "60-pandas-merge",
+  "world": "python-thinking",
+  "title": "Pandas: DataFrame Merges",
+  "story": "Merging (joining) DataFrames is essential for combining data from multiple sources. Learn inner, left, right, and outer joins.",
+  "instructions": "Perform a left join on two DataFrames using 'id' as the key. df1 has ids [1,2,3] with names, df2 has ids [2,3,4] with scores. Print the merged result.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndf1 = pd.DataFrame({\n    'id': [1, 2, 3],\n    'name': ['Alice', 'Bob', 'Charlie']\n})\n\ndf2 = pd.DataFrame({\n    'id': [2, 3, 4],\n    'score': [85, 90, 78]\n})\n\n# Left join\nresult = pd.merge(df1, df2, on='id', how='left')\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndf1 = pd.DataFrame({\n    'id': [1, 2, 3],\n    'name': ['Alice', 'Bob', 'Charlie']\n})\n\ndf2 = pd.DataFrame({\n    'id': [2, 3, 4],\n    'score': [85, 90, 78]\n})\n\nresult = pd.merge(df1, df2, on='id', how='left')\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should merge with NaN for Alice (no matching score)",
+      "expectedBehavior": "Left join preserves all rows from df1",
+      "expected": "   id     name  score\n0   1    Alice    NaN\n1   2      Bob   85.0\n2   3  Charlie   90.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use pd.merge(df1, df2, on='key', how='left') for left join."
+    },
+    {
+      "level": 2,
+      "text": "Left join keeps all rows from df1. Id 1 has no match in df2, so score is NaN."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 60
+}

@@ -6,7 +6,6 @@
     "dev": "next dev",
     "dev:full": "docker-compose up --build",
     "build": "next build",
-    "runner": "docker compose up runner",
     "build:prod": "prisma generate --schema prisma/schema.postgres.prisma && next build",
     "start": "next start",
     "lint": "eslint",
@@ -21,7 +20,10 @@
     "prisma:seed": "tsx prisma/seed.ts",
     "runner": "docker-compose up runner",
     "runner:build": "docker-compose build runner",
-    "runner:logs": "docker-compose logs -f runner"
+    "runner:logs": "docker-compose logs -f runner",
+    "runner:node": "docker-compose up runner-node",
+    "runner:node:build": "cd services/runner-node && docker build -t pyquest-runner-node .",
+    "runner:node:logs": "docker-compose logs -f runner-node"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

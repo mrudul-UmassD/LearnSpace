@@ -1,0 +1,33 @@
+{
+  "id": "16-sigmoid-function",
+  "world": "python-ml",
+  "title": "ML: Sigmoid Function for Logistic Regression",
+  "story": "Logistic regression uses sigmoid to convert any number to probability (0 to 1). σ(x) = 1 / (1 + e^(-x))",
+  "instructions": "Implement sigmoid and calculate σ(0) and σ(2). Print both rounded to 2 decimals (2 lines).",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\nprint(round(sigmoid(0), 2))\nprint(round(sigmoid(2), 2))",
+  "solutionHidden": "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\nprint(round(sigmoid(0), 2))\nprint(round(sigmoid(2), 2))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.5 then 0.88",
+      "expectedBehavior": "Calculate sigmoid(0)=0.5, sigmoid(2)≈0.88",
+      "expected": "0.5\n0.88"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "sigmoid(0) = 1/(1+e^0) = 1/2 = 0.5"
+    },
+    {
+      "level": 2,
+      "text": "sigmoid(2) = 1/(1+e^-2) = 1/(1+0.135) ≈ 0.88"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 16
+}

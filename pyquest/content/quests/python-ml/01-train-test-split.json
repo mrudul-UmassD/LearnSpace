@@ -1,0 +1,33 @@
+{
+  "id": "01-train-test-split",
+  "world": "python-ml",
+  "title": "ML: Manual Train-Test Split",
+  "story": "The golden rule of ML: never test on data you trained on! Split your data to evaluate generalization.",
+  "instructions": "Manually split 10 samples into train (first 7) and test (last 3). Print the number of training samples.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Dataset: 10 samples\nX = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])\ny = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n\n# Split: first 70% for train\nsplit_idx = int(0.7 * len(X))\nX_train = X[:split_idx]\nX_test = X[split_idx:]\n\nprint(len(X_train))",
+  "solutionHidden": "import numpy as np\n\nX = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])\ny = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n\nsplit_idx = int(0.7 * len(X))\nX_train = X[:split_idx]\nX_test = X[split_idx:]\n\nprint(len(X_train))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 7 (70% of 10)",
+      "expectedBehavior": "Calculate split index and slice array",
+      "expected": "7"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use int(0.7 * len(X)) to calculate split index, then slice X[:split_idx]"
+    },
+    {
+      "level": 2,
+      "text": "70% of 10 = 7. First 7 for train, last 3 for test."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 1
+}

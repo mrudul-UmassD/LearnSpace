@@ -1,0 +1,44 @@
+{
+  "id": "01-hello-react",
+  "world": "react",
+  "title": "Your First React Component",
+  "story": "Every React journey begins with a simple component. Let's create one that displays a greeting!",
+  "instructions": "Create a functional React component called HelloWorld that returns an <h1> element with the text 'Hello, React!'.",
+  "type": "component",
+  "starterCode": "function HelloWorld() {\n  // Return an h1 element with 'Hello, React!'\n  return (\n    <div>\n      {/* Your code here */}\n    </div>\n  );\n}\n\nexport default HelloWorld;",
+  "solutionHidden": "function HelloWorld() {\n  return (\n    <h1>Hello, React!</h1>\n  );\n}\n\nexport default HelloWorld;",
+  "tests": [],
+  "componentTests": [
+    {
+      "id": "test-1",
+      "type": "renders",
+      "description": "Component renders without errors"
+    },
+    {
+      "id": "test-2",
+      "type": "contains_element",
+      "description": "Component contains an h1 element",
+      "selector": "h1"
+    },
+    {
+      "id": "test-3",
+      "type": "contains_text",
+      "description": "h1 contains the text 'Hello, React!'",
+      "text": "Hello, React!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "JSX looks like HTML but it's JavaScript! Use <h1> tags to create a heading."
+    },
+    {
+      "level": 2,
+      "text": "The component should return <h1>Hello, React!</h1>"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 1
+}

@@ -1,0 +1,33 @@
+{
+  "id": "56-pandas-loc-iloc",
+  "world": "python-thinking",
+  "title": "Pandas: loc vs iloc",
+  "story": "loc uses labels, iloc uses integer positions. Understanding the difference prevents common indexing errors.",
+  "instructions": "Use iloc to select the 2nd row (index 1) and print only the 'name' and 'score' values as a Series.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'score': [85, 92, 78],\n    'grade': ['B', 'A', 'C']\n}\ndf = pd.DataFrame(data)\n\n# Select 2nd row (position 1) with iloc\nresult = df.iloc[1][['name', 'score']]\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'score': [85, 92, 78],\n    'grade': ['B', 'A', 'C']\n}\ndf = pd.DataFrame(data)\nresult = df.iloc[1][['name', 'score']]\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print name and score for Bob",
+      "expectedBehavior": "Select 2nd row using iloc",
+      "expected": "name      Bob\nscore      92\nName: 1, dtype: object"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "iloc uses integer positions: df.iloc[1] gets the 2nd row (0-indexed)."
+    },
+    {
+      "level": 2,
+      "text": "Use df.iloc[row_position][column_list] to select specific columns from a row."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 56
+}

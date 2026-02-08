@@ -1,0 +1,33 @@
+{
+  "id": "12-predict-underfitting",
+  "world": "python-ml",
+  "title": "Predict: Identify Underfitting",
+  "story": "Model complexity affects performance. Too simple = underfitting (both train and test poor). Too complex = overfitting (great train, poor test).",
+  "instructions": "Which scenario shows underfitting? Print 1 or 2. Scenario 1: train=0.95, test=0.92. Scenario 2: train=0.6, test=0.58.",
+  "type": "predict_output",
+  "starterCode": "# Scenario 1: train=0.95, test=0.92 (good fit, both high)\n# Scenario 2: train=0.6, test=0.58 (underfitting, both low)\n\n# Underfitting = model too simple, both scores low\nprint(2)",
+  "solutionHidden": "2",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 2 (both scores low = underfitting)",
+      "expectedBehavior": "Identify underfitting from low train and test",
+      "expected": "2"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Underfitting: model can't even fit training data well. Both scores low."
+    },
+    {
+      "level": 2,
+      "text": "Scenario 1: good generalization. Scenario 2: model too simple (underfitting)."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "intermediate",
+  "order": 12
+}

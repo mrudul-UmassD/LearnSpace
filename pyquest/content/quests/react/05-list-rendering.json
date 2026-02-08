@@ -1,0 +1,54 @@
+{
+  "id": "05-list-rendering",
+  "world": "react",
+  "title": "Rendering Lists",
+  "story": "Rendering lists is a common task in React. Let's learn how to display arrays of data!",
+  "instructions": "Create a TodoList component that accepts a 'tasks' prop (an array of strings). Render each task in a <li> element inside a <ul> element. Remember to add a unique 'key' prop to each <li>!",
+  "type": "component",
+  "starterCode": "function TodoList(props) {\n  // Use .map() to render each task\n  return (\n    <ul>\n      {/* Map over props.tasks here */}\n    </ul>\n  );\n}\n\nexport default TodoList;",
+  "solutionHidden": "function TodoList(props) {\n  return (\n    <ul>\n      {props.tasks.map((task, index) => (\n        <li key={index}>{task}</li>\n      ))}\n    </ul>\n  );\n}\n\nexport default TodoList;",
+  "tests": [],
+  "componentTests": [
+    {
+      "id": "test-1",
+      "type": "renders",
+      "description": "Component renders without errors"
+    },
+    {
+      "id": "test-2",
+      "type": "contains_element",
+      "description": "Component contains a ul element",
+      "selector": "ul"
+    },
+    {
+      "id": "test-3",
+      "type": "contains_element",
+      "description": "Component contains li elements for tasks",
+      "selector": "li"
+    },
+    {
+      "id": "test-4",
+      "type": "contains_text",
+      "description": "Tasks are rendered (checking for default tasks)",
+      "text": "Buy groceries"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use the .map() method to transform each task into a <li> element"
+    },
+    {
+      "level": 2,
+      "text": "Don't forget the key prop: <li key={index}>{task}</li>"
+    },
+    {
+      "level": 3,
+      "text": "Wrap .map() in curly braces: {props.tasks.map((task, index) => <li key={index}>{task}</li>)}"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 5
+}

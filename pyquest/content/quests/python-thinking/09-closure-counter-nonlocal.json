@@ -1,0 +1,45 @@
+{
+  "id": "python-thinking-09-closure-counter",
+  "world": "python-thinking",
+  "type": "code",
+  "difficulty": "advanced",
+  "xpReward": 150,
+  "story": "The Closure Clan needs a counter that remembers its state across calls. Use the power of `nonlocal` to maintain state without globals.",
+  "instructions": "Write `make_counter()` that returns a function. Each call to that function should increment an internal count (starting at 0) and return the new count. Use `nonlocal` to access the enclosing scope's variable.",
+  "starterCode": "def make_counter():\n    # Initialize count in the enclosing scope\n    # Return a function that increments and returns count\n    pass",
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create a variable `count = 0` inside `make_counter`, then define a nested function that accesses it."
+    },
+    {
+      "level": 2,
+      "text": "Use `nonlocal count` in the nested function to tell Python you want to modify the enclosing scope's `count`, not create a new local one."
+    },
+    {
+      "level": 3,
+      "text": "Structure: `def make_counter(): count = 0; def counter(): nonlocal count; count += 1; return count; return counter`"
+    }
+  ],
+  "tests": [
+    {
+      "name": "counter_increments",
+      "description": "Counter increments correctly",
+      "code": "c = make_counter()\nassert c() == 1, 'First call should return 1'\nassert c() == 2, 'Second call should return 2'\nassert c() == 3, 'Third call should return 3'"
+    },
+    {
+      "name": "independent_counters",
+      "description": "Separate counters don't share state",
+      "code": "c1 = make_counter()\nc2 = make_counter()\nassert c1() == 1\nassert c2() == 1\nassert c1() == 2\nassert c2() == 2"
+    },
+    {
+      "name": "counter_starts_at_zero",
+      "description": "Counter starts at 0 (returns 1 on first call)",
+      "code": "c = make_counter()\nfirst = c()\nassert first == 1, f'Expected 1, got {first}'"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 9,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Code: Closure Counter With nonlocal"
+}

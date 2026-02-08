@@ -6,6 +6,7 @@ import { calculateLevel } from '@/types/gamification';
 import { getClientIp } from '@/lib/security/ip';
 import { rateLimit, rateLimitHeaders } from '@/lib/security/rate-limit';
 import { runViaRunner } from '@/lib/runner-client';
+import { runViaNodeRunner } from '@/lib/js-runner-client';
 import { writeAuditEvent } from '@/lib/audit/audit-log';
 import { redactSecrets, safeErrorMessage } from '@/lib/security/strings';
 import crypto from 'crypto';
@@ -18,6 +19,32 @@ const MAX_STDOUT_BYTES = Number(process.env.RUN_STDOUT_MAX_BYTES || 64 * 1024);
 const MAX_STDERR_BYTES = Number(process.env.RUN_STDERR_MAX_BYTES || 64 * 1024);
 const RATE_LIMIT_WINDOW_MS = Number(process.env.EXECUTE_RATE_LIMIT_WINDOW_MS || process.env.RUN_RATE_LIMIT_WINDOW_MS || 60_000);
 const RATE_LIMIT_MAX = Number(process.env.EXECUTE_RATE_LIMIT_MAX || process.env.RUN_RATE_LIMIT_MAX || 20);
+
+function hashStarterCode(code: string) {
+  return crypto.createHash('sha256').update(code).digest('hex');
+}
+
+function countChangedLines(a: string, b: string) {
+  const aLines = a.replace(/\r\n/g, '\n').split('\n');
+  const bLines = b.replace(/\r\n/g, '\n').split('\n');
+  const n = aLines.length;
+  const m = bLines.length;
+  const dp = new Array(m + 1).fill(0);
+  for (let i = 1; i <= n; i += 1) {
+    let prev = 0;
+    for (let j = 1; j <= m; j += 1) {
+      const temp = dp[j];
+      if (aLines[i - 1] === bLines[j - 1]) {
+        dp[j] = prev + 1;
+      } else {
+        dp[j] = Math.max(dp[j], dp[j - 1]);
+      }
+      prev = temp;
+    }
+  }
+  const lcs = dp[m];
+  return n + m - 2 * lcs;
+}
 
 /**
  * Update user's daily streak
@@ -137,21 +164,51 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ schemaVersion: SCHEMA_VERSION, requestId, error: 'Quest not found' }, { status: 404 });
     }
 
-    const runnerResult = await runViaRunner({
-      code,
-      tests: quest.tests as any,
-      options: {
-        requestId,
-        route: '/api/quests/[id]/execute',
-        userId: session.user.id,
-        ip,
-        userAgent,
-        questId: id,
-        timeoutMs: REQUEST_TIMEOUT,
-        maxStdoutBytes: MAX_STDOUT_BYTES,
-        maxStderrBytes: MAX_STDERR_BYTES,
-      },
-    });
+    // Determine execution mode based on quest world
+    const isJavaScriptQuest = quest.world === 'javascript';
+    const isNodeJsQuest = quest.world === 'nodejs';
+    const useNodeRunner = isJavaScriptQuest || isNodeJsQuest; // Both use Node runner
+
+    let runnerResult;
+    
+    if (useNodeRunner) {
+      // Execute JavaScript/Node.js via Node runner
+      runnerResult = await runViaNodeRunner({
+        code,
+        tests: quest.tests as any,
+        dataset: quest.dataset,
+        options: {
+          requestId,
+          route: '/api/quests/[id]/execute',
+          userId: session.user.id,
+          ip,
+          userAgent,
+          questId: id,
+          mode: 'node',
+          timeoutMs: REQUEST_TIMEOUT,
+          maxStdoutBytes: MAX_STDOUT_BYTES,
+          maxStderrBytes: MAX_STDERR_BYTES,
+        },
+      });
+    } else {
+      // Execute Python via Python runner
+      runnerResult = await runViaRunner({
+        code,
+        tests: quest.tests as any,
+        dataset: quest.dataset,
+        options: {
+          requestId,
+          route: '/api/quests/[id]/execute',
+          userId: session.user.id,
+          ip,
+          userAgent,
+          questId: id,
+          timeoutMs: REQUEST_TIMEOUT,
+          maxStdoutBytes: MAX_STDOUT_BYTES,
+          maxStderrBytes: MAX_STDERR_BYTES,
+        },
+      });
+    }
 
     if (runnerResult.transportError) {
       const status = runnerResult.errorCode === 'RUNNER_TIMEOUT'
@@ -200,14 +257,19 @@ export async function POST(request: Request, { params }: RouteParams) {
       truncatedStderr: runnerResult.truncatedStderr,
     };
 
-    const existingAttempt = await prisma.questAttempt.findUnique({
+    const isDebugFix = quest.type === 'debug_fix';
+    const maxChangedLines = quest.debugFix?.maxChangedLines ?? 6;
+    const changedLines = isDebugFix ? countChangedLines(quest.starterCode, code) : null;
+    const starterCodeHash = isDebugFix ? hashStarterCode(quest.starterCode) : null;
+
+    const existingAttempt = (await prisma.questAttempt.findUnique({
       where: {
         userId_questId: {
           userId: session.user.id,
           questId: id
         }
       }
-    });
+    })) as any;
 
     const currentAttempts = existingAttempt?.attemptsCount ?? 0;
     const nextAttemptsCount = currentAttempts + 1;
@@ -241,7 +303,9 @@ export async function POST(request: Request, { params }: RouteParams) {
       timestamp: new Date().toISOString(),
       requestId,
       truncatedStdout: result.truncatedStdout,
-      truncatedStderr: result.truncatedStderr
+      truncatedStderr: result.truncatedStderr,
+      changedLines: changedLines ?? undefined,
+      maxChangedLines: isDebugFix ? maxChangedLines : undefined
     };
 
     // Award XP and update streak if this is a new completion
@@ -279,6 +343,35 @@ export async function POST(request: Request, { params }: RouteParams) {
     }
 
     // Update or create quest attempt
+    const createData: any = {
+      userId: session.user.id,
+      questId: id,
+      status: result.allPassed ? 'completed' : 'in_progress',
+      lastCode: code,
+      attemptsCount: nextAttemptsCount,
+      hintTierUnlocked,
+      lastResult,
+      passed: result.allPassed,
+      xpEarned: shouldAwardXP ? quest.xpReward : 0,
+      ...(isDebugFix
+        ? { starterCodeHash: starterCodeHash || undefined, changedLines: changedLines ?? undefined }
+        : {})
+    };
+
+    const updateData: any = {
+      status: result.allPassed ? 'completed' : 'in_progress',
+      lastCode: code,
+      attemptsCount: nextAttemptsCount,
+      hintTierUnlocked,
+      lastResult,
+      passed: result.allPassed,
+      xpEarned: shouldAwardXP ? quest.xpReward : (existingAttempt?.xpEarned ?? 0),
+      updatedAt: new Date(),
+      ...(isDebugFix
+        ? { starterCodeHash: existingAttempt?.starterCodeHash ?? starterCodeHash ?? undefined, changedLines: changedLines ?? undefined }
+        : {})
+    };
+
     const attempt = await prisma.questAttempt.upsert({
       where: {
         userId_questId: {
@@ -286,27 +379,8 @@ export async function POST(request: Request, { params }: RouteParams) {
           questId: id
         }
       },
-      create: {
-        userId: session.user.id,
-        questId: id,
-        status: result.allPassed ? 'completed' : 'in_progress',
-        lastCode: code,
-        attemptsCount: nextAttemptsCount,
-        hintTierUnlocked,
-        lastResult,
-        passed: result.allPassed,
-        xpEarned: shouldAwardXP ? quest.xpReward : 0
-      },
-      update: {
-        status: result.allPassed ? 'completed' : 'in_progress',
-        lastCode: code,
-        attemptsCount: nextAttemptsCount,
-        hintTierUnlocked,
-        lastResult,
-        passed: result.allPassed,
-        xpEarned: shouldAwardXP ? quest.xpReward : (existingAttempt?.xpEarned ?? 0),
-        updatedAt: new Date()
-      }
+      create: createData,
+      update: updateData
     });
 
     // Update world progress if quest completed

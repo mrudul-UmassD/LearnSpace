@@ -1,0 +1,33 @@
+{
+  "id": "15-linear-regression-coefficients",
+  "world": "python-ml",
+  "title": "ML: Multiple Linear Regression",
+  "story": "With multiple features, each coefficient tells you how much that feature contributes to the prediction.",
+  "instructions": "Given coef=[3, -2, 1.5] and intercept=5, predict for input=[2, 4, 6]. Formula: y = sum(coef * x) + intercept. Print prediction.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ncoef = np.array([3, -2, 1.5])\nintercept = 5\nx = np.array([2, 4, 6])\n\n# Multiple linear regression\ny_pred = np.dot(coef, x) + intercept\n\nprint(y_pred)",
+  "solutionHidden": "import numpy as np\n\ncoef = np.array([3, -2, 1.5])\nintercept = 5\nx = np.array([2, 4, 6])\n\ny_pred = np.dot(coef, x) + intercept\n\nprint(y_pred)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 12.0 (3*2 + (-2)*4 + 1.5*6 + 5)",
+      "expectedBehavior": "Calculate weighted sum plus intercept",
+      "expected": "12.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "y = 3*2 + (-2)*4 + 1.5*6 + 5 = 6 - 8 + 9 + 5"
+    },
+    {
+      "level": 2,
+      "text": "Use np.dot for dot product: sum of element-wise multiplication"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 15
+}

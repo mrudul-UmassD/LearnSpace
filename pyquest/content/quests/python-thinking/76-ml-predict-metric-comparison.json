@@ -1,0 +1,33 @@
+{
+  "id": "76-ml-predict-metric-comparison",
+  "world": "python-thinking",
+  "title": "Predict: Metric Comparison on Imbalanced Data",
+  "story": "Test your understanding! Predict which metric will be higher for a model on imbalanced data.",
+  "instructions": "Predict the output. Given 90% negative class, a model predicts all negative. Will accuracy or F1 be higher? Print the higher metric name.",
+  "type": "predict_output",
+  "starterCode": "import numpy as np\nfrom sklearn.metrics import accuracy_score, f1_score\n\ny_true = np.array([0]*90 + [1]*10)\ny_pred = np.array([0]*100)\n\naccuracy = accuracy_score(y_true, y_pred)\nf1 = f1_score(y_true, y_pred)\n\nif accuracy > f1:\n    print('accuracy')\nelse:\n    print('f1')",
+  "solutionHidden": "accuracy",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 'accuracy' (0.9 vs F1=0.0)",
+      "expectedBehavior": "Accuracy misleadingly high on imbalanced data",
+      "expected": "accuracy"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Predicting all negative gives 90% accuracy but F1=0 (no positives caught)."
+    },
+    {
+      "level": 2,
+      "text": "Accuracy = 90/100 = 0.9, F1 = 0 (recall=0). Accuracy is higher but misleading!"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 76
+}

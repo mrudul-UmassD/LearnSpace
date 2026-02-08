@@ -1,0 +1,33 @@
+{
+  "id": "85-ml-predict-knn-boundary",
+  "world": "python-thinking",
+  "title": "Predict: k-NN Decision Boundaries",
+  "story": "Smaller k = more complex boundaries (risk overfitting). Larger k = smoother boundaries (risk underfitting). Balance is key!",
+  "instructions": "Predict which k value creates more complex decision boundaries. k=1 or k=5? Print the k value that creates MORE COMPLEX boundaries.",
+  "type": "predict_output",
+  "starterCode": "# k=1: Each point creates its own region (very complex)\n# k=5: Smoother regions by averaging 5 neighbors (simpler)\n\n# k=1 is more complex\nprint(1)",
+  "solutionHidden": "1",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (k=1 creates most complex boundaries)",
+      "expectedBehavior": "Understand k affects decision boundary complexity",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "k=1 uses only nearest neighbor (very sensitive to noise, complex boundaries)."
+    },
+    {
+      "level": 2,
+      "text": "Smaller k = more complex = overfitting risk. Larger k = smoother = underfitting risk."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 85
+}

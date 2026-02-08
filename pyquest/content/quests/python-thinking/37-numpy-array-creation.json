@@ -1,0 +1,47 @@
+{
+  "id": "37-numpy-array-creation",
+  "world": "python-thinking",
+  "title": "NumPy: Array Creation Basics",
+  "story": "Learn to create NumPy arrays using different methods. Arrays are the foundation of numerical computing in Python.",
+  "instructions": "Create three arrays: (1) from list [1, 2, 3, 4, 5], (2) zeros array of length 5, (3) ones array of length 3. Print each array on separate lines.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create array from list\narr1 = np.array([1, 2, 3, 4, 5])\nprint(arr1)\n\n# Create zeros array\narr2 = np.zeros(5)\nprint(arr2)\n\n# Create ones array\narr3 = np.ones(3)\nprint(arr3)",
+  "solutionHidden": "import numpy as np\n\narr1 = np.array([1, 2, 3, 4, 5])\nprint(arr1)\n\narr2 = np.zeros(5)\nprint(arr2)\n\narr3 = np.ones(3)\nprint(arr3)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "First line should be [1 2 3 4 5]",
+      "expectedBehavior": "Print array from list",
+      "expected": "[1 2 3 4 5]"
+    },
+    {
+      "id": "test2",
+      "type": "output",
+      "description": "Second line should be [0. 0. 0. 0. 0.]",
+      "expectedBehavior": "Print zeros array",
+      "expected": "[0. 0. 0. 0. 0.]"
+    },
+    {
+      "id": "test3",
+      "type": "output",
+      "description": "Third line should be [1. 1. 1.]",
+      "expectedBehavior": "Print ones array",
+      "expected": "[1. 1. 1.]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.array() for creating from a list, np.zeros() for zeros, np.ones() for ones."
+    },
+    {
+      "level": 2,
+      "text": "The argument to zeros and ones is the desired length."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 37
+}

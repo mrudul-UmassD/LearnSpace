@@ -1,0 +1,33 @@
+{
+  "id": "67-ml-train-test-split",
+  "world": "python-thinking",
+  "title": "ML: Train-Test Split Basics",
+  "story": "The golden rule of ML: never test on data you trained on! Split your data to evaluate generalization.",
+  "instructions": "Split a dataset of 10 samples into 70% train (7 samples) and 30% test (3 samples) using sklearn. Use random_state=42. Print the lengths of X_train and X_test.",
+  "type": "code",
+  "starterCode": "import numpy as np\nfrom sklearn.model_selection import train_test_split\n\n# Dataset: 10 samples\nX = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])\ny = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n\n# Split 70-30\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)\n\nprint(len(X_train))\nprint(len(X_test))",
+  "solutionHidden": "import numpy as np\nfrom sklearn.model_selection import train_test_split\n\nX = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])\ny = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)\n\nprint(len(X_train))\nprint(len(X_test))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 7 (train size) then 3 (test size)",
+      "expectedBehavior": "70-30 split of 10 samples",
+      "expected": "7\n3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use train_test_split(X, y, test_size=0.3, random_state=42)"
+    },
+    {
+      "level": 2,
+      "text": "test_size=0.3 means 30% test, 70% train. 10 * 0.7 = 7, 10 * 0.3 = 3"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 67
+}

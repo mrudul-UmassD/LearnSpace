@@ -1,0 +1,33 @@
+{
+  "id": "41-numpy-boolean-indexing",
+  "world": "python-thinking",
+  "title": "NumPy: Boolean Indexing",
+  "story": "Boolean indexing lets you filter arrays based on conditions. It's a powerful technique for data filtering.",
+  "instructions": "Create array [15, 8, 23, 12, 30, 5]. Use boolean indexing to extract only values greater than 10 and print them.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create array and filter\narr = np.array([15, 8, 23, 12, 30, 5])\nfiltered = arr[arr > 10]\nprint(filtered)",
+  "solutionHidden": "import numpy as np\n\narr = np.array([15, 8, 23, 12, 30, 5])\nfiltered = arr[arr > 10]\nprint(filtered)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [15 23 12 30]",
+      "expectedBehavior": "Print elements greater than 10",
+      "expected": "[15 23 12 30]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use arr[arr > 10] to filter. The condition creates a boolean mask."
+    },
+    {
+      "level": 2,
+      "text": "arr > 10 creates [True, False, True, True, True, False], which selects matching elements."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 41
+}

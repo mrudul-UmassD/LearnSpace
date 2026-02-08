@@ -1,0 +1,44 @@
+{
+  "id": "04-conditional-render",
+  "world": "react",
+  "title": "Conditional Rendering",
+  "story": "Components can show different content based on conditions. Let's display a message only when a condition is true!",
+  "instructions": "Create a WelcomeMessage component that accepts an 'isLoggedIn' prop. If isLoggedIn is true, display 'Welcome back!' in a div. If false, display 'Please log in.' in a div.",
+  "type": "component",
+  "starterCode": "function WelcomeMessage(props) {\n  // Use props.isLoggedIn to conditionally render\n  return (\n    <div>\n      {/* Your conditional rendering here */}\n    </div>\n  );\n}\n\nexport default WelcomeMessage;",
+  "solutionHidden": "function WelcomeMessage(props) {\n  return (\n    <div>\n      {props.isLoggedIn ? 'Welcome back!' : 'Please log in.'}\n    </div>\n  );\n}\n\nexport default WelcomeMessage;",
+  "tests": [],
+  "componentTests": [
+    {
+      "id": "test-1",
+      "type": "renders",
+      "description": "Component renders without errors"
+    },
+    {
+      "id": "test-2",
+      "type": "contains_element",
+      "description": "Component contains a div element",
+      "selector": "div"
+    },
+    {
+      "id": "test-3",
+      "type": "contains_text",
+      "description": "When isLoggedIn is false, shows 'Please log in.'",
+      "text": "Please log in."
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use the ternary operator: condition ? valueIfTrue : valueIfFalse"
+    },
+    {
+      "level": 2,
+      "text": "In JSX: {props.isLoggedIn ? 'Welcome back!' : 'Please log in.'}"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 4
+}

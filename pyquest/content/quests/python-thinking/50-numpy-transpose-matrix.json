@@ -1,0 +1,33 @@
+{
+  "id": "50-numpy-transpose-matrix",
+  "world": "python-thinking",
+  "title": "NumPy: Matrix Transpose",
+  "story": "Transposing flips a matrix over its diagonal - rows become columns and vice versa. Critical for linear algebra operations.",
+  "instructions": "Create a 2x3 matrix [[1, 2, 3], [4, 5, 6]]. Transpose it to get a 3x2 matrix and print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Transpose matrix\nmatrix = np.array([[1, 2, 3], [4, 5, 6]])\ntransposed = matrix.T\nprint(transposed)",
+  "solutionHidden": "import numpy as np\n\nmatrix = np.array([[1, 2, 3], [4, 5, 6]])\ntransposed = matrix.T\nprint(transposed)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print transposed 3x2 matrix",
+      "expectedBehavior": "Transpose to swap rows and columns",
+      "expected": "[[1 4]\n [2 5]\n [3 6]]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use .T attribute or np.transpose() to transpose a matrix."
+    },
+    {
+      "level": 2,
+      "text": "Original shape (2,3) becomes (3,2) after transpose."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 50
+}

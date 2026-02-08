@@ -1,0 +1,41 @@
+{
+  "id": "03-json-parsing",
+  "world": "nodejs",
+  "title": "Node.js: Parse JSON Data",
+  "story": "JSON is everywhere! Master parsing to unlock data from APIs and config files.",
+  "instructions": "Read the JSON file '/tmp/data.json', parse it, and print the 'name' property from the parsed object.",
+  "type": "code",
+  "starterCode": "// Read and parse JSON file\nconst fileContent = fs.readFileSync('/tmp/data.json', 'utf8');\nconst data = JSON.parse(fileContent);\nconsole.log(data.name);",
+  "solutionHidden": "const fileContent = fs.readFileSync('/tmp/data.json', 'utf8');\nconst data = JSON.parse(fileContent);\nconsole.log(data.name);",
+  "dataset": {
+    "files": [
+      {
+        "name": "data.json",
+        "content": "{\"name\":\"Alice\",\"age\":25,\"city\":\"NYC\"}"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 'Alice'",
+      "expectedBehavior": "Parse JSON and extract name",
+      "expected": "Alice"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "First read the file with fs.readFileSync(), then use JSON.parse() to convert string to object."
+    },
+    {
+      "level": 2,
+      "text": "Access the 'name' property with dot notation: data.name"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 3
+}

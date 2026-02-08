@@ -1,0 +1,33 @@
+{
+  "id": "61-pandas-missing-values",
+  "world": "python-thinking",
+  "title": "Pandas: Handling Missing Values",
+  "story": "Missing data is common in real-world datasets. Learn to detect, count, and handle NaN values effectively.",
+  "instructions": "Count the number of missing values in each column and print as a Series. The data has NaN in 'age' and 'score' columns.",
+  "type": "code",
+  "starterCode": "import pandas as pd\nimport numpy as np\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'age': [25, np.nan, 30],\n    'score': [85, 90, np.nan]\n}\ndf = pd.DataFrame(data)\n\n# Count missing values per column\nmissing_count = df.isnull().sum()\nprint(missing_count)",
+  "solutionHidden": "import pandas as pd\nimport numpy as np\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'age': [25, np.nan, 30],\n    'score': [85, 90, np.nan]\n}\ndf = pd.DataFrame(data)\nmissing_count = df.isnull().sum()\nprint(missing_count)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should count 0 for name, 1 for age, 1 for score",
+      "expectedBehavior": "Count NaN values per column",
+      "expected": "name     0\nage      1\nscore    1\ndtype: int64"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use df.isnull().sum() to count missing values per column."
+    },
+    {
+      "level": 2,
+      "text": "isnull() creates boolean mask, sum() counts True values (missing data)."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 61
+}

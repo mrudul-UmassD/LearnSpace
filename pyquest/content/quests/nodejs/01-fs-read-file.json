@@ -1,0 +1,41 @@
+{
+  "id": "01-fs-read-file",
+  "world": "nodejs",
+  "title": "Node.js: Read File with fs.readFileSync",
+  "story": "The fs module is your gateway to the filesystem. Let's read a file!",
+  "instructions": "Use fs.readFileSync() to read the file '/tmp/message.txt' and print its contents.",
+  "type": "code",
+  "starterCode": "// Read and print the file contents\nconst content = fs.readFileSync('/tmp/message.txt', 'utf8');\nconsole.log(content);",
+  "solutionHidden": "const content = fs.readFileSync('/tmp/message.txt', 'utf8');\nconsole.log(content);",
+  "dataset": {
+    "files": [
+      {
+        "name": "message.txt",
+        "content": "Hello from Node.js!"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print file contents",
+      "expectedBehavior": "Read and print the message",
+      "expected": "Hello from Node.js!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use fs.readFileSync(filepath, 'utf8') to read text files."
+    },
+    {
+      "level": 2,
+      "text": "The file path is '/tmp/message.txt'. Don't forget to specify 'utf8' encoding!"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 1
+}

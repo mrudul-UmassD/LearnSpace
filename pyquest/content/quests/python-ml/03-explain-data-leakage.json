@@ -1,0 +1,33 @@
+{
+  "id": "03-explain-data-leakage",
+  "world": "python-ml",
+  "title": "Explain: What is Data Leakage?",
+  "story": "Data leakage is when test set information influences training. It makes your model look better than it really is!",
+  "instructions": "Which scenario shows data leakage? Type 1 or 2.\n\nScenario 1: Normalize data → Split into train/test → Train model\nScenario 2: Split into train/test → Normalize train → Normalize test using train statistics → Train model",
+  "type": "explain",
+  "starterCode": "# Scenario 1: Normalize BEFORE split (test stats leak into training!)\n# Scenario 2: Split FIRST, normalize using only train stats (correct!)\n\n# Which has leakage? Type the number.",
+  "solutionHidden": "Scenario 1 has data leakage because normalizing before splitting means the mean and standard deviation calculated from the entire dataset (including test data) are used to transform the training data. This leaks information from the test set into the training process, making the model appear better than it would perform on truly unseen data.",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should identify scenario 1 as having leakage",
+      "expectedBehavior": "Recognize that normalizing before split leaks test info",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Leakage occurs when test data influences training. In which scenario does the test set affect training?"
+    },
+    {
+      "level": 2,
+      "text": "If you normalize before splitting, the test set's mean/std affects the training data transformation."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 3
+}

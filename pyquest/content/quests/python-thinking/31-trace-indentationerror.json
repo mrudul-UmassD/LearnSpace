@@ -1,0 +1,60 @@
+{
+  "id": "31-trace-indentationerror",
+  "world": "python-thinking",
+  "title": "Trace: Unexpected Indentation",
+  "story": "Python uses indentation to define code blocks. IndentationError occurs when the indentation is inconsistent or unexpected.",
+  "instructions": "Read the error message and locate the indentation problem in the code.",
+  "type": "trace_reading",
+  "starterCode": "",
+  "solutionHidden": "",
+  "tests": [],
+  "hints": [
+    {
+      "level": 1,
+      "text": "IndentationError means Python found unexpected indentation or inconsistent spacing."
+    },
+    {
+      "level": 2,
+      "text": "Look for mixing tabs and spaces, or incorrect indentation levels."
+    }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 31,
+  "traceReading": {
+    "stackTrace": "  File \"main.py\", line 3\n    print(x)\n    ^\nIndentationError: unexpected indent",
+    "buggyCode": "def greet():\nprint('Hello')\n    print(x)",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "question": "What type of error is this?",
+        "options": [
+          "IndentationError",
+          "SyntaxError",
+          "TabError",
+          "RuntimeError"
+        ],
+        "correctAnswer": "IndentationError",
+        "points": 1
+      },
+      {
+        "id": "q2",
+        "type": "short_text",
+        "question": "On which line is the indentation problem?",
+        "correctAnswer": "3",
+        "keywords": ["3", "line 3"],
+        "points": 1
+      },
+      {
+        "id": "q3",
+        "type": "short_text",
+        "question": "How would you fix the indentation in this function?",
+        "correctAnswer": "Indent line 2 (print('Hello')) to be inside the function body",
+        "keywords": ["indent", "line 2", "inside"],
+        "points": 2
+      }
+    ]
+  }
+}

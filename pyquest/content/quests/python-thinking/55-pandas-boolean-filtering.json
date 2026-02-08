@@ -1,0 +1,33 @@
+{
+  "id": "55-pandas-boolean-filtering",
+  "world": "python-thinking",
+  "title": "Pandas: Boolean Filtering",
+  "story": "Filter rows based on conditions. Boolean indexing is one of the most powerful features in Pandas for data analysis.",
+  "instructions": "Filter the DataFrame to show only rows where age > 25. Print the filtered result.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'age': [23, 28, 32, 25]\n}\ndf = pd.DataFrame(data)\n\n# Filter where age > 25\nfiltered = df[df['age'] > 25]\nprint(filtered)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'age': [23, 28, 32, 25]\n}\ndf = pd.DataFrame(data)\nfiltered = df[df['age'] > 25]\nprint(filtered)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should filter and show Bob and Charlie (ages 28 and 32)",
+      "expectedBehavior": "Filter rows where age > 25",
+      "expected": "      name  age\n1      Bob   28\n2  Charlie   32"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use df[df['column'] > value] to filter rows."
+    },
+    {
+      "level": 2,
+      "text": "The condition df['age'] > 25 creates a boolean mask, then df[mask] filters rows."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 55
+}

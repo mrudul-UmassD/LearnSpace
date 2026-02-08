@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { QuestData } from '@/types/quest';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ComponentQuestEditor } from '@/components/component-quest-editor';
 
 const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -17,6 +18,9 @@ interface QuestWorkspaceProps {
 interface ExecutionResult {
   schemaVersion?: string;
   success?: boolean;
+  status?: 'passed' | 'failed';
+  score?: number;
+  feedback?: string;
   allPassed: boolean;
   stdout: string;
   stderr: string;
@@ -31,6 +35,7 @@ interface ExecutionResult {
     error?: string;
   }>;
   executionTime: number;
+  runtimeMs?: number;
   xpEarned?: number;
   error?: string;
   message?: string;
@@ -46,7 +51,27 @@ interface ExecutionResult {
 }
 
 export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspaceProps) {
+  // For component quests, use specialized editor
+  if (quest.type === 'component') {
+    return (
+      <ComponentQuestEditor
+        quest={quest}
+        initialCode={initialCode}
+        onSave={async (code: string) => {
+          await fetch(`/api/quests/${quest.id}/save`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+          });
+        }}
+      />
+    );
+  }
+
   const [code, setCode] = useState(initialCode);
+  const [predictedOutput, setPredictedOutput] = useState('');
+  const [explanationText, setExplanationText] = useState('');
+  const [traceReadingAnswers, setTraceReadingAnswers] = useState<Record<string, string>>({});
   const [showHint, setShowHint] = useState(false);
   const [currentHintLevel, setCurrentHintLevel] = useState(0);
   const [hintTierUnlocked, setHintTierUnlocked] = useState(attempt?.hintTierUnlocked ?? 0);
@@ -108,10 +133,23 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
     try {
       console.log('[quest-workspace] Sending code to execute endpoint:', `/api/quests/${quest.id}/execute`);
       
-      const response = await fetch(`/api/quests/${quest.id}/execute`, {
+      // Build payload based on quest type
+      let payload: any;
+      if (quest.type === 'predict_output') {
+        payload = { questId: quest.id, predictedStdout: predictedOutput };
+      } else if (quest.type === 'explain') {
+        payload = { questId: quest.id, explanationText };
+      } else if (quest.type === 'trace_reading') {
+        payload = { questId: quest.id, traceReadingAnswers };
+      } else {
+        // code or debug_fix
+        payload = { questId: quest.id, userCode: code };
+      }
+
+      const response = await fetch(`/api/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
+        body: JSON.stringify(payload)
       });
 
       console.log('[quest-workspace] Response status:', response.status);
@@ -299,8 +337,69 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
         {/* Output & Test Results */}
         {testResults && (
           <>
-            {/* Execution Output */}
-            {(testResults.stdout || testResults.stderr) && (
+            {/* Score and Feedback (for all quest types) */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className={`p-4 rounded ${
+                  testResults.allPassed 
+                    ? 'bg-green-50 border-2 border-green-500' 
+                    : 'bg-red-50 border-2 border-red-400'
+                }`}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-2xl">
+                      {testResults.allPassed ? '🎉' : '❌'}
+                    </span>
+                    <p className={`font-bold text-lg ${
+                      testResults.allPassed ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                      {testResults.allPassed 
+                        ? `All Tests Passed! +${testResults.xpEarned || quest.xpReward} XP` 
+                        : testResults.status === 'failed' ? 'Not Quite Right' : 'Some Tests Failed'}
+                    </p>
+                  </div>
+
+                  {/* Score Display */}
+                  {testResults.score !== undefined && (
+                    <div className="mb-3">
+                      <div className="text-sm font-medium text-gray-700 mb-1">Score</div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-gray-200 rounded-full h-3 overflow-hidden">
+                          <div 
+                            className={`h-full transition-all ${
+                              testResults.score >= 80 ? 'bg-green-500' : 
+                              testResults.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}
+                            style={{ width: `${testResults.score}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-bold">{testResults.score}%</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Feedback */}
+                  {testResults.feedback && (
+                    <div className="mb-3 p-3 bg-white rounded border">
+                      <div className="text-sm font-medium text-gray-700 mb-1">Feedback</div>
+                      <div className="text-gray-800 whitespace-pre-wrap">{testResults.feedback}</div>
+                    </div>
+                  )}
+
+                  {/* Runtime */}
+                  {(testResults.executionTime || testResults.runtimeMs) && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      Executed in {testResults.runtimeMs || testResults.executionTime}ms
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Execution Output (only for code/debug_fix) */}
+            {(quest.type === 'code' || quest.type === 'debug_fix') && (testResults.stdout || testResults.stderr) && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Output</CardTitle>
@@ -323,104 +422,81 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                       </div>
                     </div>
                   )}
-                  
-                  <div className="text-xs text-gray-500 mt-2">
-                    Executed in {testResults.executionTime}ms
-                  </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Test Results */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Test Results</CardTitle>
-              </CardHeader>
-              <CardContent>
-                  <div className={`p-4 rounded ${
-                  testResults.allPassed 
-                    ? 'bg-green-50 border-2 border-green-500' 
-                    : 'bg-red-50 border-2 border-red-400'
-                }`}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-2xl">
-                      {testResults.allPassed ? '🎉' : '❌'}
-                    </span>
-                    <p className={`font-bold text-lg ${
-                      testResults.allPassed ? 'text-green-700' : 'text-red-700'
-                    }`}>
-                      {testResults.allPassed 
-                        ? `All Tests Passed! +${testResults.xpEarned || quest.xpReward} XP` 
-                        : 'Some Tests Failed'}
-                    </p>
-                  </div>
-                  
-                  {testResults.testResults && testResults.testResults.length > 0 && (
-                    <div className="space-y-3 mt-4">
-                      {testResults.testResults.map((test, index) => (
-                        <div 
-                          key={index} 
-                          className={`p-3 rounded border ${
-                            test.passed 
-                              ? 'bg-white border-green-300' 
-                              : 'bg-white border-red-300'
-                          }`}
-                        >
-                          <div className="flex items-start gap-2">
-                            <span className={`text-lg font-bold ${
-                              test.passed ? 'text-green-600' : 'text-red-600'
-                            }`}>
-                              {test.passed ? '✓' : '✗'}
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900">
-                                {test.description}
-                              </div>
-
-                              {test.expectedBehavior && (
-                                <div className="mt-1 text-sm text-gray-600">
-                                  Expected behavior: {test.expectedBehavior}
-                                </div>
-                              )}
-
-                              {test.message && (
-                                <div className={`mt-1 text-sm ${test.passed ? 'text-green-700' : 'text-red-700'}`}>
-                                  {test.message}
-                                </div>
-                              )}
-                              
-                              {!test.passed && (test.expected !== undefined || test.actual !== undefined) && (
-                                <div className="mt-2 text-sm space-y-1">
-                                  {test.expected !== undefined && (
-                                    <div>
-                                      <span className="text-gray-600">Expected: </span>
-                                      <span className="font-mono text-gray-900">
-                                        {JSON.stringify(test.expected)}
-                                      </span>
-                                    </div>
-                                  )}
-                                  {test.actual !== undefined && (
-                                    <div>
-                                      <span className="text-gray-600">Actual: </span>
-                                      <span className="font-mono text-gray-900">
-                                        {JSON.stringify(test.actual)}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                              
-                              {test.error && (
-                                <div className="mt-1 text-sm text-red-600">
-                                  Error: {test.error}
-                                </div>
-                              )}
+            {/* Test Results Details (only for code/debug_fix with test results) */}
+            {(quest.type === 'code' || quest.type === 'debug_fix') && testResults.testResults && testResults.testResults.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Test Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {testResults.testResults.map((test, index) => (
+                      <div 
+                        key={index} 
+                        className={`p-3 rounded border ${
+                          test.passed 
+                            ? 'bg-white border-green-300' 
+                            : 'bg-white border-red-300'
+                        }`}
+                      >
+                        <div className="flex items-start gap-2">
+                          <span className={`text-lg font-bold ${
+                            test.passed ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {test.passed ? '✓' : '✗'}
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">
+                              {test.description}
                             </div>
+
+                            {test.expectedBehavior && (
+                              <div className="mt-1 text-sm text-gray-600">
+                                Expected behavior: {test.expectedBehavior}
+                              </div>
+                            )}
+
+                            {test.message && (
+                              <div className={`mt-1 text-sm ${test.passed ? 'text-green-700' : 'text-red-700'}`}>
+                                {test.message}
+                              </div>
+                            )}
+                            
+                            {!test.passed && (test.expected !== undefined || test.actual !== undefined) && (
+                              <div className="mt-2 text-sm space-y-1">
+                                {test.expected !== undefined && (
+                                  <div>
+                                    <span className="text-gray-600">Expected: </span>
+                                    <span className="font-mono text-gray-900">
+                                      {JSON.stringify(test.expected)}
+                                    </span>
+                                  </div>
+                                )}
+                                {test.actual !== undefined && (
+                                  <div>
+                                    <span className="text-gray-600">Actual: </span>
+                                    <span className="font-mono text-gray-900">
+                                      {JSON.stringify(test.actual)}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            
+                            {test.error && (
+                              <div className="mt-1 text-sm text-red-600">
+                                Error: {test.error}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+                    ))}
+                  </div>
 
                   {testResults.error && (
                     <div className="mt-3 p-3 bg-red-100 border border-red-300 rounded">
@@ -429,90 +505,296 @@ export function QuestWorkspace({ quest, initialCode, attempt }: QuestWorkspacePr
                       </div>
                     </div>
                   )}
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </>
         )}
       </div>
 
-      {/* Right Column: Code Editor */}
+      {/* Right Column: Input based on Quest Type */}
       <div className="space-y-4">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Code Editor</CardTitle>
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                {isSaving && (
-                  <span className="flex items-center gap-1">
-                    <span className="animate-pulse">●</span> Saving...
-                  </span>
-                )}
-                {lastSaved && !isSaving && (
-                  <span>Saved {lastSaved.toLocaleTimeString()}</span>
-                )}
+        {quest.type === 'predict_output' ? (
+          /* Predict Output UI */
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Predict the Output</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    What will the hidden code print?
+                  </label>
+                  <textarea
+                    className="w-full h-40 p-3 border rounded font-mono text-sm"
+                    placeholder="Enter the expected stdout here..."
+                    value={predictedOutput}
+                    onChange={(e) => setPredictedOutput(e.target.value)}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter the exact output you expect, including newlines.
+                  </p>
+                </div>
+                
+                <Button 
+                  variant="primary" 
+                  onClick={handleRunCode}
+                  disabled={isRunning || !predictedOutput.trim()}
+                  className="font-semibold w-full"
+                >
+                  {isRunning ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Checking...
+                    </>
+                  ) : (
+                    <>✓ Check Prediction</>
+                  )}
+                </Button>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="border rounded overflow-hidden">
-              <Editor
-                height="500px"
-                defaultLanguage="python"
-                value={code}
-                onChange={(value) => setCode(value || '')}
-                theme="vs-dark"
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  lineNumbers: 'on',
-                  scrollBeyondLastLine: false,
-                  automaticLayout: true,
-                  tabSize: 4,
-                  wordWrap: 'on',
-                  padding: { top: 10, bottom: 10 }
-                }}
-              />
-            </div>
-            
-            <div className="flex gap-2 mt-4">
-              <Button 
-                variant="primary" 
-                onClick={handleRunCode}
-                disabled={isRunning}
-                className="font-semibold"
-              >
-                {isRunning ? (
-                  <>
-                    <span className="animate-spin mr-2">⏳</span>
-                    Running Tests...
-                  </>
-                ) : (
-                  <>▶ Run Tests</>
+            </CardContent>
+          </Card>
+        ) : quest.type === 'explain' ? (
+          /* Explain UI */
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Write Your Explanation</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Explanation
+                  </label>
+                  <textarea
+                    className="w-full h-60 p-3 border rounded text-sm"
+                    placeholder="Write your explanation here..."
+                    value={explanationText}
+                    onChange={(e) => setExplanationText(e.target.value)}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Write 2-3 sentences covering the key concepts.
+                  </p>
+                </div>
+
+                {/* Rubric Hints (unlocked after attempts) */}
+                {quest.explainRubric && hintTierUnlocked > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded p-3">
+                    <div className="text-sm font-medium text-blue-800 mb-2">Rubric Guidelines:</div>
+                    <ul className="text-sm text-blue-700 space-y-1">
+                      {quest.explainRubric.slice(0, hintTierUnlocked).map((item, idx) => (
+                        <li key={idx}>• {item.description || `Include: ${item.keywords.join(', ')}`}</li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
-              </Button>
+                
+                <Button 
+                  variant="primary" 
+                  onClick={handleRunCode}
+                  disabled={isRunning || !explanationText.trim()}
+                  className="font-semibold w-full"
+                >
+                  {isRunning ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Grading...
+                    </>
+                  ) : (
+                    <>📝 Submit Explanation</>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : quest.type === 'trace_reading' ? (
+          /* Trace Reading UI */
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Debug Trace Analysis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Stack Trace Display */}
+                {quest.traceReading?.stackTrace && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Stack Trace
+                    </label>
+                    <div className="bg-gray-900 text-red-400 p-4 rounded font-mono text-xs whitespace-pre-wrap border-2 border-red-500 overflow-x-auto">
+                      {quest.traceReading.stackTrace}
+                    </div>
+                  </div>
+                )}
+
+                {/* Buggy Code Display */}
+                {quest.traceReading?.buggyCode && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Buggy Code Snippet
+                    </label>
+                    <div className="bg-gray-900 text-gray-100 p-4 rounded font-mono text-sm whitespace-pre-wrap border border-gray-600 overflow-x-auto">
+                      {quest.traceReading.buggyCode}
+                    </div>
+                  </div>
+                )}
+
+                {/* Questions */}
+                {quest.traceReading?.questions && quest.traceReading.questions.length > 0 && (
+                  <div className="space-y-4 mt-6">
+                    <div className="text-sm font-semibold text-gray-700">Answer the following questions:</div>
+                    {quest.traceReading.questions.map((question, idx) => (
+                      <div key={question.id} className="border rounded p-4 bg-white">
+                        <div className="text-sm font-medium text-gray-800 mb-3">
+                          {idx + 1}. {question.question}
+                          <span className="ml-2 text-xs text-gray-500">
+                            ({question.points || 1} {question.points === 1 ? 'point' : 'points'})
+                          </span>
+                        </div>
+
+                        {question.type === 'multiple_choice' ? (
+                          <div className="space-y-2">
+                            {question.options?.map((option, optIdx) => (
+                              <label key={optIdx} className="flex items-start gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name={`question-${question.id}`}
+                                  value={option}
+                                  checked={traceReadingAnswers[question.id] === option}
+                                  onChange={(e) => setTraceReadingAnswers(prev => ({
+                                    ...prev,
+                                    [question.id]: e.target.value
+                                  }))}
+                                  className="mt-1"
+                                />
+                                <span className="text-sm text-gray-700">{option}</span>
+                              </label>
+                            ))}
+                          </div>
+                        ) : (
+                          <input
+                            type="text"
+                            className="w-full p-2 border rounded text-sm font-mono"
+                            placeholder="Type your answer..."
+                            value={traceReadingAnswers[question.id] || ''}
+                            onChange={(e) => setTraceReadingAnswers(prev => ({
+                              ...prev,
+                              [question.id]: e.target.value
+                            }))}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <Button 
+                  variant="primary" 
+                  onClick={handleRunCode}
+                  disabled={isRunning || Object.keys(traceReadingAnswers).length === 0}
+                  className="font-semibold w-full mt-4"
+                >
+                  {isRunning ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Checking...
+                    </>
+                  ) : (
+                    <>🔍 Submit Answers</>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          /* Code Editor UI (for 'code' and 'debug_fix') */
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">
+                  {quest.type === 'debug_fix' ? 'Fix the Bug' : 'Code Editor'}
+                </CardTitle>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  {isSaving && (
+                    <span className="flex items-center gap-1">
+                      <span className="animate-pulse">●</span> Saving...
+                    </span>
+                  )}
+                  {lastSaved && !isSaving && (
+                    <span>Saved {lastSaved.toLocaleTimeString()}</span>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {quest.type === 'debug_fix' && (
+                <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-sm text-yellow-800">
+                    🐛 <strong>Debug Challenge:</strong> The starter code has a bug. Find and fix it with minimal changes.
+                  </p>
+                </div>
+              )}
+
+              <div className="border rounded overflow-hidden">
+                <Editor
+                  height="500px"
+                  defaultLanguage="python"
+                  value={code}
+                  onChange={(value) => setCode(value || '')}
+                  theme="vs-dark"
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    lineNumbers: 'on',
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    tabSize: 4,
+                    wordWrap: 'on',
+                    padding: { top: 10, bottom: 10 }
+                  }}
+                />
+              </div>
               
-              <Button 
-                variant="outline"
-                onClick={handleSaveCode}
-                disabled={isSaving}
-              >
-                {isSaving ? 'Saving...' : '💾 Save'}
-              </Button>
-              
-              <Button 
-                variant="outline"
-                onClick={() => {
-                  if (confirm('Reset code to starter template?')) {
-                    setCode(quest.starterCode);
-                  }
-                }}
-              >
-                🔄 Reset
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              <div className="flex gap-2 mt-4">
+                <Button 
+                  variant="primary" 
+                  onClick={handleRunCode}
+                  disabled={isRunning}
+                  className="font-semibold"
+                >
+                  {isRunning ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Running Tests...
+                    </>
+                  ) : (
+                    <>▶ Run Tests</>
+                  )}
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  onClick={handleSaveCode}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : '💾 Save'}
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    if (confirm('Reset code to starter template?')) {
+                      setCode(quest.starterCode);
+                    }
+                  }}
+                >
+                  🔄 Reset
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

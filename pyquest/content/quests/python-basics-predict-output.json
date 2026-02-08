@@ -1,0 +1,25 @@
+{
+  "id": "python-basics-predict-output",
+  "world": "python-basics",
+  "title": "Predict the Output",
+  "story": "A short script produces a greeting. Can you predict the exact stdout?",
+  "instructions": "Predict the exact stdout of the hidden reference code.",
+  "type": "predict_output",
+  "starterCode": "# No code submission required for predict_output\n# Provide the exact stdout in the Run Tests box.",
+  "solutionHidden": "print('Hello, Python Adventurer!')\nprint('Level:', 3 + 4)",
+  "tests": [
+    {
+      "id": "predict-1",
+      "type": "output",
+      "description": "Placeholder test",
+      "expectedBehavior": "Not used for predict_output"
+    }
+  ],
+  "hints": [
+    { "level": 1, "text": "Remember newlines are printed after each print call." }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 50,
+  "difficulty": "beginner",
+  "order": 99
+}

@@ -1,0 +1,33 @@
+{
+  "id": "66-pandas-debug-groupby-error",
+  "world": "python-thinking",
+  "title": "Debug: GroupBy Key Error",
+  "story": "Trying to aggregate non-numeric columns causes errors! Learn to select only the columns you want to aggregate.",
+  "instructions": "Fix the code that tries to apply mean() to all columns including strings. Select only the numeric 'salary' column for aggregation.",
+  "type": "debug_fix",
+  "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'department': ['HR', 'IT', 'HR', 'IT'],\n    'salary': [50000, 60000, 55000, 65000]\n})\n\n# BUGGY: Can't calculate mean of string columns\nresult = df.groupby('department').mean()\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndf = pd.DataFrame({\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'department': ['HR', 'IT', 'HR', 'IT'],\n    'salary': [50000, 60000, 55000, 65000]\n})\n\n# FIXED: Select only numeric column for aggregation\nresult = df.groupby('department')['salary'].mean()\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should calculate mean salary by department",
+      "expectedBehavior": "GroupBy only numeric column",
+      "expected": "department\nHR    52500.0\nIT    62500.0\nName: salary, dtype: float64"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Specify which column(s) to aggregate: df.groupby('key')['numeric_col'].mean()"
+    },
+    {
+      "level": 2,
+      "text": "Can't calculate mean of strings. Use: groupby('department')['salary'].mean()"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 66
+}

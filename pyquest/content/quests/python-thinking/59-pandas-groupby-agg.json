@@ -1,0 +1,33 @@
+{
+  "id": "59-pandas-groupby-agg",
+  "world": "python-thinking",
+  "title": "Pandas: Multiple Aggregations",
+  "story": "The agg() method lets you apply multiple aggregation functions at once, giving you a comprehensive view of your data.",
+  "instructions": "Group by 'category' and calculate both sum and mean of 'quantity'. Print the result.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'product': ['A', 'B', 'C', 'D'],\n    'category': ['Food', 'Drink', 'Food', 'Drink'],\n    'quantity': [10, 20, 15, 25]\n}\ndf = pd.DataFrame(data)\n\n# Multiple aggregations\nresult = df.groupby('category')['quantity'].agg(['sum', 'mean'])\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'product': ['A', 'B', 'C', 'D'],\n    'category': ['Food', 'Drink', 'Food', 'Drink'],\n    'quantity': [10, 20, 15, 25]\n}\ndf = pd.DataFrame(data)\nresult = df.groupby('category')['quantity'].agg(['sum', 'mean'])\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should show sum and mean for each category",
+      "expectedBehavior": "Apply multiple aggregations",
+      "expected": "          sum  mean\ncategory           \nDrink      45  22.5\nFood       25  12.5"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use .agg(['func1', 'func2']) to apply multiple aggregation functions."
+    },
+    {
+      "level": 2,
+      "text": "Drink: sum=45, mean=22.5 | Food: sum=25, mean=12.5"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 59
+}

@@ -1,0 +1,56 @@
+{
+  "id": "03-state-counter",
+  "world": "react",
+  "title": "State: Making Components Interactive",
+  "story": "State lets components remember and update information. Let's build a counter!",
+  "instructions": "Create a Counter component that displays a count starting at 0. Add a button that increments the count when clicked. Use useState to manage the count state.",
+  "type": "component",
+  "starterCode": "function Counter() {\n  // Use useState to create count state\n  // const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <p>Count: {/* display count here */}</p>\n      <button onClick={() => {/* increment count */}}>\n        Increment\n      </button>\n    </div>\n  );\n}\n\nexport default Counter;",
+  "solutionHidden": "function Counter() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>\n        Increment\n      </button>\n    </div>\n  );\n}\n\nexport default Counter;",
+  "tests": [],
+  "componentTests": [
+    {
+      "id": "test-1",
+      "type": "renders",
+      "description": "Component renders without errors"
+    },
+    {
+      "id": "test-2",
+      "type": "contains_text",
+      "description": "Component displays initial count of 0",
+      "text": "Count: 0"
+    },
+    {
+      "id": "test-3",
+      "type": "contains_element",
+      "description": "Component has a button",
+      "selector": "button"
+    },
+    {
+      "id": "test-4",
+      "type": "event_handler",
+      "description": "Clicking button increments the count",
+      "selector": "button",
+      "event": "click",
+      "expectedAfterEvent": "Count: 1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Import useState from React (it's already available as useState in the sandbox)"
+    },
+    {
+      "level": 2,
+      "text": "Create state: const [count, setCount] = useState(0)"
+    },
+    {
+      "level": 3,
+      "text": "Update state in onClick: onClick={() => setCount(count + 1)}"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 3
+}

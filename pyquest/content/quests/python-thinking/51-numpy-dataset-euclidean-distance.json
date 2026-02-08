@@ -1,0 +1,41 @@
+{
+  "id": "51-numpy-dataset-euclidean-distance",
+  "world": "python-thinking",
+  "title": "NumPy Dataset: Euclidean Distance",
+  "story": "Calculate the Euclidean distance between two points in 3D space using vectorized NumPy operations. No loops, pure vector math!",
+  "instructions": "Given two points p1=[1, 2, 3] and p2=[4, 6, 8], calculate Euclidean distance: sqrt((p1-p2)^2). Print the result rounded to 2 decimals.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Calculate Euclidean distance\np1 = np.array([1, 2, 3])\np2 = np.array([4, 6, 8])\n\n# Vectorized: sqrt(sum((p1-p2)^2))\ndiff = p1 - p2\ndist_squared = np.sum(diff ** 2)\ndistance = np.sqrt(dist_squared)\nprint(np.round(distance, 2))",
+  "solutionHidden": "import numpy as np\n\np1 = np.array([1, 2, 3])\np2 = np.array([4, 6, 8])\ndiff = p1 - p2\ndist_squared = np.sum(diff ** 2)\ndistance = np.sqrt(dist_squared)\nprint(np.round(distance, 2))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 7.07",
+      "expectedBehavior": "Calculate Euclidean distance: sqrt(9+16+25)",
+      "expected": "7.07"
+    }
+  ],
+  "dataset": {
+    "files": [
+      {
+        "name": "points.csv",
+        "content": "point_id,x,y,z\np1,1,2,3\np2,4,6,8"
+      }
+    ]
+  },
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use vectorized operations: (p1-p2)**2 squares all differences at once."
+    },
+    {
+      "level": 2,
+      "text": "Distance formula: sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2) = sqrt(9+16+25)"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 51
+}

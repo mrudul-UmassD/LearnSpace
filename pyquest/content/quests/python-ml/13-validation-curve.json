@@ -1,0 +1,33 @@
+{
+  "id": "13-validation-curve",
+  "world": "python-ml",
+  "title": "ML: Understanding Validation Curves",
+  "story": "As model complexity increases, train error decreases but test error forms a U-shape. The minimum is the sweet spot!",
+  "instructions": "Find best complexity. Test errors at complexities [1,2,3,4,5]: [0.8, 0.6, 0.5, 0.55, 0.7]. Print complexity with minimum test error.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ncomplexities = np.array([1, 2, 3, 4, 5])\ntest_errors = np.array([0.8, 0.6, 0.5, 0.55, 0.7])\n\n# Find complexity with minimum test error\nbest_complexity = complexities[np.argmin(test_errors)]\n\nprint(best_complexity)",
+  "solutionHidden": "import numpy as np\n\ncomplexities = np.array([1, 2, 3, 4, 5])\ntest_errors = np.array([0.8, 0.6, 0.5, 0.55, 0.7])\n\nbest_complexity = complexities[np.argmin(test_errors)]\n\nprint(best_complexity)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 3 (minimum test error)",
+      "expectedBehavior": "Find argmin of test errors",
+      "expected": "3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.argmin(test_errors) to find index of minimum, then get complexity"
+    },
+    {
+      "level": 2,
+      "text": "Test errors: [0.8, 0.6, 0.5, 0.55, 0.7]. Minimum is 0.5 at index 2 (complexity 3)."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 13
+}

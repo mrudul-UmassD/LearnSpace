@@ -1,0 +1,33 @@
+{
+  "id": "58-pandas-groupby-basic",
+  "world": "python-thinking",
+  "title": "Pandas: Basic GroupBy",
+  "story": "GroupBy is fundamental for data aggregation. Split data into groups, apply functions, and combine results.",
+  "instructions": "Group by 'department' and calculate the mean salary for each department. Print the result.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'department': ['HR', 'IT', 'HR', 'IT'],\n    'salary': [50000, 60000, 55000, 65000]\n}\ndf = pd.DataFrame(data)\n\n# GroupBy department and get mean salary\nresult = df.groupby('department')['salary'].mean()\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'department': ['HR', 'IT', 'HR', 'IT'],\n    'salary': [50000, 60000, 55000, 65000]\n}\ndf = pd.DataFrame(data)\nresult = df.groupby('department')['salary'].mean()\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should show HR: 52500, IT: 62500",
+      "expectedBehavior": "Calculate mean salary by department",
+      "expected": "department\nHR    52500.0\nIT    62500.0\nName: salary, dtype: float64"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use df.groupby('column')['value_column'].mean() to group and aggregate."
+    },
+    {
+      "level": 2,
+      "text": "HR average: (50000 + 55000) / 2 = 52500, IT average: (60000 + 65000) / 2 = 62500"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 58
+}

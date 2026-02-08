@@ -1,0 +1,41 @@
+{
+  "id": "49-numpy-dataset-normalize-scores",
+  "world": "python-thinking",
+  "title": "NumPy Dataset: Normalize Scores",
+  "story": "Normalization (z-score standardization) transforms data to have mean 0 and standard deviation 1. Essential for machine learning!",
+  "instructions": "Use the scores dataset. Normalize using formula: (scores - mean) / std. Print the normalized array rounded to 2 decimals.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Dataset: test scores\nscores = np.array([85, 90, 78, 92, 88, 76, 95, 89])\n\n# Normalize: (x - mean) / std\nmean = scores.mean()\nstd = scores.std()\nnormalized = (scores - mean) / std\nprint(np.round(normalized, 2))",
+  "solutionHidden": "import numpy as np\n\nscores = np.array([85, 90, 78, 92, 88, 76, 95, 89])\nmean = scores.mean()\nstd = scores.std()\nnormalized = (scores - mean) / std\nprint(np.round(normalized, 2))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print normalized scores",
+      "expectedBehavior": "Normalize and round to 2 decimals",
+      "expected": "[-0.17  0.34 -1.03  0.68  0.17 -1.37  1.03  0.34]"
+    }
+  ],
+  "dataset": {
+    "files": [
+      {
+        "name": "scores.csv",
+        "content": "score\n85\n90\n78\n92\n88\n76\n95\n89"
+      }
+    ]
+  },
+  "hints": [
+    {
+      "level": 1,
+      "text": "Calculate mean and std first, then apply formula to entire array."
+    },
+    {
+      "level": 2,
+      "text": "Broadcasting handles (scores - mean) and division automatically!"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 49
+}

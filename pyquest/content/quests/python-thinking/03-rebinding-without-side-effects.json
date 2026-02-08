@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-03-no-side-effects",
+  "world": "python-thinking",
+  "type": "code",
+  "title": "Rebinding Without Side Effects",
+  "difficulty": "intermediate",
+  "xpReward": 120,
+  "story": "The Pure Functions Guild has a strict rule: never mutate what you receive. Your task is to implement two functions that return new values without causing side effects.",
+  "instructions": "Implement `increment(n)` that returns `n+1`, and `append_one(lst)` that returns a NEW list with 1 appended, leaving the input list unchanged.",
+  "starterCode": "def increment(n):\n    # Return n + 1\n    pass\n\ndef append_one(lst):\n    # Return a NEW list with 1 appended\n    # Do NOT mutate the input list\n    pass",
+  "hints": [
+    {
+      "level": 1,
+      "text": "For `increment`, just return `n + 1`. Integers are immutable, so there's no mutation concern."
+    },
+    {
+      "level": 2,
+      "text": "For `append_one`, don't use `lst.append(1)` because that mutates the input. Instead, create a new list."
+    },
+    {
+      "level": 3,
+      "text": "Use `lst + [1]` or `lst.copy() + [1]` or `[*lst, 1]` to create a new list with the element added."
+    }
+  ],
+  "tests": [
+    {
+      "name": "increment_basic",
+      "description": "increment(41) should return 42",
+      "code": "result = increment(41)\nassert result == 42, f'Expected 42, got {result}'"
+    },
+    {
+      "name": "append_one_creates_new_list",
+      "description": "append_one should return a new list without mutating input",
+      "code": "original = [0]\nresult = append_one(original)\nassert result == [0, 1], f'Expected [0, 1], got {result}'\nassert original == [0], f'Input was mutated! Expected [0], got {original}'\nassert result is not original, 'Should return a NEW list, not the same object'"
+    },
+    {
+      "name": "append_one_empty",
+      "description": "append_one works with empty list",
+      "code": "result = append_one([])\nassert result == [1], f'Expected [1], got {result}'"
+    },
+    {
+      "name": "increment_negative",
+      "description": "increment works with negative numbers",
+      "code": "assert increment(-5) == -4"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 3,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass"
+}

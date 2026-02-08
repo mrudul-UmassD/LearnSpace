@@ -1,0 +1,33 @@
+{
+  "id": "53-pandas-select-columns",
+  "world": "python-thinking",
+  "title": "Pandas: Selecting Columns",
+  "story": "Extract specific columns from a DataFrame. You can select single columns or multiple columns at once.",
+  "instructions": "Given a DataFrame with columns 'product', 'price', 'quantity', select only the 'product' and 'price' columns. Print the result.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\n# Sample data\ndata = {\n    'product': ['Apple', 'Banana', 'Orange'],\n    'price': [1.2, 0.5, 0.8],\n    'quantity': [10, 20, 15]\n}\ndf = pd.DataFrame(data)\n\n# Select specific columns\nresult = df[['product', 'price']]\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'product': ['Apple', 'Banana', 'Orange'],\n    'price': [1.2, 0.5, 0.8],\n    'quantity': [10, 20, 15]\n}\ndf = pd.DataFrame(data)\nresult = df[['product', 'price']]\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should select and print product and price columns only",
+      "expectedBehavior": "Select two columns from DataFrame",
+      "expected": "  product  price\n0   Apple    1.2\n1  Banana    0.5\n2  Orange    0.8"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use double brackets for multiple columns: df[['col1', 'col2']]"
+    },
+    {
+      "level": 2,
+      "text": "Single column: df['col1'], Multiple: df[['col1', 'col2']]"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 53
+}

@@ -1,0 +1,33 @@
+{
+  "id": "64-pandas-debug-dtype",
+  "world": "python-thinking",
+  "title": "Debug: Data Type Issues",
+  "story": "String numbers can't be summed! dtype mismatches are a common source of bugs. Learn to convert types properly.",
+  "instructions": "Fix the code that tries to sum string numbers. Convert the 'amount' column to numeric type first, then calculate the sum.",
+  "type": "debug_fix",
+  "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'item': ['A', 'B', 'C'],\n    'amount': ['100', '200', '300']  # Strings, not numbers!\n})\n\n# BUGGY: Can't sum strings\ntotal = df['amount'].sum()\nprint(total)",
+  "solutionHidden": "import pandas as pd\n\ndf = pd.DataFrame({\n    'item': ['A', 'B', 'C'],\n    'amount': ['100', '200', '300']\n})\n\n# FIXED: Convert to numeric first\ndf['amount'] = pd.to_numeric(df['amount'])\ntotal = df['amount'].sum()\nprint(total)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 600 (sum of numeric values)",
+      "expectedBehavior": "Convert strings to numbers and sum",
+      "expected": "600"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use pd.to_numeric() to convert string numbers to actual numeric type."
+    },
+    {
+      "level": 2,
+      "text": "df['amount'] = pd.to_numeric(df['amount']) converts the column, then sum() works."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 64
+}

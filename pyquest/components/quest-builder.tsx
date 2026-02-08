@@ -9,10 +9,11 @@ import { motion } from 'framer-motion';
 const defaultQuest: QuestData = {
   id: '',
   world: 'python-basics',
+  type: 'code',
   title: '',
   story: '',
   instructions: '',
-  starterCode: '# Write your code below\n',
+  starterCode: '# Write your code below\n\n# Dataset helpers (JSON/CSV)\nimport json\nimport csv\n\n\ndef load_json(path):\n    with open(path, "r", encoding="utf-8") as f:\n        return json.load(f)\n\n\ndef load_csv(path):\n    with open(path, "r", encoding="utf-8", newline="") as f:\n        return list(csv.DictReader(f))\n',
   solutionHidden: '',
   tests: [
     {

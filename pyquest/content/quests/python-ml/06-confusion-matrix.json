@@ -1,0 +1,33 @@
+{
+  "id": "06-confusion-matrix",
+  "world": "python-ml",
+  "title": "ML: Build Confusion Matrix",
+  "story": "A confusion matrix breaks down predictions into TP, FP, TN, FN - the foundation for all classification metrics.",
+  "instructions": "Build a 2x2 confusion matrix manually. y_true=[1,0,1,0,0,1], y_pred=[1,0,0,0,1,1]. Print TP (true positives).",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ny_true = np.array([1, 0, 1, 0, 0, 1])\ny_pred = np.array([1, 0, 0, 0, 1, 1])\n\n# Calculate confusion matrix components\nTP = ((y_true == 1) & (y_pred == 1)).sum()\nTN = ((y_true == 0) & (y_pred == 0)).sum()\nFP = ((y_true == 0) & (y_pred == 1)).sum()\nFN = ((y_true == 1) & (y_pred == 0)).sum()\n\nprint(TP)",
+  "solutionHidden": "import numpy as np\n\ny_true = np.array([1, 0, 1, 0, 0, 1])\ny_pred = np.array([1, 0, 0, 0, 1, 1])\n\nTP = ((y_true == 1) & (y_pred == 1)).sum()\nTN = ((y_true == 0) & (y_pred == 0)).sum()\nFP = ((y_true == 0) & (y_pred == 1)).sum()\nFN = ((y_true == 1) & (y_pred == 0)).sum()\n\nprint(TP)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 2 (indices 0 and 5 are TP)",
+      "expectedBehavior": "Count true positives where both are 1",
+      "expected": "2"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "TP: both true and pred are 1. Use & for AND logic."
+    },
+    {
+      "level": 2,
+      "text": "Check each index: 0(TP), 1(TN), 2(FN), 3(TN), 4(FP), 5(TP). TP=2"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 6
+}

@@ -1,0 +1,37 @@
+{
+  "id": "63-pandas-debug-merge-duplicates",
+  "world": "python-thinking",
+  "title": "Debug: Merge Duplicate Keys",
+  "story": "Merging on columns with duplicate values creates a Cartesian product, exploding your data! Learn to identify and fix the issue.",
+  "instructions": "The merge creates 6 rows instead of 3 because 'category' has duplicates. Fix by ensuring unique merge keys or using a proper join strategy. Print the correct merge result with 3 rows.",
+  "type": "debug_fix",
+  "starterCode": "import pandas as pd\n\ndf1 = pd.DataFrame({\n    'id': [1, 2, 3],\n    'category': ['A', 'B', 'A']\n})\n\ndf2 = pd.DataFrame({\n    'category': ['A', 'B', 'A'],\n    'value': [10, 20, 30]\n})\n\n# BUGGY: Merging on category creates duplicates (3x2=6 rows)\nresult = pd.merge(df1, df2, on='category')\nprint(result)",
+  "solutionHidden": "import pandas as pd\n\ndf1 = pd.DataFrame({\n    'id': [1, 2, 3],\n    'category': ['A', 'B', 'A']\n})\n\ndf2 = pd.DataFrame({\n    'category': ['A', 'B', 'A'],\n    'value': [10, 20, 30]\n})\n\n# FIXED: Add unique index to df2 and merge on both category and index\ndf2['id2'] = [1, 2, 3]\nresult = pd.merge(df1, df2, left_on=['id', 'category'], right_on=['id2', 'category'])\nresult = result[['id', 'category', 'value']]\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should merge without duplicates, showing 3 rows",
+      "expectedBehavior": "Fix merge to avoid duplicate key problem",
+      "expected": "   id category  value\n0   1        A     10\n1   2        B     20\n2   3        A     30"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "When merge keys aren't unique, you get a Cartesian product. Use unique identifiers."
+    },
+    {
+      "level": 2,
+      "text": "Add a unique 'id' column to df2 and merge on both 'id' and 'category'."
+    },
+    {
+      "level": 3,
+      "text": "Use left_on=['id', 'category'] and right_on=['id2', 'category'] for compound key."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 63
+}

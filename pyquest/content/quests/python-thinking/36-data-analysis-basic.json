@@ -1,0 +1,33 @@
+{
+  "id": "36-data-analysis-basic",
+  "world": "python-thinking",
+  "title": "Data Analysis: NumPy + Pandas",
+  "story": "Combine NumPy and Pandas for data analysis. This quest verifies both packages work together efficiently under the 2-second timeout.",
+  "instructions": "Create a NumPy array [5, 10, 15, 20, 25], convert it to a Pandas Series, calculate the mean, and print it.",
+  "type": "code",
+  "starterCode": "import numpy as np\nimport pandas as pd\n\n# Create array, convert to Series, calculate mean\ndata = np.array([5, 10, 15, 20, 25])\nseries = pd.Series(data)\nmean_value = series.mean()\nprint(mean_value)",
+  "solutionHidden": "import numpy as np\nimport pandas as pd\n\ndata = np.array([5, 10, 15, 20, 25])\nseries = pd.Series(data)\nmean_value = series.mean()\nprint(mean_value)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Output should be 15.0",
+      "expectedBehavior": "Print the mean of the series",
+      "expected": "15.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create the NumPy array first with np.array()."
+    },
+    {
+      "level": 2,
+      "text": "Convert to Pandas Series using pd.Series(data), then call .mean()."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 36
+}

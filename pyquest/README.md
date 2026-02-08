@@ -1,10 +1,16 @@
 # PyQuest 🐍✨
 
-PyQuest is a production-grade web application for learning Python through interactive quests and a visual game map. Built with Next.js, TypeScript, Tailwind CSS, and PostgreSQL.
+PyQuest is a production-grade web application for learning Python and JavaScript through interactive quests and a visual game map. Built with Next.js, TypeScript, Tailwind CSS, and PostgreSQL.
 
 ## 🚀 Features
 
-- **Interactive Quests**: Learn Python through hands-on coding challenges
+- **Multiple Language Worlds**: Learn Python, JavaScript, and more through hands-on coding challenges
+  - **Python World**: 128 quests covering basics, data science (NumPy/Pandas), and ML concepts
+  - **JavaScript World**: 5 beginner quests covering fundamentals (variables, functions, arrays, loops, objects)
+- **Dual Execution Modes**: 
+  - Python quests run in secure Docker containers
+  - JavaScript quests run in-browser (Web Workers) or Node.js containers
+- **Interactive Quests**: Real-time code execution with instant feedback
 - **Quest Map**: Visual representation of your learning journey
 - **Progress Tracking**: Track your XP, achievements, and completed quests
 - **Multiple Difficulty Levels**: Beginner, Intermediate, and Advanced quests
@@ -128,11 +134,31 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 
 - **Development Mode**: `npm run dev`
 - **Full Docker (web + db + runner)**: `npm run dev:full`
-- **Runner Service Only**: `npm run runner`
+- **Python Runner Service**: `npm run runner`
+- **Node.js Runner Service** (for JavaScript quests): `npm run runner:node`
 - **Build for Production**: `npm run build`
 - **Start Production Server**: `npm start`
 - **Lint Code**: `npm run lint`
 - **Format Code**: `npx prettier --write .`
+
+### Code Execution Runners
+
+PyQuest uses two separate Docker-based runner services:
+
+1. **Python Runner** (port 8080):
+   - Executes Python quests securely in isolated containers
+   - Supports NumPy, Pandas for data science quests
+   - Start with: `npm run runner`
+
+2. **Node.js Runner** (port 8081):
+   - Executes JavaScript quests in sandboxed environment
+   - For beginner JS quests, can also run in-browser (Web Workers)
+   - Start with: `npm run runner:node`
+
+To run both runners simultaneously:
+```bash
+docker-compose up runner runner-node
+```
 
 ### Database Management
 
@@ -147,9 +173,12 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 |---------|-------------|
 | `npm run dev` | Start development server |
 | `npm run dev:full` | Start full docker-compose stack |
-| `npm run runner` | Start runner service (Docker) |
-| `npm run runner:build` | Build runner service image |
-| `npm run runner:logs` | Tail runner service logs |
+| `npm run runner` | Start Python runner service (Docker) |
+| `npm run runner:build` | Build Python runner image |
+| `npm run runner:logs` | Tail Python runner logs |
+| `npm run runner:node` | Start Node.js runner service (Docker) |
+| `npm run runner:node:build` | Build Node.js runner image |
+| `npm run runner:node:logs` | Tail Node.js runner logs |
 | `npm run build` | Build for production |
 | `npm start` | Start production server |
 | `npm run lint` | Run ESLint |
@@ -157,40 +186,121 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 | `npx prisma generate` | Generate Prisma Client |
 | `npx prisma db push` | Push schema to database |
 
+## 🌍 Quest Worlds
+
+PyQuest organizes quests into different "worlds" based on programming language and topic:
+
+### Python Worlds
+
+1. **python-thinking** (128 quests):
+   - Basic Python fundamentals (variables, loops, functions)
+   - Stack trace reading and debugging
+   - NumPy quests (arrays, operations, statistics)
+   - Pandas quests (DataFrames, operations, cleaning)
+
+2. **python-ml** (20 quests):
+   - Machine Learning concepts with pure NumPy
+   - Train/test split and data leakage
+   - Metrics (accuracy, precision, recall, F1)
+   - Overfitting/underfitting
+   - Linear/logistic regression, k-NN, gradient descent
+
+### JavaScript & Node.js Worlds
+
+3. **javascript** (5 quests):
+   - JavaScript fundamentals for beginners
+   - Variables, functions, arrays, loops, objects
+   - Runs in-browser (Web Workers) or Node.js containers
+
+4. **nodejs** (5 quests):
+   - Node.js backend features (fs, path, JSON, async)
+   - File operations, path manipulation, async/await
+   - Runs in Docker containers with secure sandboxing
+
+### React World
+
+5. **react** (5 quests):
+   - React component development with live preview
+   - JSX, props, state, conditional rendering, lists
+   - In-browser testing with React Testing Library patterns
+   - Real-time visual feedback
+
+**Total: 163 quests across 9 worlds**
+
 ## 📝 Adding New Quests
 
-To add new quests, edit or create files in `content/quests/`:
+Quests are defined as JSON files in `content/quests/<world>/`. Each world corresponds to a programming language or topic area.
 
-```typescript
-export const questsData = [
-  {
-    id: 'quest-id',
-    title: 'Quest Title',
-    description: 'Quest description',
-    difficulty: 'beginner', // 'beginner' | 'intermediate' | 'advanced'
-    category: 'category-name',
-    order: 1,
-    xpReward: 100,
-    isPublished: true,
-    challenges: [
-      {
-        title: 'Challenge Title',
-        description: 'Challenge description',
-        starterCode: '# Write your code here\n',
-        solution: 'print("Hello, World!")',
-        testCases: [
-          {
-            input: '',
-            expectedOutput: 'Hello, World!',
-            description: 'Test description',
-          },
-        ],
-        hints: ['Hint 1', 'Hint 2'],
-        order: 1,
-      },
-    ],
-  },
-];
+### Python Quest Example
+
+Create a file in `content/quests/python-thinking/`:
+
+```json
+{
+  "id": "unique-quest-id",
+  "world": "python-thinking",
+  "title": "Quest Title",
+  "story": "Quest backstory or context",
+  "instructions": "What the user needs to do",
+  "type": "code",
+  "starterCode": "# Write your code here\nprint('Hello')",
+  "solutionHidden": "print('Hello, World!')",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print Hello, World!",
+      "expectedBehavior": "Print the greeting",
+      "expected": "Hello, World!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use print() function"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 10,
+  "difficulty": "beginner",
+  "order": 1
+}
+```
+
+### JavaScript Quest Example
+
+Create a file in `content/quests/javascript/`:
+
+```json
+{
+  "id": "js-variables",
+  "world": "javascript",
+  "title": "JS: Variables",
+  "story": "Learn to declare variables in JavaScript",
+  "instructions": "Create a variable called 'message' and print it",
+  "type": "code",
+  "starterCode": "let message = 'Hello';\nconsole.log(message);",
+  "solutionHidden": "let message = 'Hello';\nconsole.log(message);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print Hello",
+      "expectedBehavior": "Print the message variable",
+      "expected": "Hello"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use console.log() to print"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 10,
+  "difficulty": "beginner",
+  "order": 1
+}
 ```
 
 ## 🔧 Configuration

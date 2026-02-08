@@ -1,0 +1,33 @@
+{
+  "id": "05-object-basics",
+  "world": "javascript",
+  "title": "JS: Object Basics",
+  "story": "Objects group related data together. They're fundamental to JavaScript!",
+  "instructions": "Create an object representing a person with properties: name='Alice', age=25. Access and print the name property.",
+  "type": "code",
+  "starterCode": "// Create an object and access a property\nconst person = {\n  name: 'Alice',\n  age: 25\n};\nconsole.log(person.name);",
+  "solutionHidden": "const person = {\n  name: 'Alice',\n  age: 25\n};\nconsole.log(person.name);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 'Alice'",
+      "expectedBehavior": "Access the name property",
+      "expected": "Alice"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create an object with { name: 'Alice', age: 25 }, access with person.name."
+    },
+    {
+      "level": 2,
+      "text": "Use dot notation: person.name returns 'Alice'."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 5
+}

@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-20-deep-copy",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "difficulty": "advanced",
+  "xpReward": 150,
+  "story": "A spell to duplicate a potion recipe book accidentally shares ingredient lists between copies. When you modify one recipe, all copies change! Fix it with deep copying.",
+  "instructions": "Fix `copy_data` to create a true deep copy of nested structures. The bug: it only copies the outer dict, so nested lists are still shared between original and copy.",
+  "starterCode": "def copy_data(data):\n    # BUG: Only does shallow copy!\n    # Nested lists/dicts are still shared\n    return {\n        'name': data['name'],\n        'items': data['items'],\n        'config': data['config']\n    }",
+  "hints": [
+    {
+      "level": 1,
+      "text": "The problem: `'items': data['items']` just copies the reference. Both dicts point to the same list."
+    },
+    {
+      "level": 2,
+      "text": "Use `copy.deepcopy()` to recursively copy all nested structures: `import copy; return copy.deepcopy(data)`"
+    },
+    {
+      "level": 3,
+      "text": "Alternative: manually copy nested structures: `'items': data['items'].copy()`, but deepcopy is safer for arbitrary nesting."
+    }
+  ],
+  "tests": [
+    {
+      "name": "outer_is_copy",
+      "description": "Creates a new outer dict",
+      "code": "original = {'name': 'test', 'items': [1, 2], 'config': {'debug': True}}\ncopy = copy_data(original)\nassert copy is not original, 'Should be a different dict'"
+    },
+    {
+      "name": "nested_list_is_copy",
+      "description": "Nested list is also copied",
+      "code": "original = {'name': 'recipe', 'items': [1, 2, 3], 'config': {}}\ncopy = copy_data(original)\ncopy['items'].append(4)\nassert original['items'] == [1, 2, 3], f\"Original items shouldn't change, got {original['items']}\"\nassert copy['items'] == [1, 2, 3, 4]"
+    },
+    {
+      "name": "nested_dict_is_copy",
+      "description": "Nested dict is also copied",
+      "code": "original = {'name': 'cfg', 'items': [], 'config': {'level': 5}}\ncopy = copy_data(original)\ncopy['config']['level'] = 10\nassert original['config']['level'] == 5, 'Original config should not change'"
+    },
+    {
+      "name": "values_match",
+      "description": "Copy has same values initially",
+      "code": "original = {'name': 'data', 'items': [10, 20], 'config': {'x': 1}}\ncopy = copy_data(original)\nassert copy['name'] == 'data'\nassert copy['items'] == [10, 20]\nassert copy['config'] == {'x': 1}"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 20,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Shallow vs Deep Copy With Nested Structures"
+}

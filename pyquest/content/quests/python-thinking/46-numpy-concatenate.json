@@ -1,0 +1,33 @@
+{
+  "id": "46-numpy-concatenate",
+  "world": "python-thinking",
+  "title": "NumPy: Array Concatenation",
+  "story": "Concatenation combines multiple arrays into one. Essential for building datasets and combining results.",
+  "instructions": "Create two arrays: [1, 2, 3] and [4, 5, 6]. Concatenate them into a single array and print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Concatenate arrays\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nresult = np.concatenate([a, b])\nprint(result)",
+  "solutionHidden": "import numpy as np\n\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nresult = np.concatenate([a, b])\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [1 2 3 4 5 6]",
+      "expectedBehavior": "Concatenate two arrays into one",
+      "expected": "[1 2 3 4 5 6]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.concatenate([a, b]) to join arrays end-to-end."
+    },
+    {
+      "level": 2,
+      "text": "Pass a list of arrays to concatenate. The arrays must have compatible shapes."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 46
+}

@@ -1,0 +1,30 @@
+{
+  "id": "python-basics-explain",
+  "world": "python-basics",
+  "title": "Explain: Why Use Functions",
+  "story": "A mentor asks you to justify using functions in your codebase.",
+  "instructions": "Write a short explanation (2-3 sentences) covering the key reasons we use functions.",
+  "type": "explain",
+  "starterCode": "# No code to write. Submit your explanation text in the Run Tests form.",
+  "solutionHidden": "Functions improve reuse and testing.",
+  "tests": [
+    {
+      "id": "explain-1",
+      "type": "output",
+      "description": "Placeholder test",
+      "expectedBehavior": "Not used for explain"
+    }
+  ],
+  "explainRubric": [
+    { "keywords": ["reuse", "reusability"], "description": "Mention reusability" },
+    { "keywords": ["readable", "organize"], "description": "Code organization/readability" },
+    { "keywords": ["test", "testing"], "description": "Easier testing" }
+  ],
+  "hints": [
+    { "level": 1, "text": "Think about how functions reduce repetition." }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 50,
+  "difficulty": "beginner",
+  "order": 100
+}

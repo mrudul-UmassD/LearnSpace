@@ -36,6 +36,9 @@ export type RunnerClientResult = {
 export async function runViaRunner(params: {
   code: string;
   tests: RunnerTest[];
+  dataset?: {
+    files: Array<{ name: string; content: string }>;
+  };
   options: RunnerClientOptions;
 }): Promise<RunnerClientResult> {
   const { options } = params;
@@ -52,7 +55,7 @@ export async function runViaRunner(params: {
         'Content-Type': 'application/json',
         'X-Request-Id': options.requestId,
       },
-      body: JSON.stringify({ code: params.code, tests: params.tests }),
+      body: JSON.stringify({ code: params.code, tests: params.tests, dataset: params.dataset }),
       signal: controller.signal,
     });
 

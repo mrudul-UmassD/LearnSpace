@@ -1,0 +1,33 @@
+{
+  "id": "17-logistic-decision-boundary",
+  "world": "python-ml",
+  "title": "ML: Logistic Regression Decision",
+  "story": "Logistic regression predicts class 1 if probability > 0.5, which happens when z > 0 (before sigmoid).",
+  "instructions": "Predict class. Given coef=[1, -2], intercept=3, input=[5, 1]. Calculate z=coef·x+intercept. Print 1 if z>0 else 0.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ncoef = np.array([1, -2])\nintercept = 3\nx = np.array([5, 1])\n\n# Calculate linear combination\nz = np.dot(coef, x) + intercept\n\n# Decision: z > 0 means probability > 0.5, predict class 1\nif z > 0:\n    print(1)\nelse:\n    print(0)",
+  "solutionHidden": "import numpy as np\n\ncoef = np.array([1, -2])\nintercept = 3\nx = np.array([5, 1])\n\nz = np.dot(coef, x) + intercept\n\nif z > 0:\n    print(1)\nelse:\n    print(0)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (z = 1*5 + (-2)*1 + 3 = 6 > 0)",
+      "expectedBehavior": "Calculate z and apply decision boundary",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "z = 1*5 + (-2)*1 + 3 = 5 - 2 + 3 = 6. Since z > 0, predict 1."
+    },
+    {
+      "level": 2,
+      "text": "Decision boundary: z > 0 → sigmoid(z) > 0.5 → class 1"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 17
+}

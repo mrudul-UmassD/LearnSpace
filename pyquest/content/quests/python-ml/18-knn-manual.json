@@ -1,0 +1,33 @@
+{
+  "id": "18-knn-manual",
+  "world": "python-ml",
+  "title": "ML: k-Nearest Neighbors Manual Prediction",
+  "story": "k-NN predicts by finding the k closest training points and taking majority vote. Simple but effective!",
+  "instructions": "Predict class for point [3] using k=3. Training: X=[1,2,4,5], y=[0,0,1,1]. Find 3 nearest, take majority. Print prediction.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nX_train = np.array([1, 2, 4, 5])\ny_train = np.array([0, 0, 1, 1])\ntest_point = 3\nk = 3\n\n# Calculate distances\ndistances = np.abs(X_train - test_point)\n\n# Get indices of k nearest\nnearest_indices = np.argsort(distances)[:k]\n\n# Get their labels\nnearest_labels = y_train[nearest_indices]\n\n# Majority vote\nprediction = np.bincount(nearest_labels).argmax()\n\nprint(prediction)",
+  "solutionHidden": "import numpy as np\n\nX_train = np.array([1, 2, 4, 5])\ny_train = np.array([0, 0, 1, 1])\ntest_point = 3\nk = 3\n\ndistances = np.abs(X_train - test_point)\nnearest_indices = np.argsort(distances)[:k]\nnearest_labels = y_train[nearest_indices]\nprediction = np.bincount(nearest_labels).argmax()\n\nprint(prediction)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0 (3 nearest: [2,4,1] with labels [0,1,0], majority=0)",
+      "expectedBehavior": "Find k nearest and take majority vote",
+      "expected": "0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Distances from 3: [2,1,1,2]. 3 nearest indices: [1,2,0] (points 2,4,1)."
+    },
+    {
+      "level": 2,
+      "text": "Labels [0,1,0]. Majority vote: 0 appears twice, so predict 0."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 18
+}

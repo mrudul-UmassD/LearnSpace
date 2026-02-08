@@ -1,0 +1,33 @@
+{
+  "id": "68-ml-split-indices",
+  "world": "python-thinking",
+  "title": "ML: Manual Split Understanding",
+  "story": "Understanding train-test split at the index level helps you grasp what's really happening under the hood.",
+  "instructions": "Manually split data at index 8 (first 8 for train, last 2 for test). Print the sum of training indices and sum of test indices.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ndata = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])\n\n# Manual split: first 8 train, last 2 test\ntrain_data = data[:8]\ntest_data = data[8:]\n\nprint(train_data.sum())\nprint(test_data.sum())",
+  "solutionHidden": "import numpy as np\n\ndata = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])\n\ntrain_data = data[:8]\ntest_data = data[8:]\n\nprint(train_data.sum())\nprint(test_data.sum())",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 360 (train sum) then 190 (test sum)",
+      "expectedBehavior": "Sum first 8 and last 2 elements",
+      "expected": "360\n190"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Train: data[:8], Test: data[8:], then use .sum()"
+    },
+    {
+      "level": 2,
+      "text": "Train sum: 10+20+30+40+50+60+70+80=360, Test sum: 90+100=190"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 68
+}

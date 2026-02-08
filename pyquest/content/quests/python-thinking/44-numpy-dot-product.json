@@ -1,0 +1,33 @@
+{
+  "id": "44-numpy-dot-product",
+  "world": "python-thinking",
+  "title": "NumPy: Dot Product",
+  "story": "The dot product is fundamental in linear algebra, physics, and machine learning. It's the sum of element-wise products.",
+  "instructions": "Calculate the dot product of vectors [1, 2, 3] and [4, 5, 6]. The result should be 1*4 + 2*5 + 3*6 = 32. Print it.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Dot product\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nresult = np.dot(a, b)\nprint(result)",
+  "solutionHidden": "import numpy as np\n\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nresult = np.dot(a, b)\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 32",
+      "expectedBehavior": "Calculate dot product: 1*4 + 2*5 + 3*6",
+      "expected": "32"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.dot(a, b) or a.dot(b) to compute the dot product."
+    },
+    {
+      "level": 2,
+      "text": "Dot product: sum of a[i] * b[i] for all i. Here: 4+10+18=32"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 44
+}

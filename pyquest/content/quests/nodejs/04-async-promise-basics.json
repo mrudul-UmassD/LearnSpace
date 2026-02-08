@@ -1,0 +1,33 @@
+{
+  "id": "04-async-promise-basics",
+  "world": "nodejs",
+  "title": "Node.js: Promise Basics",
+  "story": "Promises are the foundation of async JavaScript. They represent future values!",
+  "instructions": "Create a Promise that resolves with the value 'Success!' after using Promise.resolve(). Use .then() to print the result.",
+  "type": "code",
+  "starterCode": "// Create and handle a Promise\nconst myPromise = Promise.resolve('Success!');\n\nmyPromise.then(result => {\n  console.log(result);\n});",
+  "solutionHidden": "const myPromise = Promise.resolve('Success!');\n\nmyPromise.then(result => {\n  console.log(result);\n});",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 'Success!'",
+      "expectedBehavior": "Resolve promise and print value",
+      "expected": "Success!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Promise.resolve(value) creates a promise that immediately resolves with that value."
+    },
+    {
+      "level": 2,
+      "text": "Use .then(callback) to handle the resolved value: promise.then(result => console.log(result))"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "intermediate",
+  "order": 4
+}

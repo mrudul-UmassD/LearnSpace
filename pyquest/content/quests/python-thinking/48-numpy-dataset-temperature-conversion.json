@@ -1,0 +1,41 @@
+{
+  "id": "48-numpy-dataset-temperature-conversion",
+  "world": "python-thinking",
+  "title": "NumPy Dataset: Temperature Conversion",
+  "story": "You have temperature readings in Celsius. Convert them all to Fahrenheit using vectorized operations (no loops!).",
+  "instructions": "Use the provided temperatures_celsius.csv dataset. Load temperatures, convert to Fahrenheit using formula F = C * 9/5 + 32, and print the converted array.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Load dataset (provided as CSV)\ntemps_c = np.array([0, 10, 20, 30, 100])\n\n# Convert to Fahrenheit (vectorized)\ntemps_f = temps_c * 9/5 + 32\nprint(temps_f)",
+  "solutionHidden": "import numpy as np\n\ntemps_c = np.array([0, 10, 20, 30, 100])\ntemps_f = temps_c * 9/5 + 32\nprint(temps_f)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [ 32.  50.  68.  86. 212.]",
+      "expectedBehavior": "Convert temperatures to Fahrenheit",
+      "expected": "[ 32.  50.  68.  86. 212.]"
+    }
+  ],
+  "dataset": {
+    "files": [
+      {
+        "name": "temperatures_celsius.csv",
+        "content": "celsius\n0\n10\n20\n30\n100"
+      }
+    ]
+  },
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use broadcasting: temps_c * 9/5 + 32 applies to all elements at once."
+    },
+    {
+      "level": 2,
+      "text": "No loops needed! NumPy operations are vectorized automatically."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 48
+}

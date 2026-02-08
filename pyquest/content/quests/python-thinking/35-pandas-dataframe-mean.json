@@ -1,0 +1,33 @@
+{
+  "id": "35-pandas-dataframe-mean",
+  "world": "python-thinking",
+  "title": "Pandas: DataFrame Mean",
+  "story": "Pandas is essential for data analysis. Test that Pandas works by calculating the mean of a dataset.",
+  "instructions": "Create a Pandas DataFrame with a column 'scores' containing [85, 90, 78, 92, 88]. Print the mean of the 'scores' column.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\n# Create DataFrame and print mean\ndf = pd.DataFrame({'scores': [85, 90, 78, 92, 88]})\nmean_score = df['scores'].mean()\nprint(mean_score)",
+  "solutionHidden": "import pandas as pd\n\ndf = pd.DataFrame({'scores': [85, 90, 78, 92, 88]})\nmean_score = df['scores'].mean()\nprint(mean_score)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Output should be 86.6",
+      "expectedBehavior": "Print the mean of scores",
+      "expected": "86.6"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use pd.DataFrame() with a dictionary to create the DataFrame."
+    },
+    {
+      "level": 2,
+      "text": "Access the column with df['scores'] and call .mean() method."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 35
+}

@@ -1,0 +1,33 @@
+{
+  "id": "02-path-manipulation",
+  "world": "nodejs",
+  "title": "Node.js: Path Module Basics",
+  "story": "The path module helps you work with file and directory paths across platforms!",
+  "instructions": "Use path.join() to combine '/tmp', 'data', and 'file.txt' into a single path. Print the result.",
+  "type": "code",
+  "starterCode": "// Join path segments\nconst fullPath = path.join('/tmp', 'data', 'file.txt');\nconsole.log(fullPath);",
+  "solutionHidden": "const fullPath = path.join('/tmp', 'data', 'file.txt');\nconsole.log(fullPath);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print joined path",
+      "expectedBehavior": "Join path segments correctly",
+      "expected": "/tmp/data/file.txt"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use path.join(segment1, segment2, segment3) to combine path parts."
+    },
+    {
+      "level": 2,
+      "text": "path.join('/tmp', 'data', 'file.txt') produces '/tmp/data/file.txt'"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 2
+}

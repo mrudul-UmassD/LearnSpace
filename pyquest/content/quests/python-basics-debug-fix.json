@@ -1,0 +1,26 @@
+{
+  "id": "python-basics-debug-fix",
+  "world": "python-basics",
+  "title": "Debug: Off-by-One Loop",
+  "story": "A small bug slipped into a loop. Fix it with minimal edits.",
+  "instructions": "Fix the loop so it prints numbers 1 through 5, each on its own line.",
+  "type": "debug_fix",
+  "starterCode": "for i in range(1, 5):\n    print(i)\n",
+  "solutionHidden": "for i in range(1, 6):\n    print(i)\n",
+  "tests": [
+    {
+      "id": "debug-loop",
+      "type": "output",
+      "description": "Should print 1..5",
+      "expectedBehavior": "Prints five lines with numbers 1 through 5",
+      "expected": "1\n2\n3\n4\n5"
+    }
+  ],
+  "hints": [
+    { "level": 1, "text": "Check the end bound in range()." }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 60,
+  "difficulty": "beginner",
+  "order": 101
+}

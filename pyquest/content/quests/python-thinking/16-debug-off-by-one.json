@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-16-indexing-bug",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "difficulty": "beginner",
+  "xpReward": 90,
+  "story": "A student's sum function mysteriously misses the last element. Fix the off-by-one indexing error.",
+  "instructions": "Fix `sum_list` which uses indexing to sum a list but has a range bug that skips the last element.",
+  "starterCode": "def sum_list(xs):\n    total = 0\n    # BUG: Missing last element!\n    for i in range(len(xs) - 1):\n        total += xs[i]\n    return total",
+  "hints": [
+    {
+      "level": 1,
+      "text": "`range(len(xs) - 1)` stops one element early. For a list of length 5, it only goes 0-3."
+    },
+    {
+      "level": 2,
+      "text": "Use `range(len(xs))` to include all indices from 0 to len(xs)-1."
+    },
+    {
+      "level": 3,
+      "text": "Better yet, avoid indexing altogether: `for x in xs: total += x` is more Pythonic."
+    }
+  ],
+  "tests": [
+    {
+      "name": "sums_correctly",
+      "description": "Sums all elements correctly",
+      "code": "assert sum_list([1, 2, 3, 4]) == 10, 'Should sum to 10'\nassert sum_list([10, 20, 30]) == 60, 'Should sum to 60'"
+    },
+    {
+      "name": "handles_single_element",
+      "description": "Works with single element",
+      "code": "assert sum_list([42]) == 42"
+    },
+    {
+      "name": "handles_empty",
+      "description": "Returns 0 for empty list",
+      "code": "assert sum_list([]) == 0"
+    },
+    {
+      "name": "matches_builtin",
+      "description": "Matches Python's sum() function",
+      "code": "test_list = [5, -3, 8, 12, -1]\nassert sum_list(test_list) == sum(test_list)"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 16,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Debug Fix: Off-by-One Indexing"
+}

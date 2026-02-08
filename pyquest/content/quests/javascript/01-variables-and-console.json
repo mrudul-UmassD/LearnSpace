@@ -1,0 +1,33 @@
+{
+  "id": "01-variables-and-console",
+  "world": "javascript",
+  "title": "JS: Variables and Console Output",
+  "story": "Every JavaScript journey begins with variables and console.log(). Let's print your first message!",
+  "instructions": "Create a variable called 'message' with the value 'Hello, JavaScript!' and print it to the console.",
+  "type": "code",
+  "starterCode": "// Create a variable and print it\nlet message = 'Hello, JavaScript!';\nconsole.log(message);",
+  "solutionHidden": "let message = 'Hello, JavaScript!';\nconsole.log(message);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print the greeting message",
+      "expectedBehavior": "Print the message variable",
+      "expected": "Hello, JavaScript!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use 'let' or 'const' to declare a variable, then console.log() to print it."
+    },
+    {
+      "level": 2,
+      "text": "let message = 'Hello, JavaScript!'; console.log(message);"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 10,
+  "difficulty": "beginner",
+  "order": 1
+}

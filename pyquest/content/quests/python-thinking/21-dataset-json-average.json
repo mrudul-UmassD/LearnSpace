@@ -1,0 +1,36 @@
+{
+  "id": "python-thinking-21-json-average",
+  "world": "python-thinking",
+  "type": "code",
+  "title": "Dataset: JSON Average",
+  "story": "A researcher left you a small JSON dataset of measurements. Load it and compute the average.",
+  "instructions": "Load the JSON file `values.json` and print the average of the numbers in `values`. Print the result as a number (e.g., 6.0).",
+  "starterCode": "# Load the dataset and compute the average\n\n# Dataset helpers (JSON/CSV)\nimport json\nimport csv\n\n\ndef load_json(path):\n    with open(path, \"r\", encoding=\"utf-8\") as f:\n        return json.load(f)\n\n\ndef load_csv(path):\n    with open(path, \"r\", encoding=\"utf-8\", newline=\"\") as f:\n        return list(csv.DictReader(f))\n\n# TODO: Load values.json and print the average\n",
+  "solutionHidden": "import json\n\nwith open('values.json', 'r', encoding='utf-8') as f:\n    data = json.load(f)\n\nvalues = data['values']\navg = sum(values) / len(values)\nprint(avg)",
+  "tests": [
+    {
+      "id": "json-average-output",
+      "type": "output",
+      "description": "Should print the average of values",
+      "expectedBehavior": "Output should be the average of the dataset",
+      "expected": "6.0"
+    }
+  ],
+  "hints": [
+    { "level": 1, "text": "Use json.load() to read the file and access data['values']." },
+    { "level": 2, "text": "Average = sum(values) / len(values)." },
+    { "level": 3, "text": "Remember to print the result as a number (e.g., 6.0)." }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 120,
+  "difficulty": "intermediate",
+  "order": 21,
+  "dataset": {
+    "files": [
+      {
+        "name": "values.json",
+        "content": "{\"values\":[3,5,7,9]}"
+      }
+    ]
+  }
+}

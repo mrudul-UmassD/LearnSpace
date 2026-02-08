@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-13-safe-default",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "difficulty": "advanced",
+  "xpReward": 140,
+  "story": "Fix the item collector so each call gets a fresh bag by default, but still accepts an explicit bag if provided.",
+  "instructions": "Fix `add_item` to avoid the mutable default argument trap. Use `None` as the default and create a new list when needed. Be careful: `if not acc` would fail for an explicitly-passed empty list!",
+  "starterCode": "def add_item(item, acc=[]):\n    # BUG: Mutable default argument!\n    acc.append(item)\n    return acc",
+  "hints": [
+    {
+      "level": 1,
+      "text": "Change the default to `acc=None`. Then check `if acc is None:` and create a new list."
+    },
+    {
+      "level": 2,
+      "text": "Don't use `if not acc` because an empty list `[]` is falsy, but you want to respect it as an explicit argument."
+    },
+    {
+      "level": 3,
+      "text": "Pattern: `def add_item(item, acc=None): if acc is None: acc = []; acc.append(item); return acc`"
+    }
+  ],
+  "tests": [
+    {
+      "name": "no_shared_state",
+      "description": "Multiple calls without acc argument don't share state",
+      "code": "r1 = add_item(1)\nr2 = add_item(2)\nassert r1 == [1], f'First call should return [1], got {r1}'\nassert r2 == [2], f'Second call should return [2], got {r2}'"
+    },
+    {
+      "name": "respects_explicit_list",
+      "description": "Respects explicitly provided list",
+      "code": "my_list = []\nresult = add_item(99, my_list)\nassert result == [99]\nassert my_list == [99], 'Should mutate the provided list'"
+    },
+    {
+      "name": "respects_empty_list",
+      "description": "Respects explicitly provided empty list (doesn't create new one)",
+      "code": "my_list = []\nadd_item(1, my_list)\nadd_item(2, my_list)\nassert my_list == [1, 2], f'Should append to same list, got {my_list}'"
+    },
+    {
+      "name": "returns_correct_list",
+      "description": "Returns the accumulated list",
+      "code": "lst = [10, 20]\nresult = add_item(30, lst)\nassert result == [10, 20, 30]"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 13,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Debug Fix: Safe Default Argument"
+}

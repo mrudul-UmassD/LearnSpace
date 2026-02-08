@@ -1,0 +1,33 @@
+{
+  "id": "02-function-basics",
+  "world": "javascript",
+  "title": "JS: Function Basics",
+  "story": "Functions are reusable blocks of code. They're the building blocks of every JavaScript program!",
+  "instructions": "Create a function called 'double' that takes a number and returns it doubled. Call it with 5 and print the result.",
+  "type": "code",
+  "starterCode": "// Define a function that doubles a number\nfunction double(num) {\n  return num * 2;\n}\n\n// Call the function and print result\nconst result = double(5);\nconsole.log(result);",
+  "solutionHidden": "function double(num) {\n  return num * 2;\n}\n\nconst result = double(5);\nconsole.log(result);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 10 (5 * 2)",
+      "expectedBehavior": "Double the number 5",
+      "expected": "10"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use 'function double(num) { return num * 2; }' then call double(5)."
+    },
+    {
+      "level": 2,
+      "text": "5 doubled is 10. Make sure to return the result and print it."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 2
+}

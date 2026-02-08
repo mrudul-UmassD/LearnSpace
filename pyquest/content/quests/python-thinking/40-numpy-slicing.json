@@ -1,0 +1,33 @@
+{
+  "id": "40-numpy-slicing",
+  "world": "python-thinking",
+  "title": "NumPy: Array Slicing",
+  "story": "Slicing lets you extract portions of arrays efficiently. Master this to work with subsets of your data.",
+  "instructions": "Create array [10, 20, 30, 40, 50, 60, 70]. Extract elements from index 2 to 5 (inclusive of 2, exclusive of 5) and print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create array and slice\narr = np.array([10, 20, 30, 40, 50, 60, 70])\nsliced = arr[2:5]\nprint(sliced)",
+  "solutionHidden": "import numpy as np\n\narr = np.array([10, 20, 30, 40, 50, 60, 70])\nsliced = arr[2:5]\nprint(sliced)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [30 40 50]",
+      "expectedBehavior": "Print sliced elements from index 2 to 5",
+      "expected": "[30 40 50]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use arr[start:end] syntax where end is exclusive."
+    },
+    {
+      "level": 2,
+      "text": "Index 2 is the third element (30), index 5 is exclusive, so you get 3 elements."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 40
+}

@@ -1,0 +1,60 @@
+{
+  "id": "python-thinking-19-validate-blank",
+  "world": "python-thinking",
+  "type": "code",
+  "difficulty": "intermediate",
+  "xpReward": 100,
+  "story": "Create an input validator that correctly identifies 'blank' inputs: None, empty strings, or whitespace-only strings. Be careful with truthiness!",
+  "instructions": "Implement `is_blank(s)` returning True for None, empty strings, or whitespace-only strings. Return False otherwise. Always return a bool, and don't crash on None!",
+  "starterCode": "def is_blank(s):\n    # Return True if s is None, empty, or whitespace-only\n    # Return False otherwise\n    # Handle None without crashing!\n    pass",
+  "hints": [
+    {
+      "level": 1,
+      "text": "Check `if s is None` first to handle None safely before calling string methods."
+    },
+    {
+      "level": 2,
+      "text": "Use `.strip()` to remove whitespace, then check if the result is empty: `not s.strip()`"
+    },
+    {
+      "level": 3,
+      "text": "Pattern: `return s is None or (isinstance(s, str) and not s.strip())` or simpler: check None first, then handle string."
+    }
+  ],
+  "tests": [
+    {
+      "name": "none_is_blank",
+      "description": "None is blank",
+      "code": "assert is_blank(None) is True, 'None should be blank'"
+    },
+    {
+      "name": "empty_is_blank",
+      "description": "Empty string is blank",
+      "code": "assert is_blank('') is True, 'Empty string should be blank'"
+    },
+    {
+      "name": "whitespace_is_blank",
+      "description": "Whitespace-only is blank",
+      "code": "assert is_blank('   ') is True, 'Whitespace should be blank'\nassert is_blank('\\t\\n') is True, 'Tabs/newlines should be blank'"
+    },
+    {
+      "name": "zero_not_blank",
+      "description": "'0' is not blank (it's a character)",
+      "code": "assert is_blank('0') is False, \"'0' is not blank\""
+    },
+    {
+      "name": "text_not_blank",
+      "description": "Non-whitespace text is not blank",
+      "code": "assert is_blank(' x ') is False\nassert is_blank('hello') is False"
+    },
+    {
+      "name": "returns_bool",
+      "description": "Always returns boolean",
+      "code": "assert isinstance(is_blank(None), bool)\nassert isinstance(is_blank('test'), bool)"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 19,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Code: Validate 'Blank' Input Correctly"
+}

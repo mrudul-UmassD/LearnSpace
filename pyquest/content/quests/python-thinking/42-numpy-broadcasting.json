@@ -1,0 +1,33 @@
+{
+  "id": "42-numpy-broadcasting",
+  "world": "python-thinking",
+  "title": "NumPy: Broadcasting Basics",
+  "story": "Broadcasting allows NumPy to perform operations on arrays of different shapes. It's like magic that makes your code faster and cleaner.",
+  "instructions": "Create array [1, 2, 3, 4, 5] and add 10 to every element using broadcasting. Print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Broadcasting: add scalar to array\narr = np.array([1, 2, 3, 4, 5])\nresult = arr + 10\nprint(result)",
+  "solutionHidden": "import numpy as np\n\narr = np.array([1, 2, 3, 4, 5])\nresult = arr + 10\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [11 12 13 14 15]",
+      "expectedBehavior": "Add 10 to each element via broadcasting",
+      "expected": "[11 12 13 14 15]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Simply use arr + 10. NumPy broadcasts the scalar across all elements."
+    },
+    {
+      "level": 2,
+      "text": "Broadcasting eliminates the need for loops - it's vectorized and fast!"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 42
+}

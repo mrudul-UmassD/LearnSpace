@@ -1,0 +1,33 @@
+{
+  "id": "57-pandas-multiple-conditions",
+  "world": "python-thinking",
+  "title": "Pandas: Multiple Conditions",
+  "story": "Combine multiple conditions using & (AND) and | (OR). Remember to wrap each condition in parentheses!",
+  "instructions": "Filter rows where age >= 25 AND score > 80. Print the filtered DataFrame.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'age': [23, 28, 32, 25],\n    'score': [85, 92, 78, 88]\n}\ndf = pd.DataFrame(data)\n\n# Filter with multiple conditions\nfiltered = df[(df['age'] >= 25) & (df['score'] > 80)]\nprint(filtered)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'age': [23, 28, 32, 25],\n    'score': [85, 92, 78, 88]\n}\ndf = pd.DataFrame(data)\nfiltered = df[(df['age'] >= 25) & (df['score'] > 80)]\nprint(filtered)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should show Bob and David (both meet age >= 25 and score > 80)",
+      "expectedBehavior": "Filter with AND condition",
+      "expected": "    name  age  score\n1    Bob   28     92\n3  David   25     88"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use & for AND, | for OR. Wrap each condition in parentheses: (cond1) & (cond2)"
+    },
+    {
+      "level": 2,
+      "text": "Example: df[(df['col1'] > 5) & (df['col2'] < 10)]"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 57
+}

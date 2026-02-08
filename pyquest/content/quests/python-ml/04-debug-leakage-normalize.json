@@ -1,0 +1,33 @@
+{
+  "id": "04-debug-leakage-normalize",
+  "world": "python-ml",
+  "title": "Debug: Data Leakage via Normalization",
+  "story": "Normalizing before splitting leaks test statistics into training. Always normalize AFTER splitting using only train statistics!",
+  "instructions": "Fix the data leakage. The code normalizes before split. Move normalization after split and use only training mean/std. Print train mean rounded to 1 decimal.",
+  "type": "debug_fix",
+  "starterCode": "import numpy as np\n\ndata = np.array([100, 200, 300, 400, 500], dtype=float)\n\n# BUGGY: Normalize before split\nmean = data.mean()\nstd = data.std()\ndata_normalized = (data - mean) / std\n\n# Then split\ntrain = data_normalized[:4]\ntest = data_normalized[4:]\n\nprint(round(train.mean(), 1))",
+  "solutionHidden": "import numpy as np\n\ndata = np.array([100, 200, 300, 400, 500], dtype=float)\n\n# FIXED: Split first\ntrain = data[:4]\ntest = data[4:]\n\n# Normalize using only train statistics\ntrain_mean = train.mean()\ntrain_std = train.std()\ntrain_normalized = (train - train_mean) / train_std\n\nprint(round(train_normalized.mean(), 1))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.0 (normalized train mean)",
+      "expectedBehavior": "Normalize after split using train stats only",
+      "expected": "0.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Split data first. Calculate mean/std from train only. Then normalize train."
+    },
+    {
+      "level": 2,
+      "text": "Order: split → train_mean/std → (train - train_mean) / train_std"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 4
+}

@@ -1,0 +1,33 @@
+{
+  "id": "75-ml-confusion-matrix",
+  "world": "python-thinking",
+  "title": "ML: Confusion Matrix Interpretation",
+  "story": "A confusion matrix shows the full picture: TN, FP, FN, TP. Understanding it is key to choosing the right metric.",
+  "instructions": "Extract TP (True Positives) from confusion matrix [[50, 10], [5, 35]]. Format: [[TN, FP], [FN, TP]]. Print TP.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Confusion matrix: [[TN, FP], [FN, TP]]\nconf_matrix = np.array([[50, 10], [5, 35]])\n\n# Extract TP (bottom-right)\nTP = conf_matrix[1, 1]\n\nprint(TP)",
+  "solutionHidden": "import numpy as np\n\nconf_matrix = np.array([[50, 10], [5, 35]])\n\nTP = conf_matrix[1, 1]\n\nprint(TP)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 35 (True Positives)",
+      "expectedBehavior": "Extract TP from confusion matrix",
+      "expected": "35"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Format: [[TN, FP], [FN, TP]]. TP is at position [1,1] (bottom-right)."
+    },
+    {
+      "level": 2,
+      "text": "TN=50, FP=10, FN=5, TP=35"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 75
+}

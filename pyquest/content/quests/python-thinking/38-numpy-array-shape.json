@@ -1,0 +1,33 @@
+{
+  "id": "38-numpy-array-shape",
+  "world": "python-thinking",
+  "title": "NumPy: Understanding Array Shapes",
+  "story": "Array shapes tell you the dimensions of your data. A 1D array has one dimension, a 2D array (matrix) has two.",
+  "instructions": "Create a 2D array [[1, 2, 3], [4, 5, 6]] and print its shape. The shape should be (2, 3) meaning 2 rows and 3 columns.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create 2D array and print shape\narr = np.array([[1, 2, 3], [4, 5, 6]])\nprint(arr.shape)",
+  "solutionHidden": "import numpy as np\n\narr = np.array([[1, 2, 3], [4, 5, 6]])\nprint(arr.shape)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Output should be (2, 3)",
+      "expectedBehavior": "Print the shape of the 2D array",
+      "expected": "(2, 3)"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use .shape attribute to get the dimensions of an array."
+    },
+    {
+      "level": 2,
+      "text": "A nested list becomes a 2D array. Each inner list is a row."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 38
+}

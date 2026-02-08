@@ -1,0 +1,33 @@
+{
+  "id": "05-async-await",
+  "world": "nodejs",
+  "title": "Node.js: Async/Await Syntax",
+  "story": "Async/await makes asynchronous code look synchronous. It's syntactic sugar for Promises!",
+  "instructions": "Create an async function that awaits Promise.resolve('Hello Async!') and returns the result. Call it and print the output.",
+  "type": "code",
+  "starterCode": "// Define and use async function\nasync function getMessage() {\n  const message = await Promise.resolve('Hello Async!');\n  return message;\n}\n\n// Call async function (returns a Promise)\ngetMessage().then(result => console.log(result));",
+  "solutionHidden": "async function getMessage() {\n  const message = await Promise.resolve('Hello Async!');\n  return message;\n}\n\ngetMessage().then(result => console.log(result));",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 'Hello Async!'",
+      "expectedBehavior": "Use async/await to get and print message",
+      "expected": "Hello Async!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Async functions automatically return a Promise. Use 'await' to wait for Promise resolution."
+    },
+    {
+      "level": 2,
+      "text": "async function foo() { return await Promise.resolve(value); } - then call foo().then(console.log)"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "intermediate",
+  "order": 5
+}

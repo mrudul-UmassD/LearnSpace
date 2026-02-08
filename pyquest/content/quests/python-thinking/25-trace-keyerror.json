@@ -1,0 +1,60 @@
+{
+  "id": "25-trace-keyerror",
+  "world": "python-thinking",
+  "title": "Trace: Missing Dictionary Key",
+  "story": "A student tried to look up user information but got a KeyError. Reading stack traces is essential for debugging dictionary access issues.",
+  "instructions": "Study the stack trace and buggy code, then answer the diagnostic questions.",
+  "type": "trace_reading",
+  "starterCode": "",
+  "solutionHidden": "",
+  "tests": [],
+  "hints": [
+    {
+      "level": 1,
+      "text": "KeyError occurs when you try to access a dictionary key that doesn't exist."
+    },
+    {
+      "level": 2,
+      "text": "The error message shows the exact key that was missing in quotes."
+    }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 25,
+  "traceReading": {
+    "stackTrace": "Traceback (most recent call last):\n  File \"main.py\", line 5, in <module>\n    email = user_info['email']\nKeyError: 'email'",
+    "buggyCode": "user_info = {\n    'name': 'Alice',\n    'age': 25\n}\nemail = user_info['email']\nprint(email)",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "question": "What exception type was raised?",
+        "options": [
+          "KeyError",
+          "IndexError",
+          "AttributeError",
+          "ValueError"
+        ],
+        "correctAnswer": "KeyError",
+        "points": 1
+      },
+      {
+        "id": "q2",
+        "type": "short_text",
+        "question": "Which key was missing from the dictionary?",
+        "correctAnswer": "email",
+        "keywords": ["email"],
+        "points": 1
+      },
+      {
+        "id": "q3",
+        "type": "short_text",
+        "question": "How can you safely check if a key exists before accessing it?",
+        "correctAnswer": "Use .get() method or check 'key in dict'",
+        "keywords": ["get", "in"],
+        "points": 2
+      }
+    ]
+  }
+}

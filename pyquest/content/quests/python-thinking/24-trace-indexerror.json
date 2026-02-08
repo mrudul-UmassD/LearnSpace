@@ -1,0 +1,60 @@
+{
+  "id": "24-trace-indexerror",
+  "world": "python-thinking",
+  "title": "Trace: List Index Out of Range",
+  "story": "A beginner tried to access all elements in a list, but their code crashed with an IndexError. Can you diagnose the bug by reading the stack trace?",
+  "instructions": "Analyze the stack trace and buggy code below. Answer the questions to demonstrate your understanding of the error.",
+  "type": "trace_reading",
+  "starterCode": "",
+  "solutionHidden": "",
+  "tests": [],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Look at the line number in the traceback - it points to the exact line that failed."
+    },
+    {
+      "level": 2,
+      "text": "IndexError means you tried to access an index that doesn't exist in the list."
+    }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 24,
+  "traceReading": {
+    "stackTrace": "Traceback (most recent call last):\n  File \"main.py\", line 3, in <module>\n    print(numbers[5])\nIndexError: list index out of range",
+    "buggyCode": "numbers = [10, 20, 30, 40, 50]\nfor i in range(6):\n    print(numbers[i])",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "question": "What type of exception was raised?",
+        "options": [
+          "IndexError",
+          "ValueError",
+          "TypeError",
+          "KeyError"
+        ],
+        "correctAnswer": "IndexError",
+        "points": 1
+      },
+      {
+        "id": "q2",
+        "type": "short_text",
+        "question": "On which line number did the error occur?",
+        "correctAnswer": "3",
+        "keywords": ["3", "line 3"],
+        "points": 1
+      },
+      {
+        "id": "q3",
+        "type": "short_text",
+        "question": "What is the root cause of this error?",
+        "correctAnswer": "range(6) tries to access index 5, but list only has 5 elements (indices 0-4)",
+        "keywords": ["range", "6", "5", "index"],
+        "points": 2
+      }
+    ]
+  }
+}

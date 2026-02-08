@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-05-fix-grid",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "difficulty": "advanced",
+  "xpReward": 150,
+  "story": "A student submitted a `make_grid` function for their spellcasting matrix homework, but the instructor noticed all rows are mysteriously linked. Fix the bug with minimal changes.",
+  "instructions": "Fix the `make_grid` function so each row is independent. The bug causes all rows to share the same list object. Fix it by changing HOW the grid is built.",
+  "starterCode": "def make_grid(rows, cols):\n    # BUG: All rows share the same list!\n    row = [0] * cols\n    grid = [row] * rows\n    return grid",
+  "hints": [
+    {
+      "level": 1,
+      "text": "The problem is `[row] * rows` creates multiple references to the same `row` list."
+    },
+    {
+      "level": 2,
+      "text": "You need to create a NEW list for each row, not reuse the same one."
+    },
+    {
+      "level": 3,
+      "text": "Use a list comprehension: `[[0] * cols for _ in range(rows)]` to create independent rows."
+    }
+  ],
+  "tests": [
+    {
+      "name": "correct_dimensions",
+      "description": "Grid has correct dimensions",
+      "code": "grid = make_grid(3, 4)\nassert len(grid) == 3, f'Expected 3 rows, got {len(grid)}'\nassert all(len(row) == 4 for row in grid), 'Each row should have 4 columns'"
+    },
+    {
+      "name": "initial_values",
+      "description": "Grid initializes with zeros",
+      "code": "grid = make_grid(2, 2)\nassert all(cell == 0 for row in grid for cell in row), 'All cells should be 0'"
+    },
+    {
+      "name": "rows_are_independent",
+      "description": "Modifying one row doesn't affect others",
+      "code": "grid = make_grid(3, 3)\ngrid[0][0] = 99\nassert grid[1][0] == 0, f'grid[1][0] should still be 0, got {grid[1][0]}'\nassert grid[2][0] == 0, f'grid[2][0] should still be 0, got {grid[2][0]}'"
+    },
+    {
+      "name": "rows_are_distinct_objects",
+      "description": "Each row is a separate object",
+      "code": "grid = make_grid(3, 2)\nassert grid[0] is not grid[1], 'Rows should be distinct objects'\nassert grid[1] is not grid[2], 'Rows should be distinct objects'"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 5,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Debug Fix: Shared Row Bug"
+}

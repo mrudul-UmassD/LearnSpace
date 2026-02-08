@@ -1,0 +1,45 @@
+{
+  "id": "python-thinking-10-accidental-global",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "difficulty": "intermediate",
+  "xpReward": 130,
+  "story": "A configuration spell is failing mysteriously. The function tries to update a module-level setting, but Python thinks it's creating a local variable instead!",
+  "instructions": "Fix `set_mode` so it actually updates the module-level `MODE` variable. The bug causes an UnboundLocalError because Python sees the assignment and creates a local variable.",
+  "starterCode": "MODE = \"light\"\n\ndef set_mode(new_mode):\n    # BUG: This creates a local variable instead of updating global!\n    MODE = new_mode\n\ndef get_mode():\n    return MODE",
+  "hints": [
+    {
+      "level": 1,
+      "text": "When Python sees `MODE = new_mode` inside a function, it assumes `MODE` is a local variable for that entire function."
+    },
+    {
+      "level": 2,
+      "text": "Use the `global` keyword to tell Python you want to modify the module-level variable, not create a local one."
+    },
+    {
+      "level": 3,
+      "text": "Add `global MODE` at the start of `set_mode` before the assignment."
+    }
+  ],
+  "tests": [
+    {
+      "name": "sets_mode_correctly",
+      "description": "set_mode updates the module-level MODE",
+      "code": "set_mode('dark')\nassert get_mode() == 'dark', f\"Expected 'dark', got {get_mode()}\""
+    },
+    {
+      "name": "multiple_updates",
+      "description": "Can update mode multiple times",
+      "code": "set_mode('contrast')\nassert get_mode() == 'contrast'\nset_mode('sepia')\nassert get_mode() == 'sepia'"
+    },
+    {
+      "name": "no_error",
+      "description": "No UnboundLocalError",
+      "code": "try:\n    set_mode('test')\nexcept UnboundLocalError:\n    raise AssertionError('UnboundLocalError still occurring!')"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 10,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Debug Fix: Accidental Global"
+}

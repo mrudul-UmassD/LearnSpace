@@ -1,0 +1,60 @@
+{
+  "id": "26-trace-typeerror",
+  "world": "python-thinking",
+  "title": "Trace: Type Mismatch in Operation",
+  "story": "Someone tried to add a string to a number, causing a TypeError. Understanding type errors helps you catch data type mismatches early.",
+  "instructions": "Examine the stack trace and code snippet. Answer the questions to show your diagnostic skills.",
+  "type": "trace_reading",
+  "starterCode": "",
+  "solutionHidden": "",
+  "tests": [],
+  "hints": [
+    {
+      "level": 1,
+      "text": "TypeError happens when you use an operation with incompatible types."
+    },
+    {
+      "level": 2,
+      "text": "The error message tells you exactly what operation failed and which types were involved."
+    }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 26,
+  "traceReading": {
+    "stackTrace": "Traceback (most recent call last):\n  File \"main.py\", line 3, in <module>\n    total = age + years\nTypeError: unsupported operand type(s) for +: 'int' and 'str'",
+    "buggyCode": "age = 25\nyears = '10'\ntotal = age + years\nprint(total)",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "question": "What exception occurred?",
+        "options": [
+          "TypeError",
+          "ValueError",
+          "SyntaxError",
+          "AttributeError"
+        ],
+        "correctAnswer": "TypeError",
+        "points": 1
+      },
+      {
+        "id": "q2",
+        "type": "short_text",
+        "question": "Which two data types caused the conflict?",
+        "correctAnswer": "int and str",
+        "keywords": ["int", "str"],
+        "points": 1
+      },
+      {
+        "id": "q3",
+        "type": "short_text",
+        "question": "How would you fix this error?",
+        "correctAnswer": "Convert years to int: int(years) or convert age to str: str(age)",
+        "keywords": ["int", "str", "convert"],
+        "points": 2
+      }
+    ]
+  }
+}

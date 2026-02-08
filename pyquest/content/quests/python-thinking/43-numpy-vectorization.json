@@ -1,0 +1,33 @@
+{
+  "id": "43-numpy-vectorization",
+  "world": "python-thinking",
+  "title": "NumPy: Vectorized Operations",
+  "story": "Vectorization means operating on entire arrays at once instead of looping. It's orders of magnitude faster and more Pythonic.",
+  "instructions": "Create arrays a = [2, 4, 6] and b = [1, 3, 5]. Multiply them element-wise (a * b) and print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Element-wise multiplication (vectorized)\na = np.array([2, 4, 6])\nb = np.array([1, 3, 5])\nresult = a * b\nprint(result)",
+  "solutionHidden": "import numpy as np\n\na = np.array([2, 4, 6])\nb = np.array([1, 3, 5])\nresult = a * b\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [ 2 12 30]",
+      "expectedBehavior": "Element-wise multiplication: [2*1, 4*3, 6*5]",
+      "expected": "[ 2 12 30]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use a * b directly. NumPy multiplies corresponding elements."
+    },
+    {
+      "level": 2,
+      "text": "This is NOT matrix multiplication - it's element-wise: result[i] = a[i] * b[i]"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 43
+}

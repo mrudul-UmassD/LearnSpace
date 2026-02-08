@@ -6,9 +6,15 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies with size optimization
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    # Remove pip cache and unnecessary files to reduce image size
+    rm -rf /root/.cache/pip && \
+    # Remove pip to prevent runtime installations
+    pip uninstall -y pip setuptools && \
+    # Create python3 symlink if not exists (ensures python3 command works)
+    ln -sf /usr/local/bin/python /usr/local/bin/python3 || true
 
 # Copy application code
 COPY app.py .
@@ -28,7 +34,7 @@ EXPOSE 8080
 # Switch to non-root user
 USER runner
 
-# Health check
+# Health check - verifies Flask and Python packages load correctly
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health').read()" || exit 1
 

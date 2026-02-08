@@ -1,0 +1,33 @@
+{
+  "id": "19-knn-k-value",
+  "world": "python-ml",
+  "title": "Predict: k-NN Complexity and k Value",
+  "story": "Smaller k = more complex boundaries = risk overfitting. Larger k = smoother boundaries = risk underfitting.",
+  "instructions": "Which k creates MORE complex decision boundaries? k=1 or k=7? Print the k value (1 or 7).",
+  "type": "predict_output",
+  "starterCode": "# k=1: Each point creates its own region (very complex, sensitive to noise)\n# k=7: Averages 7 neighbors (smoother, less complex)\n\n# k=1 is more complex\nprint(1)",
+  "solutionHidden": "1",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (k=1 creates most complex boundaries)",
+      "expectedBehavior": "Understand smaller k = more complexity",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "k=1 uses only 1 neighbor (very sensitive, complex). k=7 averages 7 (smoother)."
+    },
+    {
+      "level": 2,
+      "text": "Smaller k → more complex → overfitting risk. Larger k → simpler → underfitting risk."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "intermediate",
+  "order": 19
+}

@@ -1,0 +1,33 @@
+{
+  "id": "04-loops-and-iteration",
+  "world": "javascript",
+  "title": "JS: Loops and Iteration",
+  "story": "Loops let you repeat actions efficiently. Master loops and you control the flow!",
+  "instructions": "Use a for loop to sum all numbers from 1 to 10 (inclusive). Print the total sum.",
+  "type": "code",
+  "starterCode": "// Sum numbers from 1 to 10\nlet sum = 0;\nfor (let i = 1; i <= 10; i++) {\n  sum += i;\n}\nconsole.log(sum);",
+  "solutionHidden": "let sum = 0;\nfor (let i = 1; i <= 10; i++) {\n  sum += i;\n}\nconsole.log(sum);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 55 (1+2+3+...+10)",
+      "expectedBehavior": "Sum all numbers from 1 to 10",
+      "expected": "55"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Initialize sum=0, loop from i=1 to i<=10, add each i to sum."
+    },
+    {
+      "level": 2,
+      "text": "1+2+3+4+5+6+7+8+9+10 = 55"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 4
+}

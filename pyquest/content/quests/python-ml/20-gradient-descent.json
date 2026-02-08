@@ -1,0 +1,33 @@
+{
+  "id": "20-gradient-descent",
+  "world": "python-ml",
+  "title": "ML: Gradient Descent Update Step",
+  "story": "Gradient descent finds optimal parameters by moving opposite to the gradient. It's like walking downhill!",
+  "instructions": "Simulate one gradient descent step. Given weight=8, learning_rate=0.2, gradient=5. Update: w_new = w - lr*gradient. Print new weight.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nweight = 8\nlearning_rate = 0.2\ngradient = 5\n\n# Gradient descent update\nweight_new = weight - learning_rate * gradient\n\nprint(weight_new)",
+  "solutionHidden": "import numpy as np\n\nweight = 8\nlearning_rate = 0.2\ngradient = 5\n\nweight_new = weight - learning_rate * gradient\n\nprint(weight_new)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 7.0 (8 - 0.2*5)",
+      "expectedBehavior": "Update weight using gradient descent formula",
+      "expected": "7.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Formula: w_new = w - learning_rate * gradient"
+    },
+    {
+      "level": 2,
+      "text": "8 - 0.2 * 5 = 8 - 1.0 = 7.0. Move opposite to gradient direction."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 20
+}

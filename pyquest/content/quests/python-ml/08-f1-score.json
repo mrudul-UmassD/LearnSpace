@@ -1,0 +1,33 @@
+{
+  "id": "08-f1-score",
+  "world": "python-ml",
+  "title": "ML: F1 Score Calculation",
+  "story": "F1 score is the harmonic mean of precision and recall. It balances both metrics.",
+  "instructions": "Calculate F1 score from precision=0.75 and recall=0.6. Formula: F1 = 2 * (P * R) / (P + R). Print rounded to 3 decimals.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nprecision = 0.75\nrecall = 0.6\n\n# Harmonic mean formula\nf1 = 2 * (precision * recall) / (precision + recall)\n\nprint(round(f1, 3))",
+  "solutionHidden": "import numpy as np\n\nprecision = 0.75\nrecall = 0.6\n\nf1 = 2 * (precision * recall) / (precision + recall)\n\nprint(round(f1, 3))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.667",
+      "expectedBehavior": "Calculate harmonic mean of precision and recall",
+      "expected": "0.667"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "F1 = 2 * (0.75 * 0.6) / (0.75 + 0.6) = 2 * 0.45 / 1.35"
+    },
+    {
+      "level": 2,
+      "text": "0.9 / 1.35 = 0.6666... ≈ 0.667"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 8
+}

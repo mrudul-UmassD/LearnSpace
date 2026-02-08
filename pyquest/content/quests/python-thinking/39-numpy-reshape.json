@@ -1,0 +1,33 @@
+{
+  "id": "39-numpy-reshape",
+  "world": "python-thinking",
+  "title": "NumPy: Reshaping Arrays",
+  "story": "Reshaping allows you to change the dimensions of an array without changing its data. This is crucial for matrix operations and data preprocessing.",
+  "instructions": "Create a 1D array with values 1 to 12, then reshape it to a 3x4 matrix (3 rows, 4 columns). Print the reshaped array.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create array and reshape\narr = np.arange(1, 13)\nreshaped = arr.reshape(3, 4)\nprint(reshaped)",
+  "solutionHidden": "import numpy as np\n\narr = np.arange(1, 13)\nreshaped = arr.reshape(3, 4)\nprint(reshaped)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 3x4 matrix",
+      "expectedBehavior": "Print reshaped matrix with correct values",
+      "expected": "[[ 1  2  3  4]\n [ 5  6  7  8]\n [ 9 10 11 12]]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.arange(1, 13) to create numbers 1-12, then call .reshape(3, 4)."
+    },
+    {
+      "level": 2,
+      "text": "The total elements (12) must match rows × columns (3 × 4)."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "beginner",
+  "order": 39
+}

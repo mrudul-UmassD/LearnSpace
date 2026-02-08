@@ -1,0 +1,33 @@
+{
+  "id": "80-ml-linear-regression-manual",
+  "world": "python-thinking",
+  "title": "ML: Linear Regression Manual Prediction",
+  "story": "Linear regression finds the line y = mx + b that best fits data. Let's predict manually using the equation!",
+  "instructions": "Given slope m=2 and intercept b=3, predict y for x=5 using y = mx + b. Print the prediction.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nm = 2  # slope\nb = 3  # intercept\nx = 5  # input\n\n# Linear prediction: y = mx + b\ny_pred = m * x + b\n\nprint(y_pred)",
+  "solutionHidden": "import numpy as np\n\nm = 2\nb = 3\nx = 5\n\ny_pred = m * x + b\n\nprint(y_pred)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 13 (2*5 + 3)",
+      "expectedBehavior": "Calculate y = mx + b",
+      "expected": "13"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Linear equation: y = mx + b. Substitute: y = 2*5 + 3"
+    },
+    {
+      "level": 2,
+      "text": "2 * 5 + 3 = 10 + 3 = 13"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 80
+}

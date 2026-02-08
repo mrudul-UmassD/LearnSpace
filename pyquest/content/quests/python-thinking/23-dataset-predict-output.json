@@ -1,0 +1,35 @@
+{
+  "id": "python-thinking-23-predict-dataset-output",
+  "world": "python-thinking",
+  "type": "predict_output",
+  "title": "Dataset: Predict CSV Output",
+  "story": "A script reads a small CSV dataset and prints a summary. Can you predict the exact stdout?",
+  "instructions": "Predict the exact stdout of the hidden code. The code reads `temps.csv` and prints the count of values >= 72.",
+  "starterCode": "",
+  "solutionHidden": "import csv\n\ncount = 0\nwith open('temps.csv', 'r', encoding='utf-8', newline='') as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        if int(row['temp']) >= 72:\n            count += 1\n\nprint(count)",
+  "tests": [
+    {
+      "id": "predict-dataset-output",
+      "type": "output",
+      "description": "Predict output correctly",
+      "expectedBehavior": "Match the exact output"
+    }
+  ],
+  "hints": [
+    { "level": 1, "text": "Read each row and count temps >= 72." },
+    { "level": 2, "text": "The dataset has 5 rows; count how many meet the condition." },
+    { "level": 3, "text": "Be careful: 72 counts as >= 72." }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 110,
+  "difficulty": "intermediate",
+  "order": 23,
+  "dataset": {
+    "files": [
+      {
+        "name": "temps.csv",
+        "content": "day,temp\nMon,70\nTue,72\nWed,68\nThu,75\nFri,72\n"
+      }
+    ]
+  }
+}

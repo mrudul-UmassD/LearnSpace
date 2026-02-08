@@ -20,6 +20,7 @@ import tempfile
 import os
 import json
 import time
+import shutil
 from typing import Dict, List, Any
 
 app = Flask(__name__)
@@ -28,7 +29,9 @@ app = Flask(__name__)
 MAX_EXECUTION_TIME = 2  # seconds
 MAX_OUTPUT_SIZE = 1024 * 1024  # 1MB
 MAX_CODE_SIZE = 100 * 1024  # 100KB
-SCHEMA_VERSION = "2026-02-02"
+SCHEMA_VERSION = "2026-02-07"
+MAX_DATASET_FILES = 5
+MAX_DATASET_BYTES = 128 * 1024  # 128KB total
 
 # Cached Python command to avoid repeated lookups
 _PYTHON_CMD = None
@@ -82,7 +85,42 @@ def get_python_command() -> str:
     )
 
 
-def execute_python_code(code: str) -> Dict[str, str]:
+def _safe_dataset_path(base_dir: str, name: str) -> str:
+    normalized = os.path.normpath(name).replace('\\', '/').lstrip('/')
+    if normalized.startswith('..') or normalized.startswith('/'):
+        raise ValueError(f"Invalid dataset filename: {name}")
+    full_path = os.path.join(base_dir, normalized)
+    if not full_path.startswith(base_dir):
+        raise ValueError(f"Invalid dataset path: {name}")
+    return full_path
+
+
+def _write_dataset_files(dataset: Dict[str, Any], work_dir: str) -> None:
+    files = dataset.get('files', []) if dataset else []
+    if not isinstance(files, list):
+        raise ValueError('Dataset files must be a list')
+    if len(files) > MAX_DATASET_FILES:
+        raise ValueError(f'Dataset file limit exceeded ({MAX_DATASET_FILES} files)')
+
+    total_bytes = 0
+    for file_item in files:
+        name = file_item.get('name')
+        content = file_item.get('content')
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError('Dataset file name must be a non-empty string')
+        if not isinstance(content, str):
+            raise ValueError('Dataset file content must be a string')
+        total_bytes += len(content.encode('utf-8'))
+        if total_bytes > MAX_DATASET_BYTES:
+            raise ValueError(f'Dataset size limit exceeded ({MAX_DATASET_BYTES} bytes)')
+
+        file_path = _safe_dataset_path(work_dir, name)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+
+def execute_python_code(code: str, dataset: Dict[str, Any] | None = None) -> Dict[str, str]:
     """
     Execute Python code in a temporary file with timeout and output limits.
     
@@ -95,14 +133,15 @@ def execute_python_code(code: str) -> Dict[str, str]:
     Raises:
         TimeoutException: If execution exceeds MAX_EXECUTION_TIME
     """
-    # Create temporary file for code
-    # Use system temp directory (works on Windows and Linux)
-    temp_dir = tempfile.gettempdir()
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, dir=temp_dir) as f:
-        temp_file = f.name
-        f.write(code)
-    
+    work_dir = tempfile.mkdtemp(prefix='pyquest_')
+    temp_file = os.path.join(work_dir, 'main.py')
     try:
+        if dataset:
+            _write_dataset_files(dataset, work_dir)
+
+        with open(temp_file, 'w', encoding='utf-8') as f:
+            f.write(code)
+
         # Get Python command (cached lookup with fallback)
         try:
             python_cmd = get_python_command()
@@ -128,7 +167,8 @@ def execute_python_code(code: str) -> Dict[str, str]:
             capture_output=True,
             text=True,
             timeout=MAX_EXECUTION_TIME,
-            env=env
+            env=env,
+            cwd=work_dir
         )
         
         # Limit output size
@@ -145,7 +185,6 @@ def execute_python_code(code: str) -> Dict[str, str]:
             'stdout': stdout.strip(),
             'stderr': stderr.strip()
         }
-        
     except subprocess.TimeoutExpired:
         return {
             'stdout': '',
@@ -157,9 +196,9 @@ def execute_python_code(code: str) -> Dict[str, str]:
             'stderr': f'Execution error: {str(e)}'
         }
     finally:
-        # Clean up temp file
+        # Clean up temp directory
         try:
-            os.unlink(temp_file)
+            shutil.rmtree(work_dir, ignore_errors=True)
         except:
             pass
 
@@ -447,6 +486,7 @@ def run_code():
         
         code = data.get('code', '')
         tests = data.get('tests', [])
+        dataset = data.get('dataset', None)
         
         # Validate input
         if not code:
@@ -465,7 +505,7 @@ def run_code():
         
         # Execute code
         start_time = time.time()
-        execution_result = execute_python_code(code)
+        execution_result = execute_python_code(code, dataset)
         execution_time_ms = int((time.time() - start_time) * 1000)
         
         stdout = execution_result['stdout']
@@ -495,6 +535,53 @@ def run_code():
             'success': False,
             'error': str(e)
         }), 500
+
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check endpoint that verifies the runner service is operational.
+    Tests that Python and required packages (numpy, pandas) can be imported quickly.
+    
+    Returns:
+        JSON response with status and package versions
+    """
+    try:
+        start_time = time.time()
+        
+        # Verify Python is available
+        python_cmd = get_python_command()
+        
+        # Test numpy import
+        import numpy as np
+        numpy_version = np.__version__
+        
+        # Test pandas import
+        import pandas as pd
+        pandas_version = pd.__version__
+        
+        # Quick operation to verify packages work
+        test_array = np.array([1, 2, 3])
+        test_df = pd.DataFrame({'a': [1, 2, 3]})
+        
+        elapsed_ms = int((time.time() - start_time) * 1000)
+        
+        return jsonify({
+            'status': 'healthy',
+            'schemaVersion': SCHEMA_VERSION,
+            'python': python_cmd if isinstance(python_cmd, str) else ' '.join(python_cmd),
+            'packages': {
+                'numpy': numpy_version,
+                'pandas': pandas_version
+            },
+            'healthCheckMs': elapsed_ms
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e)
+        }), 503
 
 
 if __name__ == '__main__':

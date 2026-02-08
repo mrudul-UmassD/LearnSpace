@@ -11,6 +11,20 @@ export interface QuestTest {
   args?: any[];
 }
 
+export interface ComponentTest {
+  id: string;
+  type: 'renders' | 'contains_text' | 'contains_element' | 'has_attribute' | 'snapshot' | 'event_handler';
+  description: string;
+  selector?: string;
+  role?: string;
+  text?: string;
+  attribute?: string;
+  value?: string;
+  event?: string;
+  expectedAfterEvent?: string;
+  snapshot?: string;
+}
+
 export interface QuestHint {
   level: number;
   text: string;
@@ -22,14 +36,43 @@ export interface QuestData {
   title: string;
   story: string;
   instructions: string;
+  type: 'code' | 'predict_output' | 'explain' | 'debug_fix' | 'trace_reading' | 'component';
   starterCode: string;
   solutionHidden: string;
   tests: QuestTest[];
+  componentTests?: ComponentTest[];
   hints: QuestHint[];
   hintUnlockAttempts: number;
   xpReward: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   order: number;
+  debugFix?: {
+    maxChangedLines?: number;
+  };
+  dataset?: {
+    files: Array<{
+      name: string;
+      content: string;
+    }>;
+  };
+  explainRubric?: Array<{
+    keywords: string[];
+    weight?: number;
+    description?: string;
+  }>;
+  traceReading?: {
+    stackTrace: string;
+    buggyCode: string;
+    questions: Array<{
+      id: string;
+      type: 'multiple_choice' | 'short_text';
+      question: string;
+      options?: string[];
+      correctAnswer: string;
+      keywords?: string[];
+      points?: number;
+    }>;
+  };
 }
 
 export interface WorldData {

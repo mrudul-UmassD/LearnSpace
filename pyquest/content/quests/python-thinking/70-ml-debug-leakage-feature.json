@@ -1,0 +1,33 @@
+{
+  "id": "70-ml-debug-leakage-feature",
+  "world": "python-thinking",
+  "title": "Debug: Data Leakage - Feature Selection",
+  "story": "Selecting features using the entire dataset before splitting leaks information. Always select features using only training data!",
+  "instructions": "Fix the leakage. The code selects top features using all data before splitting. Move feature selection to happen AFTER split using only training data.",
+  "type": "debug_fix",
+  "starterCode": "import numpy as np\nfrom sklearn.model_selection import train_test_split\n\nX = np.array([[1, 10], [2, 20], [3, 30], [4, 40], [5, 50]])\ny = np.array([1, 2, 3, 4, 5])\n\n# BUGGY: Select feature using ALL data\ncorrelations = np.corrcoef(X.T, y)[:-1, -1]\nbest_feature_idx = np.argmax(np.abs(correlations))\nX_selected = X[:, [best_feature_idx]]\n\nX_train, X_test = train_test_split(X_selected, test_size=0.2, random_state=42)\nprint(X_train.shape[1])",
+  "solutionHidden": "import numpy as np\nfrom sklearn.model_selection import train_test_split\n\nX = np.array([[1, 10], [2, 20], [3, 30], [4, 40], [5, 50]])\ny = np.array([1, 2, 3, 4, 5])\n\n# FIXED: Split first, then select using only training data\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\ncorrelations = np.corrcoef(X_train.T, y_train)[:-1, -1]\nbest_feature_idx = np.argmax(np.abs(correlations))\nX_train_selected = X_train[:, [best_feature_idx]]\n\nprint(X_train_selected.shape[1])",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (one selected feature)",
+      "expectedBehavior": "Select feature after split using only train data",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Split first. Calculate correlations using only X_train and y_train."
+    },
+    {
+      "level": 2,
+      "text": "Feature selection should never see test data. Use train_test_split before computing correlations."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 45,
+  "difficulty": "intermediate",
+  "order": 70
+}

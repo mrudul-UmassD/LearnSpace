@@ -1,0 +1,33 @@
+{
+  "id": "81-ml-linear-regression-coefficients",
+  "world": "python-thinking",
+  "title": "ML: Understanding Regression Coefficients",
+  "story": "Coefficients tell you feature importance and direction. A coefficient of 5 means: increase feature by 1, prediction increases by 5.",
+  "instructions": "Given coefficients [3, -2] and intercept 10, predict for input [4, 5]. Formula: y = coef[0]*x[0] + coef[1]*x[1] + intercept. Print the prediction.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ncoef = np.array([3, -2])\nintercept = 10\nx = np.array([4, 5])\n\n# Multiple linear regression\ny_pred = np.dot(coef, x) + intercept\n\nprint(y_pred)",
+  "solutionHidden": "import numpy as np\n\ncoef = np.array([3, -2])\nintercept = 10\nx = np.array([4, 5])\n\ny_pred = np.dot(coef, x) + intercept\n\nprint(y_pred)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 12 (3*4 + (-2)*5 + 10)",
+      "expectedBehavior": "Calculate weighted sum plus intercept",
+      "expected": "12"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "y = 3*4 + (-2)*5 + 10 = 12 - 10 + 10 = 12"
+    },
+    {
+      "level": 2,
+      "text": "Use np.dot(coef, x) to compute weighted sum, then add intercept."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 81
+}

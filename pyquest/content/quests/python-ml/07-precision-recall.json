@@ -1,0 +1,33 @@
+{
+  "id": "07-precision-recall",
+  "world": "python-ml",
+  "title": "ML: Calculate Precision and Recall",
+  "story": "Precision: of positive predictions, how many are correct? Recall: of actual positives, how many did we catch?",
+  "instructions": "Calculate precision and recall. Given TP=3, FP=1, FN=2. Print precision rounded to 2 decimals, then recall rounded to 2 decimals (2 lines).",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nTP = 3  # True Positives\nFP = 1  # False Positives  \nFN = 2  # False Negatives\n\n# Precision = TP / (TP + FP)\nprecision = TP / (TP + FP)\n\n# Recall = TP / (TP + FN)\nrecall = TP / (TP + FN)\n\nprint(round(precision, 2))\nprint(round(recall, 2))",
+  "solutionHidden": "import numpy as np\n\nTP = 3\nFP = 1\nFN = 2\n\nprecision = TP / (TP + FP)\nrecall = TP / (TP + FN)\n\nprint(round(precision, 2))\nprint(round(recall, 2))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.75 then 0.6",
+      "expectedBehavior": "Calculate precision and recall formulas",
+      "expected": "0.75\n0.6"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Precision = 3/(3+1) = 0.75, Recall = 3/(3+2) = 0.6"
+    },
+    {
+      "level": 2,
+      "text": "Precision: of 4 predicted positive, 3 correct. Recall: of 5 actual positive, caught 3."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 7
+}

@@ -1,0 +1,33 @@
+{
+  "id": "86-ml-gradient-descent",
+  "world": "python-thinking",
+  "title": "ML: Gradient Descent Intuition",
+  "story": "Gradient descent finds optimal parameters by iteratively moving opposite to the gradient. It's like walking downhill to find the valley!",
+  "instructions": "Simulate one gradient descent step. Given weight=10, learning_rate=0.1, gradient=4, update weight using: w_new = w - lr * gradient. Print new weight.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nweight = 10\nlearning_rate = 0.1\ngradient = 4\n\n# Gradient descent update\nweight_new = weight - learning_rate * gradient\n\nprint(weight_new)",
+  "solutionHidden": "import numpy as np\n\nweight = 10\nlearning_rate = 0.1\ngradient = 4\n\nweight_new = weight - learning_rate * gradient\n\nprint(weight_new)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 9.6 (10 - 0.1*4)",
+      "expectedBehavior": "Update weight using gradient descent formula",
+      "expected": "9.6"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Update rule: w_new = w - learning_rate * gradient"
+    },
+    {
+      "level": 2,
+      "text": "10 - 0.1 * 4 = 10 - 0.4 = 9.6. We move opposite to gradient direction."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 86
+}

@@ -1,0 +1,33 @@
+{
+  "id": "79-ml-debug-overfitting-features",
+  "world": "python-thinking",
+  "title": "Debug: Overfitting Due to Too Many Features",
+  "story": "More features aren't always better! When features >> samples, models memorize noise. The curse of dimensionality strikes!",
+  "instructions": "Fix overfitting caused by too many features. The model has 50 features but only 10 samples. Reduce to 3 most important features by selecting first 3 columns.",
+  "type": "debug_fix",
+  "starterCode": "import numpy as np\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\n\nnp.random.seed(42)\nX = np.random.randn(10, 50)  # 10 samples, 50 features!\ny = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])\n\n# BUGGY: Using all 50 features leads to overfitting\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)\nmodel = LogisticRegression(max_iter=1000)\nmodel.fit(X_train, y_train)\n\nprint(X_train.shape[1])",
+  "solutionHidden": "import numpy as np\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\n\nnp.random.seed(42)\nX = np.random.randn(10, 50)\ny = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])\n\n# FIXED: Use only 3 features to reduce overfitting\nX_reduced = X[:, :3]\nX_train, X_test, y_train, y_test = train_test_split(X_reduced, y, test_size=0.3, random_state=42)\nmodel = LogisticRegression(max_iter=1000)\nmodel.fit(X_train, y_train)\n\nprint(X_train.shape[1])",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 3 (reduced feature count)",
+      "expectedBehavior": "Select first 3 columns to reduce overfitting",
+      "expected": "3"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Create X_reduced = X[:, :3] to select first 3 columns before splitting."
+    },
+    {
+      "level": 2,
+      "text": "50 features with 10 samples = overfitting risk. Reduce to 3 features for better generalization."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 79
+}

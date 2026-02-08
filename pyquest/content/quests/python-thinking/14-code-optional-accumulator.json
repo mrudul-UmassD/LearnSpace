@@ -1,0 +1,50 @@
+{
+  "id": "python-thinking-14-optional-accumulator",
+  "world": "python-thinking",
+  "type": "code",
+  "difficulty": "intermediate",
+  "xpReward": 110,
+  "story": "Implement a function with an optional accumulator parameter. Master the art of using `None` as a sentinel value correctly.",
+  "instructions": "Implement `add_item(item, acc=None)` that appends to the provided list, or creates a new list when `acc is None`. Be careful with truthiness checks!",
+  "starterCode": "def add_item(item, acc=None):\n    # If acc is None, create a new list\n    # Otherwise, append to the provided acc\n    # Return the list\n    pass",
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use `if acc is None:` to detect when no list was provided. Don't use `if not acc` (empty list is falsy!)."
+    },
+    {
+      "level": 2,
+      "text": "When `acc is None`, create a new list: `acc = []`. Then append the item and return acc."
+    },
+    {
+      "level": 3,
+      "text": "Remember: `list.append()` returns `None`, not the list. You need to return `acc` explicitly."
+    }
+  ],
+  "tests": [
+    {
+      "name": "creates_new_list",
+      "description": "Creates new list when no acc provided",
+      "code": "r1 = add_item(1)\nr2 = add_item(2)\nassert r1 == [1], f'Expected [1], got {r1}'\nassert r2 == [2], f'Expected [2], got {r2}'"
+    },
+    {
+      "name": "uses_provided_list",
+      "description": "Uses provided list",
+      "code": "a = []\nresult = add_item(1, a)\nassert result == [1]\nassert a == [1], 'Should mutate provided list'"
+    },
+    {
+      "name": "preserves_identity",
+      "description": "Doesn't create new list when one is provided",
+      "code": "a = []\nresult = add_item(1, a)\nassert result is a, 'Should return the same list object'"
+    },
+    {
+      "name": "handles_empty_list",
+      "description": "Correctly handles explicitly-passed empty list",
+      "code": "a = []\nadd_item(1, a)\nadd_item(2, a)\nassert a == [1, 2], f'Expected [1, 2], got {a}'"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "order": 14,
+  "solutionHidden": "# Reference solution - see tests for expected behavior\npass",
+  "title": "Code: Append With Optional Accumulator"
+}

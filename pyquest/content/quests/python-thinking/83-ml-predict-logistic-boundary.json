@@ -1,0 +1,33 @@
+{
+  "id": "83-ml-predict-logistic-boundary",
+  "world": "python-thinking",
+  "title": "Predict: Logistic Regression Decision Boundary",
+  "story": "Logistic regression predicts class 1 if probability > 0.5. This happens when the linear combination (z) is > 0.",
+  "instructions": "Predict class for input. Given coef=[1, -2], intercept=1, input=[3, 1]. Calculate z = coef·x + intercept. Print 1 if z>0 else 0.",
+  "type": "predict_output",
+  "starterCode": "import numpy as np\n\ncoef = np.array([1, -2])\nintercept = 1\nx = np.array([3, 1])\n\n# Calculate linear combination\nz = np.dot(coef, x) + intercept\n\n# Decision boundary: z > 0 → class 1\nif z > 0:\n    print(1)\nelse:\n    print(0)",
+  "solutionHidden": "1",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (z = 1*3 + (-2)*1 + 1 = 2 > 0)",
+      "expectedBehavior": "Calculate z and apply decision boundary",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "z = 1*3 + (-2)*1 + 1 = 3 - 2 + 1 = 2. Since z > 0, predict class 1."
+    },
+    {
+      "level": 2,
+      "text": "Logistic regression: z > 0 → sigmoid(z) > 0.5 → predict class 1"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 83
+}

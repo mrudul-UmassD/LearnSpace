@@ -1,0 +1,33 @@
+{
+  "id": "77-ml-overfitting-detection",
+  "world": "python-thinking",
+  "title": "ML: Detecting Overfitting",
+  "story": "Overfitting = memorizing training data instead of learning patterns. Signs: high train score, low test score!",
+  "instructions": "Detect overfitting. Print 1 if the model is overfitting (train_acc > 0.95 and test_acc < 0.7), else print 0. Given train_acc=0.98, test_acc=0.65.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ntrain_acc = 0.98\ntest_acc = 0.65\n\n# Detect overfitting\nis_overfitting = (train_acc > 0.95) and (test_acc < 0.7)\n\nif is_overfitting:\n    print(1)\nelse:\n    print(0)",
+  "solutionHidden": "import numpy as np\n\ntrain_acc = 0.98\ntest_acc = 0.65\n\nis_overfitting = (train_acc > 0.95) and (test_acc < 0.7)\n\nif is_overfitting:\n    print(1)\nelse:\n    print(0)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 1 (overfitting detected)",
+      "expectedBehavior": "Detect large gap between train and test performance",
+      "expected": "1"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Overfitting: train_acc > 0.95 AND test_acc < 0.7. Check both conditions."
+    },
+    {
+      "level": 2,
+      "text": "98% train but 65% test = overfitting! Model memorized training data."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 77
+}

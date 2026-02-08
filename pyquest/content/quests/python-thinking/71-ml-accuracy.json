@@ -1,0 +1,33 @@
+{
+  "id": "71-ml-accuracy",
+  "world": "python-thinking",
+  "title": "ML: Calculate Accuracy",
+  "story": "Accuracy is the simplest metric: what fraction of predictions are correct? It's intuitive but can be misleading for imbalanced data.",
+  "instructions": "Calculate accuracy manually: (correct predictions / total predictions). Given predictions [1,0,1,1,0] and true labels [1,0,1,0,0], compute accuracy.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\ny_true = np.array([1, 0, 1, 0, 0])\ny_pred = np.array([1, 0, 1, 1, 0])\n\n# Calculate accuracy\ncorrect = (y_true == y_pred).sum()\ntotal = len(y_true)\naccuracy = correct / total\n\nprint(accuracy)",
+  "solutionHidden": "import numpy as np\n\ny_true = np.array([1, 0, 1, 0, 0])\ny_pred = np.array([1, 0, 1, 1, 0])\n\ncorrect = (y_true == y_pred).sum()\ntotal = len(y_true)\naccuracy = correct / total\n\nprint(accuracy)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.8 (4 out of 5 correct)",
+      "expectedBehavior": "Calculate fraction of correct predictions",
+      "expected": "0.8"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Compare y_true == y_pred, count matches, divide by total."
+    },
+    {
+      "level": 2,
+      "text": "Correct: indices 0,1,2,4 match (4 out of 5). Accuracy = 4/5 = 0.8"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 71
+}

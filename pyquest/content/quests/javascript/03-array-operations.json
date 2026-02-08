@@ -1,0 +1,33 @@
+{
+  "id": "03-array-operations",
+  "world": "javascript",
+  "title": "JS: Array Operations",
+  "story": "Arrays store collections of data. JavaScript arrays are powerful and flexible!",
+  "instructions": "Create an array of numbers [1, 2, 3, 4, 5], use the map() method to square each number, and print the result.",
+  "type": "code",
+  "starterCode": "// Create an array and square each number\nconst numbers = [1, 2, 3, 4, 5];\nconst squared = numbers.map(num => num * num);\nconsole.log(squared);",
+  "solutionHidden": "const numbers = [1, 2, 3, 4, 5];\nconst squared = numbers.map(num => num * num);\nconsole.log(squared);",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [1, 4, 9, 16, 25]",
+      "expectedBehavior": "Square each number in the array",
+      "expected": "[ 1, 4, 9, 16, 25 ]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use array.map(num => num * num) to square each element."
+    },
+    {
+      "level": 2,
+      "text": "Map transforms each element: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 15,
+  "difficulty": "beginner",
+  "order": 3
+}

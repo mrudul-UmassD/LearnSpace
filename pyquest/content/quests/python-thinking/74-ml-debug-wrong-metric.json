@@ -1,0 +1,33 @@
+{
+  "id": "74-ml-debug-wrong-metric",
+  "world": "python-thinking",
+  "title": "Debug: Wrong Metric for Imbalanced Data",
+  "story": "Accuracy is misleading for imbalanced data! With 95 negative and 5 positive samples, predicting all negative gives 95% accuracy but misses all positives.",
+  "instructions": "Fix the metric choice. The code uses accuracy for highly imbalanced data (5% positive class). Use F1 score instead, which better handles imbalance.",
+  "type": "debug_fix",
+  "starterCode": "import numpy as np\nfrom sklearn.metrics import accuracy_score, f1_score\n\n# Imbalanced: 95 negatives, 5 positives\ny_true = np.array([0]*95 + [1]*5)\ny_pred = np.array([0]*100)  # Predict all negative\n\n# BUGGY: Accuracy looks great but catches no positives!\nscore = accuracy_score(y_true, y_pred)\nprint(round(score, 2))",
+  "solutionHidden": "import numpy as np\nfrom sklearn.metrics import accuracy_score, f1_score\n\ny_true = np.array([0]*95 + [1]*5)\ny_pred = np.array([0]*100)\n\n# FIXED: F1 score reveals the problem (0.0 since no positives caught)\nscore = f1_score(y_true, y_pred)\nprint(round(score, 2))",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 0.0 (F1 score showing model catches no positives)",
+      "expectedBehavior": "Use F1 score for imbalanced data",
+      "expected": "0.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Replace accuracy_score with f1_score - it's more appropriate for imbalanced data."
+    },
+    {
+      "level": 2,
+      "text": "F1=0 because recall=0 (no positives caught). This reveals the real problem unlike 95% accuracy."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 40,
+  "difficulty": "intermediate",
+  "order": 74
+}

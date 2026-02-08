@@ -1,0 +1,33 @@
+{
+  "id": "14-linear-regression-manual",
+  "world": "python-ml",
+  "title": "ML: Linear Regression Prediction",
+  "story": "Linear regression finds the line y = mx + b. Let's predict manually!",
+  "instructions": "Given slope m=2.5 and intercept b=10, predict y for x=4 using y = mx + b. Print the prediction.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nm = 2.5  # slope\nb = 10   # intercept\nx = 4    # input\n\n# Linear prediction\ny_pred = m * x + b\n\nprint(y_pred)",
+  "solutionHidden": "import numpy as np\n\nm = 2.5\nb = 10\nx = 4\n\ny_pred = m * x + b\n\nprint(y_pred)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print 20.0 (2.5*4 + 10)",
+      "expectedBehavior": "Calculate y = mx + b",
+      "expected": "20.0"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Substitute into formula: y = 2.5 * 4 + 10"
+    },
+    {
+      "level": 2,
+      "text": "2.5 * 4 = 10, then 10 + 10 = 20"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 14
+}

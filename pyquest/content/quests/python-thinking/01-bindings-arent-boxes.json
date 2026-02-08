@@ -1,0 +1,36 @@
+{
+  "id": "python-thinking-01-bindings",
+  "world": "python-thinking",
+  "type": "predict_output",
+  "title": "Bindings Aren't Boxes",
+  "difficulty": "intermediate",
+  "xpReward": 80,
+  "order": 1,
+  "hintUnlockAttempts": 2,
+  "story": "You've stumbled upon ancient Python scrolls that speak of 'names' and 'objects'. The scroll warns: 'Assignment does not copy, it binds.' Test your understanding by predicting what the enchanted code will print.",
+  "instructions": "Predict the exact output of the hidden code snippet. Pay close attention to how Python handles name bindings and object references.",
+  "starterCode": "",
+  "solutionHidden": "a = [1, 2, 3]\nb = a\nprint(f\"Before: a is b = {a is b}\")\nprint(f\"id(a) = {id(a)}, id(b) = {id(b)}\")\n\nb.append(4)\nprint(f\"After append: a = {a}\")\n\na = [5, 6]\nprint(f\"After rebind: a is b = {a is b}\")\nprint(f\"a = {a}, b = {b}\")",
+  "tests": [
+    {
+      "id": "predict-01",
+      "type": "output",
+      "description": "Predict output correctly",
+      "expectedBehavior": "Match the exact output"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "When you write `b = a`, Python doesn't copy the list. Both names point to the same list object in memory."
+    },
+    {
+      "level": 2,
+      "text": "Methods like `.append()` mutate the object itself. Since both `a` and `b` refer to the same object, changes through either name are visible through both."
+    },
+    {
+      "level": 3,
+      "text": "Rebinding with `a = [5, 6]` creates a NEW list and makes `a` point to it. This doesn't affect `b`, which still points to the original list."
+    }
+  ]
+}

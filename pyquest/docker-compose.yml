@@ -65,6 +65,45 @@ services:
       retries: 3
       start_period: 10s
 
+  # Node.js Code Execution Runner (Sandboxed, for JavaScript quests)
+  runner-node:
+    build:
+      context: ./services/runner-node
+      dockerfile: Dockerfile
+    container_name: pyquest-runner-node
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    networks:
+      - pyquest-network
+    # Security: Read-only filesystem except /tmp
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8081/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   # Next.js Web Application
   web:
     build:
@@ -85,6 +124,7 @@ services:
       
       # Runner Service
       RUNNER_URL: http://runner:8080
+      NODE_RUNNER_URL: http://runner-node:8081
       
       # Node Environment
       NODE_ENV: ${NODE_ENV:-production}
@@ -92,6 +132,8 @@ services:
       db:
         condition: service_healthy
       runner:
+        condition: service_healthy
+      runner-node:
         condition: service_healthy
     networks:
       - pyquest-network

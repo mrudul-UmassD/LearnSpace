@@ -1,0 +1,33 @@
+{
+  "id": "65-pandas-debug-chained-indexing",
+  "world": "python-thinking",
+  "title": "Debug: Chained Indexing",
+  "story": "Chained indexing like df[col][row] is unpredictable! Sometimes it works, sometimes it doesn't. Always use .loc[] or .iloc[] instead.",
+  "instructions": "Fix the code that uses chained indexing to update a specific cell. Use .loc[row, col] instead of [col][row].",
+  "type": "debug_fix",
+  "starterCode": "import pandas as pd\n\ndf = pd.DataFrame({\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'score': [85, 90, 78]\n})\n\n# BUGGY: Chained indexing is unreliable\ndf['score'][1] = 95\nprint(df)",
+  "solutionHidden": "import pandas as pd\n\ndf = pd.DataFrame({\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'score': [85, 90, 78]\n})\n\n# FIXED: Use .loc for reliable indexing\ndf.loc[1, 'score'] = 95\nprint(df)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should update Bob's score to 95",
+      "expectedBehavior": "Use proper .loc indexing",
+      "expected": "      name  score\n0    Alice     85\n1      Bob     95\n2  Charlie     78"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Never use df['col'][row]. Always use df.loc[row, 'col'] instead."
+    },
+    {
+      "level": 2,
+      "text": "Chained indexing can create a copy, so changes don't persist. Use .loc[1, 'score'] = 95"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 65
+}

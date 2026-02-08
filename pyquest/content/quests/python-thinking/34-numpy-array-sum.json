@@ -1,0 +1,33 @@
+{
+  "id": "34-numpy-array-sum",
+  "world": "python-thinking",
+  "title": "NumPy: Array Sum Calculation",
+  "story": "Data scientists use NumPy for efficient numerical computations. Let's verify that NumPy works in our environment by calculating the sum of an array.",
+  "instructions": "Use NumPy to create an array [10, 20, 30, 40, 50] and print its sum. Import numpy as np and use np.array() and .sum() methods.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Create array and print sum\ndata = np.array([10, 20, 30, 40, 50])\nresult = data.sum()\nprint(result)",
+  "solutionHidden": "import numpy as np\n\ndata = np.array([10, 20, 30, 40, 50])\nresult = data.sum()\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Output should be 150",
+      "expectedBehavior": "Print the sum of array elements",
+      "expected": "150"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.array() to create the array from a Python list."
+    },
+    {
+      "level": 2,
+      "text": "Call the .sum() method on the NumPy array to get the total."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 34
+}

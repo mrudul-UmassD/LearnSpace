@@ -1,0 +1,33 @@
+{
+  "id": "54-pandas-dataframe-info",
+  "world": "python-thinking",
+  "title": "Pandas: DataFrame Info",
+  "story": "Understanding your DataFrame's structure is crucial. Learn to inspect shape, data types, and preview rows.",
+  "instructions": "Given a DataFrame, print its shape (rows, cols) in format '(rows, cols)'. The DataFrame has 4 rows and 3 columns.",
+  "type": "code",
+  "starterCode": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'score': [85, 92, 78, 88],\n    'grade': ['B', 'A', 'C', 'B']\n}\ndf = pd.DataFrame(data)\n\n# Print shape\nprint(df.shape)",
+  "solutionHidden": "import pandas as pd\n\ndata = {\n    'name': ['Alice', 'Bob', 'Charlie', 'David'],\n    'score': [85, 92, 78, 88],\n    'grade': ['B', 'A', 'C', 'B']\n}\ndf = pd.DataFrame(data)\nprint(df.shape)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print (4, 3)",
+      "expectedBehavior": "Print DataFrame shape as tuple",
+      "expected": "(4, 3)"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use df.shape to get (rows, columns) as a tuple."
+    },
+    {
+      "level": 2,
+      "text": "df.shape returns a tuple: (number_of_rows, number_of_columns)"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 20,
+  "difficulty": "beginner",
+  "order": 54
+}

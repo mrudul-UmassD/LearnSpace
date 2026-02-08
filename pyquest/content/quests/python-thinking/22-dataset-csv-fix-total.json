@@ -1,0 +1,39 @@
+{
+  "id": "python-thinking-22-csv-total-debug",
+  "world": "python-thinking",
+  "type": "debug_fix",
+  "title": "Dataset: Fix CSV Total",
+  "story": "A teammate wrote a quick script to total quantities from a CSV file, but it can’t find the dataset. Fix the bug with minimal changes.",
+  "instructions": "Fix the code so it reads `sales.csv` correctly and prints the total quantity (an integer).",
+  "starterCode": "import csv\n\n\ndef total_qty(path):\n    total = 0\n    with open(path, \"r\", encoding=\"utf-8\", newline=\"\") as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            total += int(row[\"qty\"])\n    return total\n\n# BUG: Wrong filename\nprint(total_qty(\"sale.csv\"))\n",
+  "solutionHidden": "import csv\n\n\ndef total_qty(path):\n    total = 0\n    with open(path, \"r\", encoding=\"utf-8\", newline=\"\") as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            total += int(row[\"qty\"])\n    return total\n\nprint(total_qty(\"sales.csv\"))\n",
+  "tests": [
+    {
+      "id": "csv-total-output",
+      "type": "output",
+      "description": "Should print total quantity",
+      "expectedBehavior": "Output should be the total quantity in sales.csv",
+      "expected": "9"
+    }
+  ],
+  "hints": [
+    { "level": 1, "text": "The CSV file is named sales.csv, not sale.csv." },
+    { "level": 2, "text": "Fix the filename in the print call; the rest of the logic works." },
+    { "level": 3, "text": "The expected output is the sum of all qty values." }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 130,
+  "difficulty": "intermediate",
+  "order": 22,
+  "debugFix": {
+    "maxChangedLines": 2
+  },
+  "dataset": {
+    "files": [
+      {
+        "name": "sales.csv",
+        "content": "product,qty\nwidget,3\ngizmo,4\nwidget,2\n"
+      }
+    ]
+  }
+}

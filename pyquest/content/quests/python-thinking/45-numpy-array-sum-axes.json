@@ -1,0 +1,33 @@
+{
+  "id": "45-numpy-array-sum-axes",
+  "world": "python-thinking",
+  "title": "NumPy: Sum Along Axes",
+  "story": "Understanding axes is crucial for multi-dimensional operations. Axis 0 goes down rows, axis 1 goes across columns.",
+  "instructions": "Create 2D array [[1, 2, 3], [4, 5, 6]]. Calculate sum along axis 0 (column sums) and print the result.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\n# Sum along axis 0 (column-wise)\narr = np.array([[1, 2, 3], [4, 5, 6]])\nresult = arr.sum(axis=0)\nprint(result)",
+  "solutionHidden": "import numpy as np\n\narr = np.array([[1, 2, 3], [4, 5, 6]])\nresult = arr.sum(axis=0)\nprint(result)",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print [5 7 9]",
+      "expectedBehavior": "Sum columns: [1+4, 2+5, 3+6]",
+      "expected": "[5 7 9]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use arr.sum(axis=0) to sum along rows (producing column sums)."
+    },
+    {
+      "level": 2,
+      "text": "Axis 0 collapses rows: [1,4] sums to 5, [2,5] to 7, [3,6] to 9."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 45
+}

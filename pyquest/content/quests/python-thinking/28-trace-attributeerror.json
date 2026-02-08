@@ -1,0 +1,60 @@
+{
+  "id": "28-trace-attributeerror",
+  "world": "python-thinking",
+  "title": "Trace: Missing Attribute or Method",
+  "story": "Code that tries to call a method that doesn't exist on an object will raise an AttributeError. Learning to read these traces helps debug object-oriented code.",
+  "instructions": "Read the stack trace and code, then diagnose the attribute error.",
+  "type": "trace_reading",
+  "starterCode": "",
+  "solutionHidden": "",
+  "tests": [],
+  "hints": [
+    {
+      "level": 1,
+      "text": "AttributeError means the object doesn't have the attribute or method you tried to access."
+    },
+    {
+      "level": 2,
+      "text": "Check the object type - maybe you're calling a method that doesn't exist on that type."
+    }
+  ],
+  "hintUnlockAttempts": 1,
+  "xpReward": 30,
+  "difficulty": "intermediate",
+  "order": 28,
+  "traceReading": {
+    "stackTrace": "Traceback (most recent call last):\n  File \"main.py\", line 3, in <module>\n    numbers.add(4)\nAttributeError: 'list' object has no attribute 'add'",
+    "buggyCode": "numbers = [1, 2, 3]\nnumbers.add(4)\nprint(numbers)",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "question": "What exception occurred?",
+        "options": [
+          "AttributeError",
+          "TypeError",
+          "NameError",
+          "KeyError"
+        ],
+        "correctAnswer": "AttributeError",
+        "points": 1
+      },
+      {
+        "id": "q2",
+        "type": "short_text",
+        "question": "Which method doesn't exist on the list object?",
+        "correctAnswer": "add",
+        "keywords": ["add"],
+        "points": 1
+      },
+      {
+        "id": "q3",
+        "type": "short_text",
+        "question": "What is the correct method to add an item to a list?",
+        "correctAnswer": "append()",
+        "keywords": ["append"],
+        "points": 2
+      }
+    ]
+  }
+}

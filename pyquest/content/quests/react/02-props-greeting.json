@@ -1,0 +1,44 @@
+{
+  "id": "02-props-greeting",
+  "world": "react",
+  "title": "Props: Passing Data to Components",
+  "story": "Components become powerful when they accept data! Props let you pass information from parent to child.",
+  "instructions": "Create a Greeting component that accepts a 'name' prop and displays 'Hello, [name]!' in a paragraph element.",
+  "type": "component",
+  "starterCode": "function Greeting(props) {\n  // Use props.name to display a personalized greeting\n  return (\n    <p>\n      {/* Your code here */}\n    </p>\n  );\n}\n\nexport default Greeting;",
+  "solutionHidden": "function Greeting(props) {\n  return (\n    <p>Hello, {props.name}!</p>\n  );\n}\n\nexport default Greeting;",
+  "tests": [],
+  "componentTests": [
+    {
+      "id": "test-1",
+      "type": "renders",
+      "description": "Component renders without errors"
+    },
+    {
+      "id": "test-2",
+      "type": "contains_element",
+      "description": "Component contains a paragraph element",
+      "selector": "p"
+    },
+    {
+      "id": "test-3",
+      "type": "contains_text",
+      "description": "Paragraph uses the name prop (checking with default 'World')",
+      "text": "Hello, World!"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Access props using props.name inside JSX with curly braces: {props.name}"
+    },
+    {
+      "level": 2,
+      "text": "Your paragraph should look like: <p>Hello, {props.name}!</p>"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 2
+}

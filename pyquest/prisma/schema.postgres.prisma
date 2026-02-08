@@ -192,6 +192,8 @@ model QuestAttempt {
   lastResult   Json?
   passed       Boolean  @default(false)
   xpEarned     Int      @default(0)
+  starterCodeHash String?
+  changedLines Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   

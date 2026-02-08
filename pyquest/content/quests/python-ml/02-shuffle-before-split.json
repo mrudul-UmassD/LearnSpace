@@ -1,0 +1,33 @@
+{
+  "id": "02-shuffle-before-split",
+  "world": "python-ml",
+  "title": "ML: Shuffle Before Split",
+  "story": "If data is ordered (e.g., all class 0 then all class 1), splitting without shuffling creates biased train/test sets!",
+  "instructions": "Shuffle indices [0,1,2,3,4,5,6,7,8,9] using np.random.shuffle with seed 42, then print the first 3 shuffled indices.",
+  "type": "code",
+  "starterCode": "import numpy as np\n\nnp.random.seed(42)\nindices = np.arange(10)\nnp.random.shuffle(indices)\n\n# First 3 shuffled indices\nprint(indices[:3])",
+  "solutionHidden": "import numpy as np\n\nnp.random.seed(42)\nindices = np.arange(10)\nnp.random.shuffle(indices)\n\nprint(indices[:3])",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should print first 3 shuffled indices with seed 42",
+      "expectedBehavior": "Shuffle with seed and slice",
+      "expected": "[6 3 7]"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Use np.random.seed(42), then np.random.shuffle(indices)"
+    },
+    {
+      "level": 2,
+      "text": "np.arange(10) creates [0,1,2,3,4,5,6,7,8,9], shuffle randomizes order"
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 25,
+  "difficulty": "beginner",
+  "order": 2
+}

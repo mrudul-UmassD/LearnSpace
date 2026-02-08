@@ -1,0 +1,33 @@
+{
+  "id": "09-explain-imbalanced-metrics",
+  "world": "python-ml",
+  "title": "Explain: Metrics for Imbalanced Data",
+  "story": "With 95% negative samples, predicting all negative gives 95% accuracy but misses all positives! Which metric reveals this?",
+  "instructions": "Which metric best reveals the problem when a model predicts all negative on imbalanced data (95% negative, 5% positive)? Type: accuracy, precision, recall, or f1",
+  "type": "explain",
+  "starterCode": "# Scenario: 95% negative, 5% positive\n# Model predicts ALL negative\n# \n# Accuracy = 95% (looks great!)\n# Precision = undefined (no positive predictions)\n# Recall = 0% (caught no positives)\n# F1 = 0 (because recall is 0)\n#\n# Which metric best shows the problem?",
+  "solutionHidden": "recall",
+  "tests": [
+    {
+      "id": "test1",
+      "type": "output",
+      "description": "Should identify recall as the metric that reveals the problem",
+      "expectedBehavior": "Recognize recall shows 0% when model misses all positives",
+      "expected": "recall"
+    }
+  ],
+  "hints": [
+    {
+      "level": 1,
+      "text": "Which metric directly measures 'what fraction of actual positives did we catch?'"
+    },
+    {
+      "level": 2,
+      "text": "Recall = TP/(TP+FN). If model predicts all negative, TP=0, so recall=0."
+    }
+  ],
+  "hintUnlockAttempts": 2,
+  "xpReward": 35,
+  "difficulty": "intermediate",
+  "order": 9
+}
